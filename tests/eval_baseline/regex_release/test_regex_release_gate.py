@@ -533,7 +533,7 @@ def test_rendered_launch_commands_require_the_exact_contract_digest() -> None:
         "aggregate_5100",
     )
     assert all(contract.sha256 in command for command in commands.values())
-    assert all("MODAL_PROFILE=huyhoang041100" in command for command in commands.values())
+    assert all("MODAL_PROFILE=private-profile-c" in command for command in commands.values())
     assert "--approved-contract-sha256" in commands["stage_approval"]
     assert "--contract-sha256" in commands["run_eval"]
 

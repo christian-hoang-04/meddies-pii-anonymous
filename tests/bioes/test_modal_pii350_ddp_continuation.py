@@ -47,7 +47,7 @@ def test_modal_contract_uses_exact_two_a100_for_wave_one_and_detached_gated_comm
         "timeout": 7_900,
         "max_containers": 1,
     }
-    assert modal_continuation.train_options("huyhoang0411ha") == {
+    assert modal_continuation.train_options("private-profile-d") == {
         "gpu": "A100-40GB:4",
         "cpu": 8.0,
         "memory": 128 * 1024,
@@ -120,7 +120,7 @@ def test_modal_image_branches_finish_with_local_source_after_every_build_step() 
 
 def test_remote_authorization_fails_closed_on_cross_topology_tokens() -> None:
     wave_one = continuation.render_segment_contract("meddiesresearch")
-    wave_two = continuation.render_segment_contract("huyhoang0411ha")
+    wave_two = continuation.render_segment_contract("private-profile-d")
     ddp2 = wave_one["manual_launch"]
     ddp4 = wave_two["manual_launch"]
 
@@ -142,7 +142,7 @@ def test_remote_authorization_fails_closed_on_cross_topology_tokens() -> None:
         )
     with pytest.raises(RuntimeError, match="exact profile topology authorization"):
         modal_continuation._train_segment_impl(
-            "huyhoang0411ha",
+            "private-profile-d",
             wave_two["execution_contract_digest"],
             execute=True,
             confirmation=ddp2["confirmation"],
@@ -150,7 +150,7 @@ def test_remote_authorization_fails_closed_on_cross_topology_tokens() -> None:
         )
     with pytest.raises(RuntimeError, match="source checkpoint receipt"):
         modal_continuation._train_segment_impl(
-            "huyhoang0411ha",
+            "private-profile-d",
             wave_two["execution_contract_digest"],
             execute=True,
             confirmation=ddp4["confirmation"],
@@ -613,7 +613,7 @@ def test_upload_main_passes_valid_persisted_manifest_receipt_to_remote(  # ruff:
                     checkpoint_root="/artifacts/checkpoints/step-00000100",
                     step=100,
                     cursor=12_800,
-                    profile="huyhoang0411ha",
+                    profile="private-profile-d",
                 ),
             ),
             "does not match the requested profile contract",
@@ -838,7 +838,7 @@ def test_rendered_transport_commands_are_explicit_and_immutable() -> None:
         '{"source_checkpoint_receipt":{"hash_verified":true}}',
     )
     download = continuation.render_download_command(
-        "huyhoang0411ha",
+        "private-profile-d",
         "stage1/step100",
         "/artifacts/imported/step100",
         "abc123",
@@ -850,7 +850,7 @@ def test_rendered_transport_commands_are_explicit_and_immutable() -> None:
     assert "--download" in download
     assert "--destination" in download
     assert "--revision 'abc123'" in download
-    assert "MODAL_PROFILE=huyhoang0411ha" in download
+    assert "MODAL_PROFILE=private-profile-d" in download
 
 
 def test_parameter_inventory_mismatch_fails_before_tensor_collectives() -> None:
@@ -911,14 +911,14 @@ def test_launch_attempt_claim_rejects_modal_transparent_replay(tmp_path: Path) -
             self.commits += 1
 
     volume = Volume()
-    contract = continuation.render_segment_contract("huyhoang0411ha")
+    contract = continuation.render_segment_contract("private-profile-d")
     attempt_digest = continuation.launch_attempt_digest(contract["execution_contract_digest"], "a" * 64, "b" * 32)
 
     artifact_root = modal_continuation._claim_launch_attempt(
         tmp_path,
         attempt_digest=attempt_digest,
         launch_attempt_nonce="b" * 32,
-        profile="huyhoang0411ha",
+        profile="private-profile-d",
         source_launch_digest="a" * 64,
         volume=volume,
     )
@@ -928,7 +928,7 @@ def test_launch_attempt_claim_rejects_modal_transparent_replay(tmp_path: Path) -
             tmp_path,
             attempt_digest=attempt_digest,
             launch_attempt_nonce="b" * 32,
-            profile="huyhoang0411ha",
+            profile="private-profile-d",
             source_launch_digest="a" * 64,
             volume=volume,
         )
@@ -939,7 +939,7 @@ def test_launch_attempt_claim_rejects_modal_transparent_replay(tmp_path: Path) -
     assert json.loads((tmp_path / "launch-claims" / attempt_digest / "claim.json").read_text(encoding="utf-8")) == {
         "attempt_digest": attempt_digest,
         "launch_attempt_nonce": "b" * 32,
-        "profile": "huyhoang0411ha",
+        "profile": "private-profile-d",
         "source_launch_digest": "a" * 64,
     }
 
@@ -957,7 +957,7 @@ def test_train_segment_claim_blocks_a_transparent_modal_retry_before_torchrun(
         def commit(self) -> None:  # ruff: ignore[no-self-use]
             return None
 
-    profile = "huyhoang0411ha"
+    profile = "private-profile-d"
     contract = continuation.render_segment_contract(profile)
     source = {
         "hash_verified": True,

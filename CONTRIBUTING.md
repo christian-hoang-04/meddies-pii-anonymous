@@ -5,7 +5,7 @@ Meddies PII should be easy to run without credentials. Start with the offline CL
 ## Setup
 
 ```bash
-git clone https://github.com/meddies-ai/meddies-pii.git
+git clone https://example.invalid/anonymous/meddies-pii.git
 cd meddies-pii
 uv sync
 uv run meddies-pii demo
@@ -56,7 +56,7 @@ Report suspected vulnerabilities through the private process in [SECURITY.md](SE
 
 ```bash
 uv run ruff check --config ruff-strict.toml .
-uvx --from 'git+https://github.com/hahuyhoang411/lintmax-py.git@4cac0c5b770b8f9cdb5a1d84186554ffbd0eb2a7' lintmax-py check .
+uvx --from lintmax-py==0.0.7 lintmax-py check .
 uv run pytest
 uv run mypy src/meddies_pii
 uv run basedpyright src/meddies_pii

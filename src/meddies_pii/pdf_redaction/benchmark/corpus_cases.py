@@ -574,7 +574,7 @@ def _add_hostile_document_objects(builder: _CorpusBuilder) -> None:
         '<?xpacket begin="" id="W5M0MpCehiHzreSzNTczkc9d"?>'
         '<x:xmpmeta xmlns:x="adobe:ns:meta/">'
         '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">'
-        '<rdf:Description xmlns:meddies="https://meddies.ai/ns/benchmark/" '
+        '<rdf:Description xmlns:meddies="https://example.invalid/ns/benchmark/" '
         f'meddies:syntheticCanary="{xmp_value}"/>'
         '</rdf:RDF></x:xmpmeta><?xpacket end="w"?>'
     )

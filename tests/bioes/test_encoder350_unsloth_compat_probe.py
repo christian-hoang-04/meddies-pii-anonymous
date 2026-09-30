@@ -72,4 +72,4 @@ assert "unsloth" not in sys.modules
     )
     assert modules.returncode == 0
     assert probe.PROBE_CONFIRMATION in probe.render_command()
-    assert probe.render_command().startswith("MODAL_PROFILE=huyhoang041100 uv run modal run --timestamps -m")
+    assert probe.render_command().startswith("MODAL_PROFILE=private-profile-c uv run modal run --timestamps -m")

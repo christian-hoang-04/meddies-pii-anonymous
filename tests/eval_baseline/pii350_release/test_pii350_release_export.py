@@ -357,7 +357,7 @@ def test_r1_receipt_stages_between_distinct_roots_before_export(tmp_path: Path, 
     )
     approved_path = release.write_r1_preflight_receipt(approved, local_root / "preflight")
     assert release._stage_r1_command(approved_path, approved["receipt_sha256"]) == (
-        "MODAL_PROFILE=huyhoang041100 uv run modal run "
+        "MODAL_PROFILE=private-profile-c uv run modal run "
         "scripts/ops/export_pii350_release.py --action stage_r1_preflight_receipt "
         f"--local-preflight-receipt-path {approved_path} "
         f"--expected-receipt-sha256 {approved['receipt_sha256']}"
@@ -370,7 +370,7 @@ def test_r1_receipt_stages_between_distinct_roots_before_export(tmp_path: Path, 
     assert not remote_receipt.is_relative_to(local_root)
     assert staged["model_bytes_transferred"] == 0
     assert release._export_r1_command(staged["remote_path"], staged["receipt_sha256"]) == (
-        "MODAL_PROFILE=huyhoang041100 uv run modal run "
+        "MODAL_PROFILE=private-profile-c uv run modal run "
         "scripts/ops/export_pii350_release.py --action export_r1_q8_head_preserved "
         f"--preflight-receipt-path {staged['remote_path']} "
         f"--expected-receipt-sha256 {staged['receipt_sha256']} --no-upload"

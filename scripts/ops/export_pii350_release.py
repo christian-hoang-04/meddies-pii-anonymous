@@ -750,7 +750,7 @@ def _release_volume_path(relative_path: str) -> Path:
 
 def _stage_r1_command(receipt_path: Path, receipt_sha256: str) -> str:
     return " ".join((
-        "MODAL_PROFILE=huyhoang041100",
+        "MODAL_PROFILE=private-profile-c",
         "uv run modal run scripts/ops/export_pii350_release.py",
         "--action stage_r1_preflight_receipt",
         "--local-preflight-receipt-path",
@@ -762,7 +762,7 @@ def _stage_r1_command(receipt_path: Path, receipt_sha256: str) -> str:
 
 def _export_r1_command(remote_path: str, receipt_sha256: str) -> str:
     return " ".join((
-        "MODAL_PROFILE=huyhoang041100",
+        "MODAL_PROFILE=private-profile-c",
         "uv run modal run scripts/ops/export_pii350_release.py",
         "--action export_r1_q8_head_preserved",
         "--preflight-receipt-path",

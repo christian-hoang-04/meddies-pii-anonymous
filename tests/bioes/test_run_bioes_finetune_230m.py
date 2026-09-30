@@ -36,7 +36,7 @@ def test_default_recipe_binds_every_settled_issue_78_value(
 
     monkeypatch.setattr(runner, "SmokeTrainingConfig", capture_config)
 
-    assert runner.ISSUE_78_URL == "https://github.com/meddies-ai/meddies-pii/issues/78"
+    assert runner.ISSUE_78_URL == "https://example.invalid/anonymous/meddies-pii/issues/78"
     runner.build_config(runner.parse_args([]))
 
     assert (

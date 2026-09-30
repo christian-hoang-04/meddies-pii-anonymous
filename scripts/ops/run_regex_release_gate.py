@@ -3,7 +3,7 @@
 Render the frozen contract and commands first. No experiment action accepts a
 different seed, data revision, artifact, runtime, resource envelope, or verdict.
 
-    MODAL_PROFILE=huyhoang041100 uv run --no-sync modal run \
+    MODAL_PROFILE=private-profile-c uv run --no-sync modal run \
       scripts/ops/run_regex_release_gate.py::render
 
 The contract needs a source commit, so it cannot be built at module scope where the image and the decorators are

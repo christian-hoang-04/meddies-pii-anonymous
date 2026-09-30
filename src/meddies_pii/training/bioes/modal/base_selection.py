@@ -260,7 +260,7 @@ def render_dry_run() -> str:
 
 
 def require_modal_profile() -> None:
-    require_profile("hahuyhoang411", "H100 selection gate")
+    require_profile("private-profile-a", "H100 selection gate")
 
 
 def _probe_lane_guard(lane: str, *, execute: bool, confirmation: str, estimated_cost_usd: float) -> dict[str, object]:

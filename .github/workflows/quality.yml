@@ -47,7 +47,7 @@ jobs:
         run: uv run ruff format --config ruff-strict.toml --check .
 
       - name: Full pinned lintmax gate
-        run: uvx --from 'git+https://github.com/hahuyhoang411/lintmax-py.git@4cac0c5b770b8f9cdb5a1d84186554ffbd0eb2a7' lintmax-py check .
+        run: uvx --from lintmax-py==0.0.7 lintmax-py check .
 
       - name: Test with branch coverage
         run: >-

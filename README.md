@@ -6,16 +6,12 @@ De-identification**.
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
-[![arXiv](https://img.shields.io/badge/arXiv-2609.12544-b31b1b)](https://arxiv.org/abs/2609.12544)
-
-**Authors:** Le Linh Uyen*, Ho Dinh Tri*, Christian Hoang, and Huy Hoang Ha
-
-\* These authors contributed equally.
+**Author information:** Omitted for double-blind review.
 
 This repository contains the research code and paper artifacts for a
 multilingual synthetic clinical PII generation and evaluation framework. The
-paper's local PDF and source are the authoritative publication artifacts; the
-linked arXiv record is the associated preprint.
+paper's local PDF and source are the authoritative review artifacts; identifying
+author and preprint links are intentionally omitted from this copy.
 
 ## Paper
 
@@ -23,7 +19,6 @@ linked arXiv record is the associated preprint.
 | --- | --- |
 | Paper PDF | [`paper/meddies-pii-naacl-final.pdf`](paper/meddies-pii-naacl-final.pdf) |
 | LaTeX source | [`paper/meddies-pii-naacl-final.tex`](paper/meddies-pii-naacl-final.tex) |
-| arXiv preprint | [arXiv:2609.12544](https://arxiv.org/abs/2609.12544) |
 | Paper assets | [`paper/`](paper/) |
 
 The paper presents a synthetic clinical PII corpus with one million documents
@@ -158,12 +153,9 @@ If you use this code or paper, please cite:
 ```bibtex
 @misc{meddiespii2026,
   title         = {Meddies-PII: A Multilingual Framework for Personally Identifiable Information Extraction in Clinical De-identification},
-  author        = {Le, Linh Uyen and Ho, Dinh Tri and Hoang, Christian and Ha, Huy Hoang},
+  author        = {Anonymous},
   year          = {2026},
-  eprint        = {2609.12544},
-  archivePrefix = {arXiv},
   primaryClass  = {cs.CL},
-  url           = {https://arxiv.org/abs/2609.12544}
 }
 ```
 

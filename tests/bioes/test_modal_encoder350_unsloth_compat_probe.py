@@ -154,7 +154,7 @@ def test_local_profile_is_encoder350_account_before_remote(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.delenv("MODAL_PROFILE", raising=False)
-    with pytest.raises(RuntimeError, match="huyhoang041100"):
+    with pytest.raises(RuntimeError, match="private-profile-c"):
         modal_probe._local_remote_call(probe.render_probe(), execute=True, confirmation=probe.PROBE_CONFIRMATION)
 
 

@@ -1,4 +1,4 @@
-# Materialized from lintmax-py 0.0.7 (hahuyhoang411/lintmax-py@917dea9) so CI, hooks,
+# Materialized from lintmax-py 0.0.7 so CI, hooks,
 # and documented local review enforce the same policy without an unpinned global tool.
 preview = true
 line-length = 123

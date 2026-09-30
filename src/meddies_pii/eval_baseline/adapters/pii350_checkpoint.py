@@ -81,7 +81,7 @@ HEAD_HIDDEN_SIZE = 1024
 HEAD_LABEL_COUNT = 37
 GLOBAL_BATCH_SIZE = 128
 WORLD_SIZE = 4
-WAVE_PROFILES = frozenset({"meddiesresearch", "huyhoang0411ha", "meddies-ocr"})
+WAVE_PROFILES = frozenset({"meddiesresearch", "private-profile-d", "meddies-ocr"})
 MAX_SEQUENCE_LENGTH = 8192
 MAX_BATCH_SIZE = 8
 MAX_BATCH_TOKENS = 32_768
@@ -380,7 +380,7 @@ def _require_metadata(  # ruff: ignore[complex-structure]
             or rng_transition.get("kind") != "two_rank_to_four_rank_v1"
             or rng_transition.get("rank_mapping") != [0, 1, 2, 3]
             or [record.get("rank") for record in rank_rng_states] != [0, 1, 2, 3]
-            or wave_profile != "huyhoang0411ha"
+            or wave_profile != "private-profile-d"
             or float(cumulative_cost) != STEP150_WAVE2_CUMULATIVE_ALL_IN_COST_USD
         ):
             msg = "step-150 Wave2 checkpoint does not match its allowlisted contract"

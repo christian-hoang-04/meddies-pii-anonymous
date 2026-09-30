@@ -2323,9 +2323,9 @@ def test_request_requires_its_workspace_pinned_budget_ceiling() -> None:
     request = _request(runner)
     assert runner.PROFILE_ALL_IN_CEILING_USD == {
         "diffusionllm": 4.0,
-        "huyhoang0411ha": 8.5,
+        "private-profile-d": 8.5,
         "meddies-pii": 3.8,
-        "huyhoang041100": 3.0,
+        "private-profile-c": 3.0,
         "meddies-run": 2.9,
     }
     for profile, ceiling in runner.PROFILE_ALL_IN_CEILING_USD.items():
@@ -3193,7 +3193,7 @@ def _concurrent_request(runner: ModuleType, ceiling: float, digest: str = "a" * 
             ceiling,
             base.all_in_rate_usd_per_second,
             base.reserve_seconds_per_cell,
-            "huyhoang0411ha",
+            "private-profile-d",
         ),
     )
 
@@ -3205,7 +3205,7 @@ def test_one_profile_holds_several_active_reservations_within_its_allocation(
     runner = _runner()
     _issuer_key_for_test(runner, monkeypatch, tmp_path)
     ledger_path = tmp_path / "ledger.json"
-    assert runner.PROFILE_ALL_IN_CEILING_USD["huyhoang0411ha"] == 8.5
+    assert runner.PROFILE_ALL_IN_CEILING_USD["private-profile-d"] == 8.5
 
     first = runner.issue_launch_approval(
         _concurrent_request(runner, 4.0),
@@ -3227,7 +3227,7 @@ def test_one_profile_holds_several_active_reservations_within_its_allocation(
     active = [
         reservation
         for reservation in ledger["reservations"]
-        if reservation["profile"] == "huyhoang0411ha" and reservation["status"] == "active"
+        if reservation["profile"] == "private-profile-d" and reservation["status"] == "active"
     ]
     assert len(active) == 2
 
@@ -3292,7 +3292,7 @@ def test_settling_a_reservation_frees_none_of_its_settled_spend(monkeypatch: pyt
             cells=["gretel_en"],
         )
     ledger = runner.inspect_approval_ledger(ledger_path)
-    settled = ledger["prior_modeled_attempts_by_profile"]["huyhoang0411ha"]
+    settled = ledger["prior_modeled_attempts_by_profile"]["private-profile-d"]
     assert [entry["modeled_all_in_cost_usd"] for entry in settled] == ["4.0"]
 
 
@@ -3708,7 +3708,7 @@ def _destination_request(runner: ModuleType, request: BenchmarkRequest) -> Bench
             8.5,
             request.all_in_rate_usd_per_second,
             request.reserve_seconds_per_cell,
-            "huyhoang0411ha",
+            "private-profile-d",
         ),
     )
 
@@ -3739,11 +3739,11 @@ def _export_transfer(
 def test_new_evaluation_workspace_has_its_own_pinned_ceiling() -> None:
     runner = _runner()
     request = _request(runner)
-    assert runner.PROFILE_ALL_IN_CEILING_USD["huyhoang0411ha"] == 8.5
-    assert "huyhoang0411ha" in runner.EVALUATION_PROFILES
+    assert runner.PROFILE_ALL_IN_CEILING_USD["private-profile-d"] == 8.5
+    assert "private-profile-d" in runner.EVALUATION_PROFILES
     pinned = _destination_request(runner, request)
     assert pinned.max_all_in_usd == 8.5
-    assert pinned.profile == "huyhoang0411ha"
+    assert pinned.profile == "private-profile-d"
     with pytest.raises(ValueError, match="profile-pinned"):
         runner.BenchmarkRequest(
             request.repo_id,
@@ -3754,7 +3754,7 @@ def test_new_evaluation_workspace_has_its_own_pinned_ceiling() -> None:
             8.51,
             request.all_in_rate_usd_per_second,
             request.reserve_seconds_per_cell,
-            "huyhoang0411ha",
+            "private-profile-d",
         )
 
 
@@ -3827,7 +3827,7 @@ def test_import_writes_identical_bytes_at_identical_relative_paths(
     assert destination_root != source_root
     assert sorted(imported["written_files"]) == sorted(entry["path"] for entry in receipt["files"])
     assert imported["already_present_files"] == []
-    assert imported["destination_profile"] == "huyhoang0411ha"
+    assert imported["destination_profile"] == "private-profile-d"
     assert imported["source_receipt_digest"] == receipt["receipt_digest"]
     for entry in receipt["files"]:
         assert (destination_root / entry["path"]).read_bytes() == (source_root / entry["path"]).read_bytes()

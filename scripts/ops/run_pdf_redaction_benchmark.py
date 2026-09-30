@@ -2,9 +2,9 @@
 
 Run the cheap security/toolchain gate first, then the complete matrix:
 
-    MODAL_PROFILE=huyhoang041100 uv run modal run \
+    MODAL_PROFILE=private-profile-c uv run modal run \
       scripts/ops/run_pdf_redaction_benchmark.py::preflight
-    MODAL_PROFILE=huyhoang041100 uv run modal run \
+    MODAL_PROFILE=private-profile-c uv run modal run \
       scripts/ops/run_pdf_redaction_benchmark.py::main
 
 Only deterministic synthetic fixtures are persisted on Modal. The private-fixture

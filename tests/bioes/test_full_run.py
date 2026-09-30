@@ -411,7 +411,7 @@ def test_full_run_command_renderer_has_one_explicit_candidate_and_exact_profile(
     assert full_run.FULL_RUN_CONFIRMATION in command
     assert "ded3bd6ec1c04ee486500308f4f05035" in command
     assert "SUCCESSFUL_QUALIFICATION_JSON" not in command
-    assert "MODAL_PROFILE=huyhoang041100" in command
+    assert "MODAL_PROFILE=private-profile-c" in command
     assert "uv run modal run --detach --timestamps -m" in command
     assert "qualification_evidence_backend" in command
     assert "source_backend" not in command
@@ -421,10 +421,10 @@ def test_full_run_command_renderer_has_one_explicit_candidate_and_exact_profile(
 @pytest.mark.parametrize(
     ("candidate", "profile"),
     [
-        ("base230", "hahuyhoang411"),
-        ("encoder230", "huyhoangha0411"),
-        ("encoder350", "huyhoang041100"),
-        ("pii350", "huyhoang041100"),
+        ("base230", "private-profile-a"),
+        ("encoder230", "private-profile-e"),
+        ("encoder350", "private-profile-c"),
+        ("pii350", "private-profile-c"),
     ],
 )
 def test_preflight_command_renders_the_cpu_receipt_prerequisite(candidate: str, profile: str) -> None:
@@ -687,8 +687,8 @@ def test_pii350_capacity_run_uses_authorized_batch256_and_r128a256() -> None:
             "encoder230",
             288,
             "HA_AUTHORIZE_ENCODER230_B288_R64A128_FULL_BUDGET",
-            "hahuyhoang041100",
-            "2fd30d386077b03af086c337145765a8cd6f05f03032da6240d9437b7789c681",
+            "private-profile-b",
+                "4b7d4cd1f9b53308dd7b9c561c228fb98457718a95bffa03d986b16391cc7d6d",
         ),
     ],
 )

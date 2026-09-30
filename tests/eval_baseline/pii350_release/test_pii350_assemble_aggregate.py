@@ -117,7 +117,7 @@ def _split_summaries(*, first_count: int = 15) -> tuple[dict[str, Any], dict[str
             second[dataset] = cell
     return (
         _summary(first, profile="diffusionllm", generation=GENERATION_A),
-        _summary(second, profile="huyhoang0411ha", generation=GENERATION_B),
+        _summary(second, profile="private-profile-d", generation=GENERATION_B),
     )
 
 
@@ -193,7 +193,7 @@ def test_assembly_records_per_cell_source_provenance() -> None:
     generations = {entry["evaluation_generation_digest"] for entry in provenance.values()}
     assert generations == {GENERATION_A, GENERATION_B}
     profiles = {entry["source_profile"] for entry in provenance.values()}
-    assert profiles == {"diffusionllm", "huyhoang0411ha"}
+    assert profiles == {"diffusionllm", "private-profile-d"}
     for dataset, entry in provenance.items():
         assert entry["result_sha256"] == hashlib.sha256(dataset.encode()).hexdigest()
     assert assembled["assembly"]["evaluation_generation_digests"] == sorted([GENERATION_A, GENERATION_B])
@@ -204,7 +204,7 @@ def test_assembly_refuses_a_missing_cell() -> None:
     assembler = _assembler()
     first, second = _split_summaries()
     second["cells"].pop(EVAL_DATASETS[-1])
-    second = _summary(second["cells"], profile="huyhoang0411ha", generation=GENERATION_B)
+    second = _summary(second["cells"], profile="private-profile-d", generation=GENERATION_B)
 
     with pytest.raises(SystemExit, match="missing cells"):
         assembler.assemble(
@@ -223,7 +223,7 @@ def _duplicated_v2_eval_summaries() -> tuple[dict[str, Any], dict[str, Any]]:
     first, second = _split_summaries(first_count=16)
     fill_cells = dict(second["cells"])
     fill_cells["v2-eval"] = _cell("v2-eval", tp=1, pred=2, gold=3)
-    return first, _summary(fill_cells, profile="huyhoang0411ha", generation=GENERATION_B)
+    return first, _summary(fill_cells, profile="private-profile-d", generation=GENERATION_B)
 
 
 def test_exclusion_resolves_a_duplicate_and_keeps_the_other_generation() -> None:
@@ -348,7 +348,7 @@ def test_assembly_refuses_a_cell_supplied_by_two_summaries() -> None:
     duplicated = EVAL_DATASETS[0]
     cells = dict(second["cells"])
     cells[duplicated] = _cell(duplicated, tp=1, pred=2, gold=3)
-    second = _summary(cells, profile="huyhoang0411ha", generation=GENERATION_B)
+    second = _summary(cells, profile="private-profile-d", generation=GENERATION_B)
 
     with pytest.raises(SystemExit, match="appears in more than one summary"):
         assembler.assemble(
@@ -379,7 +379,7 @@ def test_assembly_refuses_a_summary_from_another_checkpoint() -> None:
     first, second = _split_summaries()
     foreign = _summary(
         second["cells"],
-        profile="huyhoang0411ha",
+        profile="private-profile-d",
         generation=GENERATION_B,
         checkpoint="b" * 64,
     )

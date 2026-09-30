@@ -73,7 +73,7 @@ EXECUTION_TOPOLOGIES = {
         "memory_mib": 64 * 1024,
         "timeout_seconds": 7_900,
     },
-    "huyhoang0411ha": {
+    "private-profile-d": {
         "world_size": 4,
         "gpu": "A100-40GB:4",
         "cpu": 8.0,
@@ -111,7 +111,7 @@ def authorization_tokens(world_size: int) -> dict[str, str]:
 
 SLICE_TIMEOUT_SCHEDULE: dict[str, tuple[int, ...]] = {
     "meddiesresearch": (7_900,),
-    "huyhoang0411ha": (10_800, 7_000, 6_000, 4_000),
+    "private-profile-d": (10_800, 7_000, 6_000, 4_000),
     "meddies-ocr": (10_800, 4_000),
 }
 TRAIN_CONFIRMATION_BY_WORLD_SIZE = {
@@ -133,13 +133,13 @@ EVAL_ROWS = 1_700
 EVALUATION_CREDITS: dict[str, float] = {
     "diffusionllm": 4.0,
     "meddies-pii": 3.8,
-    "huyhoang041100": 3.0,
+    "private-profile-c": 3.0,
     "meddies-run": 2.9,
 }
-WAVE_ORDER = ("meddiesresearch", "huyhoang0411ha", "meddies-ocr")
+WAVE_ORDER = ("meddiesresearch", "private-profile-d", "meddies-ocr")
 SEGMENTS: dict[str, float] = {
     "meddiesresearch": WAVE_ONE_LIVE_REMAINING_BALANCE_USD,
-    "huyhoang0411ha": 30.0,
+    "private-profile-d": 30.0,
     "meddies-ocr": 71.0,
 }
 """This is Modal's reported live balance.
@@ -156,12 +156,12 @@ planned resumable slices repeat transport.
 """
 AUXILIARY_BILLING_RESERVE_USD: dict[str, float] = {
     "meddiesresearch": 0.40,
-    "huyhoang0411ha": 0.40,
+    "private-profile-d": 0.40,
     "meddies-ocr": 1.20,
 }
 AUXILIARY_MAX_CPU_CALLS: dict[str, int] = {
     "meddiesresearch": 4,
-    "huyhoang0411ha": 4,
+    "private-profile-d": 4,
     "meddies-ocr": 12,
 }
 CHECKPOINT_REQUIRED_FILES = (
@@ -484,7 +484,7 @@ def validate_interruption_cost_receipt(
         msg = "interruption cost receipt cumulative cost is inconsistent"
         raise RuntimeError(msg)
     is_preempted_wave2_source = (
-        profile == "huyhoang0411ha"
+        profile == "private-profile-d"
         and source_receipt.get("checkpoint_digest") == PREEMPTED_WAVE2_SOURCE_CHECKPOINT_DIGEST
         and source_receipt.get("optimizer_step") == PREEMPTED_WAVE2_SOURCE_STEP
         and source_receipt.get("packed_cursor") == PREEMPTED_WAVE2_SOURCE_CURSOR
@@ -497,7 +497,7 @@ def validate_interruption_cost_receipt(
 
 def requires_interruption_cost_receipt(profile: str, source_receipt: Mapping[str, object]) -> bool:
     return (
-        profile == "huyhoang0411ha"
+        profile == "private-profile-d"
         and source_receipt.get("checkpoint_digest") == PREEMPTED_WAVE2_SOURCE_CHECKPOINT_DIGEST
         and source_receipt.get("optimizer_step") == PREEMPTED_WAVE2_SOURCE_STEP
         and source_receipt.get("packed_cursor") == PREEMPTED_WAVE2_SOURCE_CURSOR

@@ -72,10 +72,7 @@ def test_contributing_lint_commands_match_the_enforced_strict_policy() -> None:
 
 
 def test_full_lintmax_gate_is_pinned_in_ci_and_contributor_pr_checklist() -> None:
-    pinned_command = (
-        "uvx --from 'git+https://github.com/hahuyhoang411/lintmax-py.git@"
-        "4cac0c5b770b8f9cdb5a1d84186554ffbd0eb2a7' lintmax-py check ."
-    )
+    pinned_command = "uvx --from lintmax-py==0.0.7 lintmax-py check ."
     unpinned_command = "uvx --from lintmax-py lintmax-py check ."
     quality_workflow = (REPOSITORY_ROOT / ".github" / "workflows" / "quality.yml").read_text(encoding="utf-8")
     contributor_pr_checklist = (

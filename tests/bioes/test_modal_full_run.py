@@ -212,7 +212,7 @@ def test_m230_comparison_uses_primary_asset_receipt_and_exact_profile(
 
     expected_profile = {
         "base230": "meddies-pii",
-        "encoder230": "hahuyhoang041100",
+        "encoder230": "private-profile-b",
     }[candidate]
     monkeypatch.setenv("MODAL_PROFILE", expected_profile)
     result = full_run._local_m230_comparison_call(
@@ -223,7 +223,7 @@ def test_m230_comparison_uses_primary_asset_receipt_and_exact_profile(
         _inventory(),
     )
     assert result["args"][0] == comparison
-    monkeypatch.setenv("MODAL_PROFILE", "hahuyhoang411")
+    monkeypatch.setenv("MODAL_PROFILE", "private-profile-a")
     with pytest.raises(RuntimeError, match=f"MODAL_PROFILE={expected_profile}"):
         full_run._local_m230_comparison_call(
             candidate,
@@ -254,7 +254,7 @@ def test_pii350_utilization_uses_primary_asset_receipt_and_exact_profile(
         _inventory(),
     )
     assert result["args"][0] == utilization
-    monkeypatch.setenv("MODAL_PROFILE", "huyhoang041100")
+    monkeypatch.setenv("MODAL_PROFILE", "private-profile-c")
     with pytest.raises(RuntimeError, match="MODAL_PROFILE=retraction"):
         full_run._local_pii350_utilization_call(
             _Endpoint(),
@@ -267,10 +267,10 @@ def test_pii350_utilization_uses_primary_asset_receipt_and_exact_profile(
 
 def test_full_run_profile_map_and_timeout_are_candidate_specific() -> None:
     assert full_run.FULL_RUN_PROFILES == {
-        "base230": "hahuyhoang411",
-        "encoder230": "huyhoangha0411",
-        "encoder350": "huyhoang041100",
-        "pii350": "huyhoang041100",
+        "base230": "private-profile-a",
+        "encoder230": "private-profile-e",
+        "encoder350": "private-profile-c",
+        "pii350": "private-profile-c",
     }
     assert full_run.H100_OPTIONS["timeout"] == 9_000
     assert round(full_run.H100_OPTIONS["timeout"] * contract.FULL_RUN_RATE_USD_PER_SECOND, 6) == 9.873
@@ -291,7 +291,7 @@ def test_encoder350_and_pii350_are_independently_launchable_on_shared_profile(
             calls.append(self.name)
             return {"candidate": self.name}
 
-    monkeypatch.setenv("MODAL_PROFILE", "huyhoang041100")
+    monkeypatch.setenv("MODAL_PROFILE", "private-profile-c")
     for candidate in ("encoder350", "pii350"):
         artifact = (
             _artifact()
@@ -759,7 +759,7 @@ def test_pii350_scout_remote_and_profile_gates_bind_the_exact_arm(
         action,
         _inventory(),
     )
-    monkeypatch.setenv("MODAL_PROFILE", "hahuyhoang411")
+    monkeypatch.setenv("MODAL_PROFILE", "private-profile-a")
     with pytest.raises(RuntimeError, match=f"MODAL_PROFILE={profile}"):
         full_run._local_pii350_scout_call(
             _Endpoint(),

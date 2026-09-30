@@ -195,7 +195,7 @@ M230_COMPARISON_BATCH_SIZES = {
 }
 M230_COMPARISON_PROFILES = {
     "base230": "meddies-pii",
-    "encoder230": "hahuyhoang041100",
+    "encoder230": "private-profile-b",
 }
 M230_COMPARISON_PRIMARY_ACTIONS = {
     "base230": "HA_AUTHORIZE_BASE230_B320_R64A128_FULL_BUDGET",
@@ -212,10 +212,10 @@ PII350_B192_COMPLETE_EVIDENCE: dict[str, str | int] = {
     "maximum_device_vram_used_bytes": 58_263_797_760,
 }
 FULL_RUN_MODAL_PROFILES = {
-    "base230": "hahuyhoang411",
-    "encoder230": "huyhoangha0411",
-    "encoder350": "huyhoang041100",
-    "pii350": "huyhoang041100",
+    "base230": "private-profile-a",
+    "encoder230": "private-profile-e",
+    "encoder350": "private-profile-c",
+    "pii350": "private-profile-c",
 }
 
 

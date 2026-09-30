@@ -296,7 +296,7 @@ def test_r1_preflight_is_a_non_launching_exact_contract() -> None:
         "gpu": None,
         "memory_mib": 32768,
         "timeout_seconds": 5400,
-        "workspace_profile": "huyhoang041100",
+        "workspace_profile": "private-profile-c",
     }
     assert contract["transfer"] == {
         "browser_cache_bytes": 0,

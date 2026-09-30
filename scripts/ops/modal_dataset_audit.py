@@ -5,7 +5,7 @@ raw label distribution, Meddies Labels-mapped span + doc counts, language mix, a
 (Nemotron) domain mix. Drives the data-redistribution strategy with real numbers
 instead of local 2k-row samples.
 
-Run:  MODAL_PROFILE=hahuyhoang411 uv run modal run scripts/ops/modal_dataset_audit.py
+Run:  MODAL_PROFILE=private-profile-a uv run modal run scripts/ops/modal_dataset_audit.py
 Output: printed summary + JSON written back to ./_dataset_audit.json
 
 Each container prints an AUDIT_RESULT:: line into the streamed run log; parse those lines from the log (no return values to

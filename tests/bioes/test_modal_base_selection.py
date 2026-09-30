@@ -66,7 +66,7 @@ def test_h100_dispatch_profile_is_fail_closed(monkeypatch: pytest.MonkeyPatch) -
     monkeypatch.delenv("MODAL_PROFILE", raising=False)
     with pytest.raises(RuntimeError, match="MODAL_PROFILE"):
         base_selection.require_modal_profile()
-    monkeypatch.setenv("MODAL_PROFILE", "hahuyhoang411")
+    monkeypatch.setenv("MODAL_PROFILE", "private-profile-a")
     base_selection.require_modal_profile()
 
 

@@ -500,7 +500,7 @@ def build_r1_preflight(
         "compatibility": _compatibility_contract(),
         "modal": {
             "app": "meddies-pii350-release-export",
-            "workspace_profile": "huyhoang041100",
+            "workspace_profile": "private-profile-c",
             "gpu": None,
             "cpu": 8,
             "memory_mib": 32_768,

@@ -4,7 +4,7 @@
 Thin call site over the existing ``run_smoke_training`` — all training logic lives in
 ``src/meddies_pii/training/bioes/``; this file only supplies the settled configuration
 for the settled 230M recipe documented in issue #78:
-https://github.com/meddies-ai/meddies-pii/issues/78
+https://example.invalid/anonymous/meddies-pii/issues/78
 
   * model     LiquidAI/LFM2.5-230M-Base      (base tokenizer loads without remote code)
   * train     Meddies/meddies-pii-mixed / default / train   (1,000,000 rows)
@@ -45,7 +45,7 @@ from meddies_pii.training.bioes.trainers.trainer import (
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-ISSUE_78_URL = "https://github.com/meddies-ai/meddies-pii/issues/78"
+ISSUE_78_URL = "https://example.invalid/anonymous/meddies-pii/issues/78"
 MODEL_ID = "LiquidAI/LFM2.5-230M-Base"
 TRAIN_REPO = "Meddies/meddies-pii-mixed"
 EVAL_REPO = "Meddies/meddies-pii-v2"

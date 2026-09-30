@@ -66,13 +66,13 @@ def test_four_exact_candidates_and_two_h100_lanes_render_without_launch() -> Non
             "gpu": "H100!",
             "models": ["base230", "encoder230"],
             "max_estimated_cost_usd": 3.0,
-            "modal_profile": "hahuyhoang411",
+            "modal_profile": "private-profile-a",
         },
         "350": {
             "gpu": "H100!",
             "models": ["encoder350", "pii350"],
             "max_estimated_cost_usd": 3.0,
-            "modal_profile": "hahuyhoang411",
+            "modal_profile": "private-profile-a",
         },
     }
     assert all(run["max_estimated_cost_usd"] == 10.0 for run in rendered["full_runs"].values())

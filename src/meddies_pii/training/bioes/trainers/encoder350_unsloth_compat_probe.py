@@ -122,7 +122,7 @@ def resolve_encoder350_snapshot(snapshot_download: Callable[..., str]) -> str:
 
 def render_command() -> str:
     return (
-        "MODAL_PROFILE=huyhoang041100 uv run modal run --timestamps -m "
+        "MODAL_PROFILE=private-profile-c uv run modal run --timestamps -m "
         "meddies_pii.training.bioes.modal.encoder350_unsloth_compat_probe "
         f"--execute --confirmation {PROBE_CONFIRMATION}"
     )

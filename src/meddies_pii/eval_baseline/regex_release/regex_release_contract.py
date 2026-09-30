@@ -367,7 +367,7 @@ def render_launch_commands(contract: ReleaseGateContract) -> dict[str, str]:
         A mapping from each release-gate action to its digest-pinned launch command.
 
     """
-    prefix = "MODAL_PROFILE=huyhoang041100 uv run --no-sync modal run scripts/ops/run_regex_release_gate.py"
+    prefix = "MODAL_PROFILE=private-profile-c uv run --no-sync modal run scripts/ops/run_regex_release_gate.py"
     digest = contract.sha256
     pin_flag = f" --ignore-list-sha256 {contract.ignore_list_sha256}" if contract.ignore_list_sha256 is not None else ""
     return {

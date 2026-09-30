@@ -52,10 +52,10 @@ def test_step60_resume_assigns_four_windows_and_commits_step61_cursor7808() -> N
 
 def test_trajectory_digest_survives_profile_change_but_execution_digest_does_not() -> None:
     first = continuation.render_segment_contract("meddiesresearch")
-    second = continuation.render_segment_contract("huyhoang0411ha")
+    second = continuation.render_segment_contract("private-profile-d")
     assert continuation.WAVE_ORDER == (
         "meddiesresearch",
-        "huyhoang0411ha",
+        "private-profile-d",
         "meddies-ocr",
     )
     assert second["execution"]["timeout_seconds"] == 10_800
@@ -71,7 +71,7 @@ def test_trajectory_digest_survives_profile_change_but_execution_digest_does_not
     assert first["execution_contract_digest"] != second["execution_contract_digest"]
     assert first["execution"]["trajectory_digest"] == first["trajectory_digest"]
     with pytest.raises(ValueError, match="approved training profile"):
-        continuation.render_segment_contract("huyhoangha0411")
+        continuation.render_segment_contract("private-profile-e")
 
 
 def test_schema_v2_records_explicit_single_to_two_rank_transition_for_wave_one() -> None:
@@ -180,7 +180,7 @@ def test_budget_and_whole_checkpoint_evaluation_scheduler_are_deterministic() ->
     assert queue == [
         ("step-100", "diffusionllm"),
         ("step-150", "meddies-pii"),
-        ("step-200", "huyhoang041100"),
+        ("step-200", "private-profile-c"),
         ("step-250", "meddies-run"),
     ]
 
@@ -203,7 +203,7 @@ def test_launch_digest_binds_parent_identity_and_terminal_checkpoint_never_overw
 
 
 def test_preflight_digest_is_independent_of_future_stage_two_source_root() -> None:
-    contract = continuation.render_segment_contract("huyhoang0411ha")
+    contract = continuation.render_segment_contract("private-profile-d")
     attestation = {"body_tensor_count": 10, "body_tensor_values_sha256": "body"}
     first = continuation.preflight_digest(
         contract["execution_contract_digest"],
@@ -285,8 +285,8 @@ def test_only_the_terminal_partial_metadata_may_break_step_times_128() -> None:
 
 def test_wave_order_and_epoch_terminal_refuse_invalid_next_launches() -> None:
     assert continuation.validate_wave_source("meddiesresearch", {"wave_profile": None}) == 0.0
-    assert continuation.validate_wave_source("huyhoang0411ha", {"wave_profile": "meddiesresearch"}) == 0.0
-    assert continuation.validate_wave_source("meddies-ocr", {"wave_profile": "huyhoang0411ha"}) == 0.0
+    assert continuation.validate_wave_source("private-profile-d", {"wave_profile": "meddiesresearch"}) == 0.0
+    assert continuation.validate_wave_source("meddies-ocr", {"wave_profile": "private-profile-d"}) == 0.0
     with pytest.raises(RuntimeError, match="prior wave"):
         continuation.validate_wave_source("meddies-ocr", {"wave_profile": "meddiesresearch"})
     with pytest.raises(RuntimeError, match="epoch-terminal"):
@@ -295,7 +295,7 @@ def test_wave_order_and_epoch_terminal_refuse_invalid_next_launches() -> None:
 
 def test_auxiliary_reserve_is_applied_once_for_new_wave_and_not_again_on_resume() -> None:
     new_ocr = {
-        "wave_profile": "huyhoang0411ha",
+        "wave_profile": "private-profile-d",
         "wave_cumulative_all_in_cost_usd": 30.0,
     }
     resumed_ocr = {
@@ -311,7 +311,7 @@ def test_auxiliary_reserve_is_applied_once_for_new_wave_and_not_again_on_resume(
 
 
 def test_gpu_budget_uses_full_ceiling_minus_effective_auxiliary_carry() -> None:
-    effective_carry = continuation.effective_wave_carried_cost("meddies-ocr", {"wave_profile": "huyhoang0411ha"})
+    effective_carry = continuation.effective_wave_carried_cost("meddies-ocr", {"wave_profile": "private-profile-d"})
     assert not continuation.budget_allows_next_step(
         elapsed_seconds=69.0,
         predicted_step_seconds=1.0,
@@ -323,7 +323,7 @@ def test_gpu_budget_uses_full_ceiling_minus_effective_auxiliary_carry() -> None:
 
 def test_static_slice_denominations_admit_hangs_without_exceeding_wave_ceiling() -> None:
     assert continuation.select_slice_timeout_seconds("meddiesresearch", carried_cost_usd=0.0) == 7_900
-    assert continuation.select_slice_timeout_seconds("huyhoang0411ha", carried_cost_usd=0.4) == 10_800
+    assert continuation.select_slice_timeout_seconds("private-profile-d", carried_cost_usd=0.4) == 10_800
     assert continuation.select_slice_timeout_seconds("meddies-ocr", carried_cost_usd=1.2) == 10_800
     assert continuation.select_slice_timeout_seconds("meddies-ocr", carried_cost_usd=60.0) == 4_000
     with pytest.raises(RuntimeError, match="no approved"):
@@ -402,7 +402,7 @@ def _cadence_receipt(
 
 
 def test_post_step60_continue_receipt_requires_benchmark_semantics_and_complete_cadence() -> None:
-    contract = continuation.render_segment_contract("huyhoang0411ha")
+    contract = continuation.render_segment_contract("private-profile-d")
     comparison_contract_digest = "a" * 64
     history = [
         _benchmark_cadence_result(
@@ -439,7 +439,7 @@ def test_post_step60_continue_receipt_requires_benchmark_semantics_and_complete_
 
 
 def test_recomputed_digests_cannot_turn_real_early_stop_into_continue() -> None:
-    contract = continuation.render_segment_contract("huyhoang0411ha")
+    contract = continuation.render_segment_contract("private-profile-d")
     comparison_contract_digest = "a" * 64
     history = [
         _benchmark_cadence_result(
@@ -500,7 +500,7 @@ def test_rendered_timeout_is_the_profile_static_cap_not_the_legacy_10800_default
 
 
 def test_step200_interruption_receipt_carries_replayed_attempt_cost_without_reset() -> None:
-    profile = "huyhoang0411ha"
+    profile = "private-profile-d"
     contract = continuation.render_segment_contract(profile)
     source = {
         "checkpoint_digest": "10c305bfc0d4c33ec16a192574c631366461bb8955903035ade5424dea4172e2",

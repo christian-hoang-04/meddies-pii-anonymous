@@ -143,9 +143,9 @@ PROFILE_ENVIRONMENT_KEY = "MODAL_PROFILE"
 
 PROFILE_ALL_IN_CEILING_USD = {
     "diffusionllm": 4.0,
-    "huyhoang0411ha": 8.5,
+    "private-profile-d": 8.5,
     "meddies-pii": 3.8,
-    "huyhoang041100": 3.0,
+    "private-profile-c": 3.0,
     "meddies-run": 2.9,
 }
 """These ceilings are an approved workspace ledger, not caller preferences.

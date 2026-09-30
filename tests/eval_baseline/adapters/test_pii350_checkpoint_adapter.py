@@ -54,7 +54,7 @@ STEP150_WAVE2_METADATA_FIXTURE = {
         for rank in range(4)
     ],
     "epoch_complete": False,
-    "wave_profile": "huyhoang0411ha",
+    "wave_profile": "private-profile-d",
     "wave_cumulative_all_in_cost_usd": 1.680104012429088,
 }
 """Immutable revision 310864af3f15645f70d1c016b8645e5988fbfbcd provenance contract.
@@ -455,7 +455,7 @@ def test_wave2_four_to_four_checkpoint_profile_matches_producer_contract(
         trajectory_digest="542478f63b1726aa863c9a0ecec1e84f6347855fa9b6776b451b40c37781dac4",
         optimizer_step=optimizer_step,
         packed_cursor=packed_cursor,
-        wave_profile="huyhoang0411ha",
+        wave_profile="private-profile-d",
         wave_cumulative_all_in_cost_usd=wave_cost_usd,
     )
 
@@ -470,7 +470,7 @@ def test_wave2_four_to_four_checkpoint_profile_matches_producer_contract(
 def test_wave2_profile_typo_is_not_a_valid_checkpoint_profile(tmp_path: Path) -> None:
     artifact = _write_artifact(
         tmp_path,
-        wave_profile="huyhoangha0411",
+        wave_profile="private-profile-e",
     )
 
     with pytest.raises(RuntimeError, match="continuation schema"):

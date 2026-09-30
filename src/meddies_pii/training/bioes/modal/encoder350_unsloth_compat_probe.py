@@ -478,7 +478,7 @@ def run_encoder350_unsloth_compat_probe(
 
 
 def _local_remote_call(contract: Mapping[str, Any], *, execute: bool, confirmation: str) -> dict[str, Any]:
-    require_modal_profile("huyhoang041100", "Encoder350 compatibility probe")
+    require_modal_profile("private-profile-c", "Encoder350 compatibility probe")
     return run_encoder350_unsloth_compat_probe.remote(contract, execute=execute, confirmation=confirmation)
 
 
