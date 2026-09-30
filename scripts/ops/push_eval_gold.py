@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Assemble the gold eval set and push it as a Meddies/meddies-pii config.
+"""Assemble the gold eval set and push it as a anonymous-placeholder/anonymous-pii config.
 
 Reads the per-language `accepted.*.jsonl` gold (gpt-5.4-mini, heuristic-gated)
 and pushes the concatenation as one config/split, overwriting the legacy broken
@@ -17,16 +17,16 @@ import collections
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from meddies_pii.jsonl import read_jsonl
-from meddies_pii.publishing.huggingface import push_config
-from meddies_pii.taxonomy import PII_LABEL_SET
+from anonymous_pii.jsonl import read_jsonl
+from anonymous_pii.publishing.huggingface import push_config
+from anonymous_pii.taxonomy import PII_LABEL_SET
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
 REPO = Path(__file__).resolve().parents[2]
 DEFAULT_SOURCE_DIR = REPO / "data/run2a/eval_gold"
-DEFAULT_REPO_ID = "Meddies/meddies-pii"
+DEFAULT_REPO_ID = "anonymous-placeholder/anonymous-pii"
 DEFAULT_CONFIG = "eval"
 DEFAULT_SPLIT = "train"
 

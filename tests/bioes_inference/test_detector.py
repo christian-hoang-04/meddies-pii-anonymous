@@ -12,13 +12,13 @@ import numpy as np
 import pytest
 import torch
 
-from meddies_pii.annotations.bioes import (
+from anonymous_pii.annotations.bioes import (
     ENTITY_LABELS,
     build_bioes_label_space,
     viterbi_decode_logits,
     viterbi_decode_numpy,
 )
-from meddies_pii.bioes_inference import (
+from anonymous_pii.bioes_inference import (
     BioesSpanDetector,
     ExpectedFileIdentity,
     OnnxRuntimeBackend,
@@ -402,7 +402,7 @@ def test_detector_rejects_oversized_model_before_reading_or_leaving_a_stage(
 
     assert bytes_read == 0
     assert backend.load_count == 0
-    assert not tuple(tmp_path.glob("meddies-pii-runtime-*"))
+    assert not tuple(tmp_path.glob("anonymous-pii-runtime-*"))
 
 
 def test_detector_bounds_copy_when_open_model_grows_after_fstat(
@@ -462,7 +462,7 @@ def test_detector_bounds_copy_when_open_model_grows_after_fstat(
     assert model_grew is True
     assert model_bytes_read == 2
     assert backend.load_count == 0
-    assert not tuple(tmp_path.glob("meddies-pii-runtime-*"))
+    assert not tuple(tmp_path.glob("anonymous-pii-runtime-*"))
 
 
 def test_detector_rejects_symlinked_model_and_tokenizer_sources(

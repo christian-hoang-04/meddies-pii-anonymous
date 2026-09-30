@@ -7,8 +7,8 @@ import argparse
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from meddies_pii.historical_artifacts import LEGACY_ARTIFACT_TOKEN
-from meddies_pii.training.bioes.reports.training_data_breakdown import (
+from anonymous_pii.historical_artifacts import LEGACY_ARTIFACT_TOKEN
+from anonymous_pii.training.bioes.reports.training_data_breakdown import (
     TrainingDataSourceConfig,
     scan_training_data_source,
     write_training_data_breakdown_report,
@@ -97,7 +97,7 @@ def _source_configs() -> tuple[TrainingDataSourceConfig, ...]:
             "convert-first",
         ),
         TrainingDataSourceConfig(
-            "Meddies/meddies-pii 19 configs (HF)",
+            "anonymous-placeholder/anonymous-pii 19 configs (HF)",
             "internal-augmented",
             (
                 "Canonical 17-lang set + nvidia-health/non-health + vietnamese-translated. On HF — needs "

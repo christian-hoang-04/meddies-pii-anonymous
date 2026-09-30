@@ -1,6 +1,6 @@
 """Redistributed-mix builder + Component B builder on Modal (Run 1, Wave 2).
 
-Loads every source ONCE, converts through the project's real Meddies Labels converters,
+Loads every source ONCE, converts through the project's real Anonymous Labels converters,
 re-audits the internal `pii-bioes` pool with the strengthened Track-D gates
 (quarantining high-severity contamination), folds the external sources
 (17-language-filtered, `source`-tagged), carves a balanced held-out, and builds the
@@ -13,7 +13,7 @@ push (Ha-gated).
 
   MODAL_PROFILE=openmedical uv run modal run scripts/ops/build_redistributed_mix.py::build
 
-Internal `Meddies/meddies-pii` is PRIVATE → attaches `huggingface-secret` (openmedical).
+Internal `anonymous-placeholder/anonymous-pii` is PRIVATE → attaches `huggingface-secret` (openmedical).
 Results print as `MIX_RESULT::` / `COMPB_RESULT::` lines (Modal blob-return is broken);
 the JSONL payloads go to the Volume, not the logs.
 """
@@ -39,8 +39,8 @@ from typing import TYPE_CHECKING
 
 import modal
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.modal_runtime import (
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
 )
@@ -49,16 +49,16 @@ if TYPE_CHECKING:
     from collections import Counter
     from collections.abc import Callable, Iterable, Mapping, Sequence
 
-    from meddies_pii.training.bioes.data.record_schema import NormalizedRecord
+    from anonymous_pii.training.bioes.data.record_schema import NormalizedRecord
 
     type RowConverter = Callable[..., tuple[NormalizedRecord | None, Counter[str]]]
 
-REPO = "Meddies/meddies-pii"
+REPO = "anonymous-placeholder/anonymous-pii"
 OPENPII = "ai4privacy/pii-masking-openpii-1.5m"
 NEMOTRON = "nvidia/Nemotron-PII"
 GRETEL = "gretelai/gretel-pii-masking-en-v1"
 OPENPII_500K = "ai4privacy/open-pii-masking-500k-ai4privacy"
-ARTIFACT_VOLUME = "meddies-pii-bioes-artifacts"
+ARTIFACT_VOLUME = "anonymous-pii-bioes-artifacts"
 OUT_ROOT = "/artifacts/run1"
 
 image = add_source_pythonpath(
@@ -76,13 +76,13 @@ image = add_source_pythonpath(
 So the converter + dedup chain needs transformers present.
 
 """
-app = modal.App("meddies-pii-redistributed-mix", image=image)
+app = modal.App("anonymous-pii-redistributed-mix", image=image)
 _SECRET = modal.Secret.from_name("huggingface-secret")
 _VOLUME = modal.Volume.from_name(ARTIFACT_VOLUME, create_if_missing=True)
 
 
 def _bioes_row_to_record(row: Mapping[str, object], index: int) -> dict[str, object] | None:
-    """Convert a `pii-bioes` row into the canonical Meddies Labels record.
+    """Convert a `pii-bioes` row into the canonical Anonymous Labels record.
 
     The shape matches `mixed.py:_record`: `{text, label:[{category,start,end,text}], info}`.
     Emitting `label` rather than `spans` keeps internal rows schema-identical to the external
@@ -105,8 +105,8 @@ def _bioes_row_to_record(row: Mapping[str, object], index: int) -> dict[str, obj
         return None
     raw_info = row.get("info")
     info: dict[str, object] = dict(raw_info) if is_str_mapping(raw_info) else {}
-    info.setdefault("source", "meddies-internal")
-    info.setdefault("source_dataset", "Meddies/meddies-pii:pii-bioes")
+    info.setdefault("source", "anonymous-internal")
+    info.setdefault("source_dataset", "anonymous-placeholder/anonymous-pii:pii-bioes")
     info.setdefault("id", info.get("id") or f"pii-bioes:{index}")
     return {"text": text, "label": spans, "info": info}
 
@@ -128,7 +128,7 @@ def _high_severity_reasons(record: Mapping[str, object]) -> list[str]:
     `audit_record` wants `label`-keyed gold spans while the canonical record stores
     `category`-keyed spans under `label`, so the remap from category to label happens here.
     """
-    from meddies_pii.training.bioes.eval.audit import audit_record
+    from anonymous_pii.training.bioes.eval.audit import audit_record
 
     raw_spans = record.get("label")
     gold_spans = [
@@ -192,19 +192,19 @@ def build(  # ruff: ignore[complex-structure,too-many-arguments,too-many-locals,
 
     from datasets import load_dataset
 
-    from meddies_pii.training.bioes.data.augmentation import text_hash
-    from meddies_pii.training.bioes.data.mixed import (
+    from anonymous_pii.training.bioes.data.augmentation import text_hash
+    from anonymous_pii.training.bioes.data.mixed import (
         convert_ai4privacy_row,
         convert_gretel_row,
         convert_nemotron_row,
-        is_supported_meddies_language,
+        is_supported_anonymous_language,
         summarize_records,
     )
-    from meddies_pii.training.bioes.data.openpii_candidates import (
+    from anonymous_pii.training.bioes.data.openpii_candidates import (
         DEFAULT_OPENPII_LANGUAGE_QUOTAS,
         select_openpii_candidates_from_rows,
     )
-    from meddies_pii.training.bioes.data.splits import carve_heldout, normalize_text
+    from anonymous_pii.training.bioes.data.splits import carve_heldout, normalize_text
 
     pool: list[Mapping[str, object]] = []
     quarantined = 0
@@ -230,7 +230,7 @@ def build(  # ruff: ignore[complex-structure,too-many-arguments,too-many-locals,
             quarantine_reasons.update(hit)
             continue
         pool.append(record)
-        source_rows["meddies-internal"] += 1
+        source_rows["anonymous-internal"] += 1
 
     seen_hashes = {text_hash(normalize_text(str(r.get("text") or ""))) for r in pool}
 
@@ -264,7 +264,7 @@ def build(  # ruff: ignore[complex-structure,too-many-arguments,too-many-locals,
             if record is None:
                 continue
             lang = str((record.get("info") or {}).get("language") or "")
-            if not is_supported_meddies_language(lang):
+            if not is_supported_anonymous_language(lang):
                 dropped[f"{tag}:unsupported_language:{lang.lower()}"] += 1
                 continue
             digest = text_hash(normalize_text(str(record.get("text") or "")))
@@ -329,7 +329,7 @@ def build(  # ruff: ignore[complex-structure,too-many-arguments,too-many-locals,
                 fh.write(json.dumps(r, ensure_ascii=False) + "\n")
 
     def _bucket_counts(rows: Sequence[Mapping[str, object]]) -> dict[str, int]:
-        from meddies_pii.training.bioes.data.splits import row_language_bucket
+        from anonymous_pii.training.bioes.data.splits import row_language_bucket
 
         return dict(Counter(row_language_bucket(r) for r in rows))
 
@@ -338,7 +338,7 @@ def build(  # ruff: ignore[complex-structure,too-many-arguments,too-many-locals,
         "internal_quarantined_precise": quarantined,
         "internal_quarantine_reasons": dict(quarantine_reasons.most_common()),
         "internal_flagged_all_reasons": dict(flagged_reasons.most_common()),
-        "internal_kept": source_rows.get("meddies-internal", 0),
+        "internal_kept": source_rows.get("anonymous-internal", 0),
         "source_rows": dict(source_rows.most_common()),
         "natural_label_counts": natural.label_counts,
         "natural_language_bucket_counts": natural.language_bucket_counts,

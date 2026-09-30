@@ -8,7 +8,7 @@ import sys
 
 import pytest
 
-from meddies_pii.training.bioes.trainers import encoder350_unsloth_compat_probe as probe
+from anonymous_pii.training.bioes.trainers import encoder350_unsloth_compat_probe as probe
 
 
 def test_one_step_encoder350_contract_is_exact_and_versioned() -> None:
@@ -48,7 +48,7 @@ def test_review_render_is_pure_and_paid_command_is_explicit() -> None:
         [
             sys.executable,
             "-m",
-            "meddies_pii.training.bioes.trainers.encoder350_unsloth_compat_probe",
+            "anonymous_pii.training.bioes.trainers.encoder350_unsloth_compat_probe",
             "--render-config",
         ],
         check=True,
@@ -61,7 +61,7 @@ def test_review_render_is_pure_and_paid_command_is_explicit() -> None:
             sys.executable,
             "-c",
             """import sys
-import meddies_pii.training.bioes.trainers.encoder350_unsloth_compat_probe
+import anonymous_pii.training.bioes.trainers.encoder350_unsloth_compat_probe
 assert "modal" not in sys.modules
 assert "unsloth" not in sys.modules
 """,

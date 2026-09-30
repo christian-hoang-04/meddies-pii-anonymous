@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-from meddies_pii.annotations.inline_records import validate_inline_jsonl
+from anonymous_pii.annotations.inline_records import validate_inline_jsonl
 
 if TYPE_CHECKING:
     from pathlib import Path

@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from meddies_pii.training.bioes.reports.inference_preview import (
+from anonymous_pii.training.bioes.reports.inference_preview import (
     DEFAULT_INFERENCE_JSON,
     DEFAULT_OUTPUT_DIR,
     DEFAULT_RESULT_JSON,

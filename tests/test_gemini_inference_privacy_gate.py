@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.generation.gemini.inference import (
+from anonymous_pii.generation.gemini.inference import (
     prepare_hf_review,
     submit_batch_job,
 )

@@ -10,16 +10,16 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii import cli
+from anonymous_pii import cli
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from meddies_pii.generation.label_corpus.runner import SyntheticGenerationRequest
+    from anonymous_pii.generation.label_corpus.runner import SyntheticGenerationRequest
 
 
 def _run_cli(monkeypatch: pytest.MonkeyPatch, *arguments: str) -> None:
-    monkeypatch.setattr(sys, "argv", ["meddies-pii", *arguments])
+    monkeypatch.setattr(sys, "argv", ["anonymous-pii", *arguments])
     cli.main()
 
 
@@ -52,7 +52,7 @@ def test_inference_prepare_interrupt_returns_shell_interrupt_status(
 
 
 def test_generate_success_passes_only_named_scenarios(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    from meddies_pii.generation.label_corpus import runner
+    from anonymous_pii.generation.label_corpus import runner
 
     received: list[SyntheticGenerationRequest] = []
 
@@ -84,7 +84,7 @@ def test_generate_aggregates_an_unexpected_provider_failure(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii.generation.label_corpus import runner
+    from anonymous_pii.generation.label_corpus import runner
 
     # reason: this stands in for `runner.run_synthetic_generation`, which `cli.py` drives through `asyncio.run` and
     # reason: `generation_runs.py:130` awaits, so dropping `async` would hand both a value that cannot be awaited.
@@ -112,7 +112,7 @@ def test_generate_interrupt_returns_shell_interrupt_status(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii.generation.label_corpus import runner
+    from anonymous_pii.generation.label_corpus import runner
 
     # reason: this stands in for `runner.run_synthetic_generation`, which `cli.py` drives through `asyncio.run` and
     # reason: `generation_runs.py:130` awaits, so dropping `async` would hand both a value that cannot be awaited.
@@ -171,7 +171,7 @@ def test_prepare_hf_runs_without_creating_a_provider_client(tmp_path: Path, monk
         "--output",
         str(output_path),
         "--repo-id",
-        "Meddies/source",
+        "anonymous-placeholder/source",
         "--raw-col",
         "text",
         "--label-col",
@@ -185,7 +185,7 @@ def test_prepare_hf_runs_without_creating_a_provider_client(tmp_path: Path, monk
         (
             "vi",
             str(output_path),
-            "Meddies/source",
+            "anonymous-placeholder/source",
             "text",
             "spans",
             {
@@ -255,7 +255,7 @@ def test_correction_interrupt_returns_shell_interrupt_status(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii.generation import correction
+    from anonymous_pii.generation import correction
 
     # reason: this stands in for `correction.correct_hf_data`, which `cli.py:225` drives through `asyncio.run`, so
     # reason: dropping `async` would hand it a value that cannot be awaited.
@@ -299,7 +299,7 @@ def test_pool_status_reports_a_missing_usage_record(
     capsys: pytest.CaptureFixture[str],
     requested_date: str | None,
 ) -> None:
-    from meddies_pii.generation import pool_monitor
+    from anonymous_pii.generation import pool_monitor
 
     monkeypatch.setattr(pool_monitor, "load_usage_record", lambda *_args: None)
     arguments = ["pool-status", "--usage-dir", str(tmp_path)]
@@ -322,7 +322,7 @@ def test_pool_status_propagates_the_health_exit_code(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    from meddies_pii.generation import pool_monitor
+    from anonymous_pii.generation import pool_monitor
 
     record = SimpleNamespace(accounts=2)
     monkeypatch.setattr(pool_monitor, "load_usage_record", lambda *_args: record)
@@ -344,9 +344,9 @@ def test_pool_status_propagates_the_health_exit_code(
 
 
 def test_module_entrypoint_runs_the_cli(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
-    monkeypatch.setattr(sys, "argv", ["meddies-pii", "labels"])
-    monkeypatch.delitem(sys.modules, "meddies_pii.cli")
+    monkeypatch.setattr(sys, "argv", ["anonymous-pii", "labels"])
+    monkeypatch.delitem(sys.modules, "anonymous_pii.cli")
 
-    runpy.run_module("meddies_pii.cli", run_name="__main__")
+    runpy.run_module("anonymous_pii.cli", run_name="__main__")
 
-    assert "Meddies Labels (9)" in capsys.readouterr().out
+    assert "Anonymous Labels (9)" in capsys.readouterr().out

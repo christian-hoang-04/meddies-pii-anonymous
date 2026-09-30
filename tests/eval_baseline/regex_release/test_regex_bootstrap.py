@@ -10,20 +10,20 @@ from typing import cast
 
 import pytest
 
-from meddies_pii.eval_baseline.regex_release import regex_report as report_module
-from meddies_pii.eval_baseline.regex_release.regex_bootstrap import (
+from anonymous_pii.eval_baseline.regex_release import regex_report as report_module
+from anonymous_pii.eval_baseline.regex_release.regex_bootstrap import (
     LengthBucket,
     PairedDocumentCounts,
     paired_document_bootstrap,
 )
-from meddies_pii.eval_baseline.regex_release.regex_corpus_registry import (
+from anonymous_pii.eval_baseline.regex_release.regex_corpus_registry import (
+    ANONYMOUS_PII_V2_EXPOSED_REVISION,
     APPROVED_BLINDED_SHIPPING_CORPORA,
-    MEDDIES_PII_V2_EXPOSED_REVISION,
     TRUSTED_CORPUS_REGISTRY_SHA256,
     is_known_exposed,
 )
-from meddies_pii.eval_baseline.regex_release.regex_fixtures import RegexFixture
-from meddies_pii.eval_baseline.regex_release.regex_report import (
+from anonymous_pii.eval_baseline.regex_release.regex_fixtures import RegexFixture
+from anonymous_pii.eval_baseline.regex_release.regex_report import (
     RegexCorpusManifest,
     build_regex_quality_report,
     combine_regex_shipping_verdict,
@@ -109,8 +109,8 @@ def test_shipping_requires_release_gate_and_blinded_confirmation() -> None:
         namespace="release",
         historically_exposed=True,
         blinded=False,
-        dataset="Meddies/meddies-pii-v2",
-        dataset_revision=MEDDIES_PII_V2_EXPOSED_REVISION,
+        dataset="anonymous-placeholder/anonymous-pii-v2",
+        dataset_revision=ANONYMOUS_PII_V2_EXPOSED_REVISION,
         shard="eval-challenge",
     )
     blind_manifest, blind_documents = _evidence(
@@ -136,13 +136,13 @@ def test_trusted_registry_denies_known_exposed_family_and_has_no_blind_corpus() 
     assert TRUSTED_CORPUS_REGISTRY_SHA256 == ("36a62ae9d535838807fac5234cc92dcc977381b1db5eb626b1da2e8540f33060")
     assert APPROVED_BLINDED_SHIPPING_CORPORA == ()
     assert is_known_exposed(
-        dataset_id="Meddies/meddies-pii-v2",
-        revision=MEDDIES_PII_V2_EXPOSED_REVISION,
+        dataset_id="anonymous-placeholder/anonymous-pii-v2",
+        revision=ANONYMOUS_PII_V2_EXPOSED_REVISION,
         shard="eval",
     )
     assert is_known_exposed(
-        dataset_id="Meddies/meddies-pii-v2",
-        revision=MEDDIES_PII_V2_EXPOSED_REVISION,
+        dataset_id="anonymous-placeholder/anonymous-pii-v2",
+        revision=ANONYMOUS_PII_V2_EXPOSED_REVISION,
         shard="eval-challenge",
     )
 
@@ -151,8 +151,8 @@ def test_exposed_family_cannot_be_relabelled_or_revision_laundered_as_blind() ->
     relabelled_manifest, relabelled_documents = _evidence(
         "claimed-blind-subset",
         namespace="disjoint-exposed-subset",
-        dataset="Meddies/meddies-pii-v2",
-        dataset_revision=MEDDIES_PII_V2_EXPOSED_REVISION,
+        dataset="anonymous-placeholder/anonymous-pii-v2",
+        dataset_revision=ANONYMOUS_PII_V2_EXPOSED_REVISION,
         shard="eval-challenge",
         historically_exposed=False,
         blinded=True,
@@ -168,7 +168,7 @@ def test_exposed_family_cannot_be_relabelled_or_revision_laundered_as_blind() ->
     new_revision_manifest, new_revision_documents = _evidence(
         "claimed-blind-new-revision",
         namespace="disjoint-new-revision",
-        dataset="Meddies/meddies-pii-v2",
+        dataset="anonymous-placeholder/anonymous-pii-v2",
         dataset_revision="1" * 40,
         shard="eval-challenge",
         historically_exposed=False,
@@ -187,8 +187,8 @@ def test_exposed_family_cannot_be_relabelled_or_revision_laundered_as_blind() ->
     release_manifest, release_documents = _evidence(
         "v2-eval-challenge",
         namespace="hostile-release",
-        dataset="Meddies/meddies-pii-v2",
-        dataset_revision=MEDDIES_PII_V2_EXPOSED_REVISION,
+        dataset="anonymous-placeholder/anonymous-pii-v2",
+        dataset_revision=ANONYMOUS_PII_V2_EXPOSED_REVISION,
         shard="eval-challenge",
         historically_exposed=True,
         blinded=False,
@@ -266,8 +266,8 @@ def test_report_requires_positive_ci_precision_and_negative_safety() -> None:
         namespace="quality",
         historically_exposed=True,
         blinded=False,
-        dataset="Meddies/meddies-pii-v2",
-        dataset_revision=MEDDIES_PII_V2_EXPOSED_REVISION,
+        dataset="anonymous-placeholder/anonymous-pii-v2",
+        dataset_revision=ANONYMOUS_PII_V2_EXPOSED_REVISION,
         shard="eval-challenge",
     )
     report = build_regex_quality_report(corpus_manifest=manifest, documents=documents, seed=23)

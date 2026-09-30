@@ -27,7 +27,7 @@ from typing import TYPE_CHECKING, Literal, cast
 
 import pytest
 
-from meddies_pii.annotations.span_records import (
+from anonymous_pii.annotations.span_records import (
     BACKGROUND_LABEL,
     BIOES_LABELS,
     ENTITY_LABELS,
@@ -41,8 +41,8 @@ from meddies_pii.annotations.span_records import (
     redaction_record,
     validate_label,
 )
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.spans import CharSpan
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -65,7 +65,7 @@ def _mapping_field(payload: Mapping[str, object], key: str) -> Mapping[str, obje
     return value
 
 
-def test_entity_labels_are_the_nine_meddies_labels() -> None:
+def test_entity_labels_are_the_nine_anonymous_labels() -> None:
     assert ENTITY_LABELS == (
         "address",
         "company_name",
@@ -136,18 +136,18 @@ def test_placeholder_handles_empty_label() -> None:
     assert placeholder("___") == "<REDACTED>"
 
 
-def test_validate_label_accepts_each_meddies_label() -> None:
+def test_validate_label_accepts_each_anonymous_label() -> None:
     for label in ENTITY_LABELS:
         validate_label(label, field="test")
 
 
 def test_validate_label_rejects_unknown_label() -> None:
-    with pytest.raises(ValueError, match="meddies taxonomy"):
+    with pytest.raises(ValueError, match="anonymous taxonomy"):
         validate_label("private_person", field="test")
 
 
 def test_validate_label_rejects_empty_string() -> None:
-    with pytest.raises(ValueError, match="meddies taxonomy"):
+    with pytest.raises(ValueError, match="anonymous taxonomy"):
         validate_label("", field="test")
 
 
@@ -178,7 +178,7 @@ def test_parse_labeled_record_typed_rejects_unknown_label() -> None:
         "text": "Patient.",
         "spans": {"private_person: Patient": [[0, 7]]},
     }
-    with pytest.raises(ValueError, match="meddies taxonomy"):
+    with pytest.raises(ValueError, match="anonymous taxonomy"):
         parse_labeled_record(record, eval_mode="typed")
 
 

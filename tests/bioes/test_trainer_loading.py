@@ -16,8 +16,8 @@ from typing import TYPE_CHECKING
 import pytest
 import torch
 
-from meddies_pii.historical_artifacts import legacy_jsonl_locator
-from meddies_pii.training.bioes.trainers.trainer import (
+from anonymous_pii.historical_artifacts import legacy_jsonl_locator
+from anonymous_pii.training.bioes.trainers.trainer import (
     SmokeTrainingConfig,
     _load_rows,
     _load_training_checkpoint,
@@ -61,32 +61,32 @@ def test_smoke_training_defaults_to_unsloth_lora_backend() -> None:
 
 
 def test_eval_dataset_id_defaults_to_train_repo() -> None:
-    config = SmokeTrainingConfig(dataset_id="Meddies/meddies-pii", dataset_revision="abc123")
+    config = SmokeTrainingConfig(dataset_id="anonymous-placeholder/anonymous-pii", dataset_revision="abc123")
 
-    assert config.resolved_eval_dataset_id() == "Meddies/meddies-pii"
+    assert config.resolved_eval_dataset_id() == "anonymous-placeholder/anonymous-pii"
     assert config.resolved_eval_revision() == "abc123"
 
 
 def test_eval_dataset_id_can_differ_from_train_repo() -> None:
     config = SmokeTrainingConfig(
-        dataset_id="Meddies/meddies-pii-mixed",
+        dataset_id="anonymous-placeholder/anonymous-pii-mixed",
         dataset_revision="train-sha",
-        eval_dataset_id="Meddies/meddies-pii-v2",
+        eval_dataset_id="anonymous-placeholder/anonymous-pii-v2",
         eval_dataset_revision="eval-sha",
     )
 
-    assert config.resolved_eval_dataset_id() == "Meddies/meddies-pii-v2"
+    assert config.resolved_eval_dataset_id() == "anonymous-placeholder/anonymous-pii-v2"
     assert config.resolved_eval_revision() == "eval-sha"
 
 
 def test_eval_dataset_id_set_without_revision_is_none() -> None:
     config = SmokeTrainingConfig(
-        dataset_id="Meddies/meddies-pii-mixed",
+        dataset_id="anonymous-placeholder/anonymous-pii-mixed",
         dataset_revision="train-sha",
-        eval_dataset_id="Meddies/meddies-pii-v2",
+        eval_dataset_id="anonymous-placeholder/anonymous-pii-v2",
     )
 
-    assert config.resolved_eval_dataset_id() == "Meddies/meddies-pii-v2"
+    assert config.resolved_eval_dataset_id() == "anonymous-placeholder/anonymous-pii-v2"
     assert config.resolved_eval_revision() is None
 
 

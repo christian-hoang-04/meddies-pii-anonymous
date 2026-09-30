@@ -1,14 +1,14 @@
 #!/usr/bin/env python
-"""Build the ai4privacy external Meddies Labels dataset (train + eval) locally.
+"""Build the ai4privacy external Anonymous Labels dataset (train + eval) locally.
 
-Converts ``ai4privacy/pii-masking-openpii-1.5m`` into the Meddies Labels span schema
+Converts ``ai4privacy/pii-masking-openpii-1.5m`` into the Anonymous Labels span schema
 via the tested ``convert_ai4privacy_row`` adapter, then assembles the two splits
-agreed for ``Meddies/meddies-pii-external`` / config ``ai4privacy``:
+agreed for ``anonymous-placeholder/anonymous-pii-external`` / config ``ai4privacy``:
 
 * ``train`` = ai4privacy ``train``
 * ``eval``  = ai4privacy ``validation``   (no test split exists)
 
-Keeps ALL languages (no Meddies-17 language gate) — the aim is entity-taxonomy
+Keeps ALL languages (no Anonymous-17 language gate) — the aim is entity-taxonomy
 coverage, which is language-independent; ``info.language`` preserves each row's
 language for any later filtering.
 
@@ -34,23 +34,23 @@ from typing import TYPE_CHECKING
 
 from datasets import load_dataset
 
-from meddies_pii.historical_artifacts import legacy_jsonl_locator
-from meddies_pii.training.bioes.data.augmentation import (
+from anonymous_pii.historical_artifacts import legacy_jsonl_locator
+from anonymous_pii.training.bioes.data.augmentation import (
     text_hash,
     write_json,
     write_jsonl,
     write_parquet,
 )
-from meddies_pii.training.bioes.data.mixed import (
+from anonymous_pii.training.bioes.data.mixed import (
     convert_ai4privacy_row,
     summarize_records,
 )
-from meddies_pii.training.bioes.data.splits import normalize_text
+from anonymous_pii.training.bioes.data.splits import normalize_text
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    from meddies_pii.training.bioes.data.record_schema import NormalizedRecord
+    from anonymous_pii.training.bioes.data.record_schema import NormalizedRecord
 
 DATASET_ID = "ai4privacy/pii-masking-openpii-1.5m"
 
@@ -65,7 +65,7 @@ def convert_split(
     max_scan: int | None,
     log_every: int = 100_000,
 ) -> tuple[list[NormalizedRecord], Counter[str]]:
-    """Convert every row of one ai4privacy split into Meddies Labels span records.
+    """Convert every row of one ai4privacy split into Anonymous Labels span records.
 
     Non-streaming load (cached locally first). No language gate: all 30 languages
     are kept (info.language preserves each).
@@ -143,7 +143,7 @@ def main() -> None:
     dropped = drop_train + drop_validation
     summary = {
         "dataset_id": DATASET_ID,
-        "repo_target": "Meddies/meddies-pii-external",
+        "repo_target": "anonymous-placeholder/anonymous-pii-external",
         "config": "ai4privacy",
         "train_source": "ai4privacy train",
         "eval_source": "ai4privacy validation",

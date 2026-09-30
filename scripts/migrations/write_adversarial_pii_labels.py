@@ -7,14 +7,14 @@ import argparse
 import json
 from pathlib import Path
 
-from meddies_pii.historical_artifacts import LEGACY_ARTIFACT_TOKEN
-from meddies_pii.training.bioes.data.adversarial_synthetic import (
+from anonymous_pii.historical_artifacts import LEGACY_ARTIFACT_TOKEN
+from anonymous_pii.training.bioes.data.adversarial_synthetic import (
     build_adversarial_pii_label_examples,
 )
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Write deterministic Meddies Labels adversarial examples as JSONL.")
+    parser = argparse.ArgumentParser(description="Write deterministic Anonymous Labels adversarial examples as JSONL.")
     parser.add_argument(
         "--output",
         type=Path,

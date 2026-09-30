@@ -10,15 +10,15 @@ import hashlib
 import json
 from typing import TYPE_CHECKING
 
-import meddies_pii.eval_baseline.baseline.run as run_module
-from meddies_pii.eval_baseline.baseline.run import (
+import anonymous_pii.eval_baseline.baseline.run as run_module
+from anonymous_pii.eval_baseline.baseline.run import (
     ShardSpec,
     read_shard_timing,
     resolved_environment_fingerprint,
     shard_meta_path,
     write_shard_meta,
 )
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.evaluation.identity import (
     ArtifactIdentity,
     DatasetShardIdentity,
     EvaluationContract,

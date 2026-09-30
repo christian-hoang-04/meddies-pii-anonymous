@@ -4,11 +4,11 @@ import json
 
 import pytest
 
-from meddies_pii.annotations.bioes import (
+from anonymous_pii.annotations.bioes import (
     build_bioes_label_space,
     build_label_to_id,
 )
-from meddies_pii.training.bioes.eval.selection import (
+from anonymous_pii.training.bioes.eval.selection import (
     at_dot_obfuscate_email_rows,
     select_prepared_rows_for_adversarial_slice,
 )

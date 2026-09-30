@@ -14,12 +14,12 @@ from typing import TYPE_CHECKING, Protocol, cast
 import fitz
 import pytest
 
-from meddies_pii.pdf_redaction.benchmark.corpus import (
+from anonymous_pii.pdf_redaction.benchmark.corpus import (
     PAGE_CLASSES,
     CorpusFixture,
     generate_challenge_corpus,
 )
-from meddies_pii.taxonomy import PII_LABELS
+from anonymous_pii.taxonomy import PII_LABELS
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -58,7 +58,7 @@ def import_without_pdf_provider(name, globals=None, locals=None, fromlist=(), le
     return real_import(name, globals, locals, fromlist, level)
 
 builtins.__import__ = import_without_pdf_provider
-from meddies_pii.pdf_redaction.benchmark.corpus_records import CorpusFixture
+from anonymous_pii.pdf_redaction.benchmark.corpus_records import CorpusFixture
 assert CorpusFixture.__name__ == "CorpusFixture"
 """,
         ],

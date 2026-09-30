@@ -12,8 +12,8 @@ from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
 
-from meddies_pii.generation.gemini import inference
-from meddies_pii.generation.gemini.inference import (
+from anonymous_pii.generation.gemini import inference
+from anonymous_pii.generation.gemini.inference import (
     download_batch_results,
     merge_results,
     prepare_jsonl,
@@ -155,7 +155,7 @@ def test_get_client_constructs_ai_studio_client_without_provider_call(
 def test_get_client_constructs_vertex_client_without_provider_call(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("GOOGLE_CLOUD_PROJECT", "meddies-test-project")
+    monkeypatch.setenv("GOOGLE_CLOUD_PROJECT", "anonymous-test-project")
     monkeypatch.setenv("GOOGLE_CLOUD_LOCATION", "asia-southeast1")
     factory = MagicMock()
     monkeypatch.setattr(inference.genai, "Client", factory)
@@ -166,6 +166,6 @@ def test_get_client_constructs_vertex_client_without_provider_call(
     factory.assert_called_once()
     kwargs = factory.call_args.kwargs
     assert kwargs["vertexai"] is True
-    assert kwargs["project"] == "meddies-test-project"
+    assert kwargs["project"] == "anonymous-test-project"
     assert kwargs["location"] == "asia-southeast1"
     assert kwargs["http_options"].api_version == "v1"

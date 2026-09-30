@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Self
 from pypdf import PdfWriter
 from pypdf.generic import ArrayObject, DictionaryObject, NameObject, TextStringObject
 
-from meddies_pii.pdf_redaction.risk import classify_pdf_risk
+from anonymous_pii.pdf_redaction.risk import classify_pdf_risk
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -97,7 +97,7 @@ def test_risk_classifier_marks_render_inspection_failures_unsupported(
         msg = "native renderer unavailable"
         raise RuntimeError(msg)
 
-    monkeypatch.setattr("meddies_pii.pdf_redaction.risk.pymupdf.open", unavailable)
+    monkeypatch.setattr("anonymous_pii.pdf_redaction.risk.pymupdf.open", unavailable)
 
     result = classify_pdf_risk(path)
 
@@ -204,7 +204,7 @@ def test_risk_classifier_checks_native_trace_opacity_and_outside_bounds(
         def __iter__(self) -> object:
             return iter((Page(),))
 
-    monkeypatch.setattr("meddies_pii.pdf_redaction.risk.pymupdf.open", lambda _: Document())
+    monkeypatch.setattr("anonymous_pii.pdf_redaction.risk.pymupdf.open", lambda _: Document())
 
     result = classify_pdf_risk(path)
 

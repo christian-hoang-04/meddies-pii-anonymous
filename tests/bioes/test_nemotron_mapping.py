@@ -8,8 +8,8 @@ company_name supply is ~0. These tests pin the pre-map at the converter layer.
 
 from __future__ import annotations
 
-from meddies_pii.annotations.span_records import parse_labeled_record
-from meddies_pii.training.bioes.data.mixed import convert_nemotron_row
+from anonymous_pii.annotations.span_records import parse_labeled_record
+from anonymous_pii.training.bioes.data.mixed import convert_nemotron_row
 
 
 def test_nemotron_organisation_placeholder_maps_to_company_name() -> None:

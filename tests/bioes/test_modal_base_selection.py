@@ -11,8 +11,8 @@ from typing import TYPE_CHECKING
 import modal
 import pytest
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.training.bioes.modal import base_selection
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.training.bioes.modal import base_selection
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

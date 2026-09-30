@@ -5,8 +5,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from meddies_pii.training.bioes.reports import html
-from meddies_pii.training.bioes.reports.models import (
+from anonymous_pii.training.bioes.reports import html
+from anonymous_pii.training.bioes.reports.models import (
     LabelExample,
     RowPreview,
     TrainingReportOptions,
@@ -30,7 +30,7 @@ def _render_report(monkeypatch: pytest.MonkeyPatch) -> str:
     options = TrainingReportOptions(
         train_jsonl=Path("train <untrusted>.jsonl"),
         output_html=Path("report.html"),
-        title="Meddies <script>alert('title')</script> & readiness",
+        title="Anonymous <script>alert('title')</script> & readiness",
         rows_per_label=2,
         include_all_rows=True,
     )

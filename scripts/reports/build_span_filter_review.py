@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from meddies_pii.training.bioes.reports.span_filter_review import (
+from anonymous_pii.training.bioes.reports.span_filter_review import (
     collect_span_filter_review,
     write_span_filter_review_report,
 )

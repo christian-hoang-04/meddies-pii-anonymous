@@ -14,13 +14,13 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.eval_baseline.baseline.datasets import V2_DATASET_REVISION, V2_REPO_ID
-from meddies_pii.eval_baseline.regex_release.regex_bootstrap import (
+from anonymous_pii.eval_baseline.baseline.datasets import V2_DATASET_REVISION, V2_REPO_ID
+from anonymous_pii.eval_baseline.regex_release.regex_bootstrap import (
     LengthBucket,
     PairedBootstrapResult,
     PairedDocumentCounts,
 )
-from meddies_pii.eval_baseline.regex_release.regex_release_contract import (
+from anonymous_pii.eval_baseline.regex_release.regex_release_contract import (
     REGEX_RELEASE_SEED,
     ReleaseGateContract,
     render_launch_commands,
@@ -29,7 +29,7 @@ from meddies_pii.eval_baseline.regex_release.regex_release_contract import (
     write_hydration_receipt,
     write_terminal_receipt,
 )
-from meddies_pii.eval_baseline.regex_release.regex_release_gate import (
+from anonymous_pii.eval_baseline.regex_release.regex_release_gate import (
     BudgetProjectionError,
     ChildRegexEvidence,
     LabelMetricCounts,
@@ -40,14 +40,14 @@ from meddies_pii.eval_baseline.regex_release.regex_release_gate import (
     _overredaction_metrics,
     aggregate_exposed_children,
 )
-from meddies_pii.eval_baseline.regex_release.regex_report import RegexCorpusManifest
-from meddies_pii.taxonomy import PII_LABEL_SET
+from anonymous_pii.eval_baseline.regex_release.regex_report import RegexCorpusManifest
+from anonymous_pii.taxonomy import PII_LABEL_SET
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
     from pathlib import Path
 
-    from meddies_pii.spans import CharSpan
+    from anonymous_pii.spans import CharSpan
 
 
 def test_default_contract_content_addresses_every_paid_run_input() -> None:
@@ -241,11 +241,11 @@ def _freeze_bootstrap(monkeypatch: pytest.MonkeyPatch, *, lower_95: float = 0.08
         return bootstrap
 
     monkeypatch.setattr(
-        "meddies_pii.eval_baseline.regex_release.regex_release_gate.paired_document_bootstrap",
+        "anonymous_pii.eval_baseline.regex_release.regex_release_gate.paired_document_bootstrap",
         fake("pooled"),
     )
     monkeypatch.setattr(
-        "meddies_pii.eval_baseline.regex_release.regex_report.paired_document_bootstrap",
+        "anonymous_pii.eval_baseline.regex_release.regex_report.paired_document_bootstrap",
         fake("challenge"),
     )
     return seen

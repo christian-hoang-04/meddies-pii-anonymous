@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import json
 
-from meddies_pii.annotations.span_records import BIOES_LABELS, ENTITY_LABELS
-from meddies_pii.annotations.tagged_text import parse_tagged_text
-from meddies_pii.training.bioes.data.preparation import _select_source_rows
-from meddies_pii.training.bioes.eval.harness import classify_adversarial_slices
+from anonymous_pii.annotations.span_records import BIOES_LABELS, ENTITY_LABELS
+from anonymous_pii.annotations.tagged_text import parse_tagged_text
+from anonymous_pii.training.bioes.data.preparation import _select_source_rows
+from anonymous_pii.training.bioes.eval.harness import classify_adversarial_slices
 
 
 def test_bioes_schema_exposes_pii_label_as_37_token_classes() -> None:

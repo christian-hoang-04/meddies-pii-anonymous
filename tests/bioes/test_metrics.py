@@ -5,13 +5,13 @@ from __future__ import annotations
 # reason: inputs, so a tolerance would make the test accept a value the code does not produce.
 from math import isclose
 
-from meddies_pii.evaluation.span_metrics import (
+from anonymous_pii.evaluation.span_metrics import (
     SpanMetricBlock,
     containment_span_prf_by_label,
     exact_span_prf_by_label,
 )
-from meddies_pii.spans import CharSpan
-from meddies_pii.taxonomy import PII_LABELS
+from anonymous_pii.spans import CharSpan
+from anonymous_pii.taxonomy import PII_LABELS
 
 GOLD_BY_DOC: dict[str, tuple[CharSpan, ...]] = {
     "doc1": (

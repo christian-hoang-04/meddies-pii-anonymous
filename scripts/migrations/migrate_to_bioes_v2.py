@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Migrate scattered Meddies-PII training data into the canonical `data/bioes-v2/` home.
+"""Migrate scattered Anonymous-PII training data into the canonical `data/bioes-v2/` home.
 
 Implements the one-time migration of ADR 0007 decision 5. The plan is data-driven:
 it reads `data/bioes-v2/MANIFEST.json` and acts only on entries whose `action` is a
@@ -39,7 +39,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from meddies_pii.json_types import is_str_mapping
+from anonymous_pii.json_types import is_str_mapping
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

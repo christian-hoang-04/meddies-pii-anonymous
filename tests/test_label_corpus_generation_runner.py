@@ -32,12 +32,12 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.exceptions import (
+from anonymous_pii.exceptions import (
+    AnonymousException,
     ConfigurationError,
     DailyBudgetExceeded,
-    MeddiesException,
 )
-from meddies_pii.generation.label_corpus.runner import (
+from anonymous_pii.generation.label_corpus.runner import (
     GenerationRunError,
     GenerationRunPlan,
     GenerationSegment,
@@ -46,7 +46,7 @@ from meddies_pii.generation.label_corpus.runner import (
     run_generation_plan,
     run_language_generation,
 )
-from meddies_pii.json_types import as_object_list, is_str_mapping
+from anonymous_pii.json_types import as_object_list, is_str_mapping
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -136,7 +136,7 @@ def test_language_generation_collects_mixed_results_and_keeps_running(
         attempted.append(request.language)
         if request.language == "English":
             msg = "provider rejected one document"
-            raise MeddiesException(msg)
+            raise AnonymousException(msg)
         return {"accepted_count": 2}
 
     result = asyncio.run(
@@ -332,7 +332,7 @@ def test_generation_plan_summary_schema_excludes_raw_rows(tmp_path: Path) -> Non
 
 
 def test_languages_by_deficit_serves_neediest_and_skips_satisfied() -> None:
-    from meddies_pii.generation.label_corpus.generation_runs import (
+    from anonymous_pii.generation.label_corpus.generation_runs import (
         language_target,
         languages_by_deficit,
     )
@@ -349,7 +349,7 @@ def test_languages_by_deficit_serves_neediest_and_skips_satisfied() -> None:
 
 
 def test_cumulative_language_counts_sums_across_whole_corpus(tmp_path: Path) -> None:
-    from meddies_pii.generation.label_corpus.generation_runs import (
+    from anonymous_pii.generation.label_corpus.generation_runs import (
         cumulative_language_counts,
     )
 
@@ -373,8 +373,8 @@ def test_run_weak_labels_skips_at_target_and_serves_neediest(tmp_path: Path, mon
     filled to target (2 rounds x url+secret), then stops.
 
     """
-    import meddies_pii.generation.label_corpus.generation_runs as gr
-    from meddies_pii.generation.label_corpus.synthetic import language_paths
+    import anonymous_pii.generation.label_corpus.generation_runs as gr
+    from anonymous_pii.generation.label_corpus.synthetic import language_paths
 
     monkeypatch.setattr(gr, "DEFAULT_LANGUAGE_TARGET", 4)
     monkeypatch.setattr(gr, "LANGUAGE_TARGET_OVERRIDES", {})
@@ -423,7 +423,7 @@ def test_run_weak_labels_skips_at_target_and_serves_neediest(tmp_path: Path, mon
 
 def test_cloudflare_provider_limits_has_no_request_cap() -> None:
     """A genuinely request-capped provider still reports its real RPD."""
-    from meddies_pii.generation.label_corpus.generation_runs import _provider_limits
+    from anonymous_pii.generation.label_corpus.generation_runs import _provider_limits
 
     assert _provider_limits("cloudflare")["rpd_per_account"] is None
     assert _provider_limits("groq")["rpd_per_account"] == 1000
@@ -431,7 +431,7 @@ def test_cloudflare_provider_limits_has_no_request_cap() -> None:
 
 def test_account_rate_limits_respect_documented_caps() -> None:
     """(rpm, rpd, tpm, tpd) documented ceilings; None = unbounded/unpublished → skip."""
-    from meddies_pii.generation.label_corpus.generation_policy import (
+    from anonymous_pii.generation.label_corpus.generation_policy import (
         ACCOUNT_RATE_LIMITS,
     )
 
@@ -454,7 +454,7 @@ def test_account_rate_limits_respect_documented_caps() -> None:
 def test_accepted_count_rejects_malformed_persisted_summary_counter(
     tmp_path: Path,
 ) -> None:
-    from meddies_pii.generation.label_corpus.runner import accepted_count
+    from anonymous_pii.generation.label_corpus.runner import accepted_count
 
     (tmp_path / "summary.en.json").write_text('{"accepted_count":"2"}', encoding="utf-8")
 
@@ -468,8 +468,8 @@ def test_usage_telemetry_failure_keeps_generation_artifacts_and_logs_traceback(
 ) -> None:
     import logging
 
-    from meddies_pii.generation.account_ledger import AccountLedger
-    from meddies_pii.generation.label_corpus import generation_runs
+    from anonymous_pii.generation.account_ledger import AccountLedger
+    from anonymous_pii.generation.label_corpus import generation_runs
 
     accepted = tmp_path / "out" / "groq" / "acct1" / "accepted.en.jsonl"
     accepted.parent.mkdir(parents=True)

@@ -10,8 +10,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from meddies_pii.pdf_redaction.contracts import Point
-from meddies_pii.pdf_redaction.ocr import (
+from anonymous_pii.pdf_redaction.contracts import Point
+from anonymous_pii.pdf_redaction.ocr import (
     OcrAdapterError,
     PixelToPageTransform,
     RapidOcrAdapter,

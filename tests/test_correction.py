@@ -4,8 +4,8 @@ import asyncio
 
 import pytest
 
-from meddies_pii.generation import correction
-from meddies_pii.generation.correction import CorrectionRequest, DataCorrector
+from anonymous_pii.generation import correction
+from anonymous_pii.generation.correction import CorrectionRequest, DataCorrector
 
 
 def test_extract_text_from_provider_candidate() -> None:
@@ -59,8 +59,8 @@ def test_stream_skips_non_object_row_without_provider_call(
     ("repo", "limit", "output", "message"),
     [
         ("", 1, "corrected.jsonl", "repo must not be blank"),
-        ("Meddies/vie-pii", 0, "corrected.jsonl", "limit must be positive"),
-        ("Meddies/vie-pii", 1, "", "output must not be blank"),
+        ("anonymous-placeholder/vie-pii", 0, "corrected.jsonl", "limit must be positive"),
+        ("anonymous-placeholder/vie-pii", 1, "", "output must not be blank"),
     ],
 )
 def test_correction_request_rejects_invalid_cli_values(repo: str, limit: int, output: str, message: str) -> None:
@@ -69,7 +69,7 @@ def test_correction_request_rejects_invalid_cli_values(repo: str, limit: int, ou
 
 
 def test_correction_request_is_frozen_value_object() -> None:
-    request = CorrectionRequest(repo="Meddies/vie-pii", limit=3, output="corrected.jsonl")
+    request = CorrectionRequest(repo="anonymous-placeholder/vie-pii", limit=3, output="corrected.jsonl")
 
     with pytest.raises(AttributeError):
         # reason: the rejected write is the behaviour under test — `limit` is a read-only property and

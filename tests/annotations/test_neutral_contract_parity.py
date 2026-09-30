@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING, cast
 
 import numpy as np
 
-from meddies_pii.annotations import tagged_text
-from meddies_pii.annotations.bioes import (
+from anonymous_pii.annotations import tagged_text
+from anonymous_pii.annotations.bioes import (
     ENTITY_LABELS,
     build_bioes_label_space,
     build_label_to_id,
@@ -15,11 +15,11 @@ from meddies_pii.annotations.bioes import (
     tokenize_and_align,
     viterbi_decode_numpy,
 )
-from meddies_pii.annotations.source_mapping import map_native_label_to_pii_label
-from meddies_pii.annotations.span_records import redaction_record
-from meddies_pii.annotations.tagged_text import parse_tagged_text
-from meddies_pii.evaluation.span_metrics import exact_span_report_by_doc
-from meddies_pii.spans import CharSpan
+from anonymous_pii.annotations.source_mapping import map_native_label_to_pii_label
+from anonymous_pii.annotations.span_records import redaction_record
+from anonymous_pii.annotations.tagged_text import parse_tagged_text
+from anonymous_pii.evaluation.span_metrics import exact_span_report_by_doc
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     from transformers import PreTrainedTokenizerBase

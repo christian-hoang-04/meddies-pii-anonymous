@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from meddies_pii.training.bioes.report import (
+from anonymous_pii.training.bioes.report import (
     TrainingReportOptions,
     build_training_report,
 )
@@ -14,7 +14,7 @@ from meddies_pii.training.bioes.report import (
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Build a static HTML pre-launch report for a Meddies Labels BIOES training bundle.",
+        description="Build a static HTML pre-launch report for a Anonymous Labels BIOES training bundle.",
     )
     parser.add_argument("--train-jsonl", type=Path, required=True)
     parser.add_argument("--summary-json", type=Path, default=None)
@@ -46,7 +46,7 @@ def main() -> None:
         type=Path,
         default=Path("reports/training-readiness/training_readiness_report.html"),
     )
-    parser.add_argument("--title", default="Meddies Labels BIOES Training Readiness Report")
+    parser.add_argument("--title", default="Anonymous Labels BIOES Training Readiness Report")
     parser.add_argument("--rows-per-label", type=int, default=3)
     parser.add_argument("--audit-samples-per-rule", type=int, default=3)
     parser.add_argument("--row-table-limit", type=int, default=0)

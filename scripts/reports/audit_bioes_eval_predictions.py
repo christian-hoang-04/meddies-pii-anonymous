@@ -7,8 +7,8 @@ import argparse
 import json
 from pathlib import Path
 
-from meddies_pii.training.bioes.eval.audit import audit_records, summarize_issues
-from meddies_pii.training.bioes.reports.eval_prediction_audit import (
+from anonymous_pii.training.bioes.eval.audit import audit_records, summarize_issues
+from anonymous_pii.training.bioes.reports.eval_prediction_audit import (
     DEFAULT_OUTPUT_DIR,
     DEFAULT_PREDICTIONS_JSON,
     read_prediction_records,

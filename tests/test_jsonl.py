@@ -1,4 +1,4 @@
-"""Behavior tests for meddies_pii.jsonl primitives.
+"""Behavior tests for anonymous_pii.jsonl primitives.
 
 All file I/O goes through tmp_path — no mock_open, no patching. Tests assert
 on file contents and yielded records, not on which open() call happened.
@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from meddies_pii.jsonl import (
+from anonymous_pii.jsonl import (
     append_jsonl,
     count_jsonl,
     read_jsonl,
@@ -48,7 +48,7 @@ def test_read_logs_and_skips_malformed(tmp_path: Path, caplog: pytest.LogCapture
         '{"a": 1}\nnot json at all\n{"a": 2}\n',
         encoding="utf-8",
     )
-    with caplog.at_level("WARNING", logger="meddies_pii.jsonl"):
+    with caplog.at_level("WARNING", logger="anonymous_pii.jsonl"):
         records = list(read_jsonl(path))
 
     assert records == [{"a": 1}, {"a": 2}]
@@ -129,7 +129,7 @@ def test_read_skips_non_object_json(tmp_path: Path, caplog: pytest.LogCaptureFix
         '{"a": 1}\n[1, 2, 3]\n"just a string"\nnull\n{"a": 2}\n',
         encoding="utf-8",
     )
-    with caplog.at_level("WARNING", logger="meddies_pii.jsonl"):
+    with caplog.at_level("WARNING", logger="anonymous_pii.jsonl"):
         records = list(read_jsonl(path))
 
     assert records == [{"a": 1}, {"a": 2}]

@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from meddies_pii.training.bioes.reports.data_shape import write_data_shape_report
+from anonymous_pii.training.bioes.reports.data_shape import write_data_shape_report
 
 
 def main() -> None:

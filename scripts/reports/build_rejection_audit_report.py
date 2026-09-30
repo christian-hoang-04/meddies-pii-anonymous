@@ -9,7 +9,7 @@ import argparse
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-from meddies_pii.training.bioes.reports.rejection_audit import (
+from anonymous_pii.training.bioes.reports.rejection_audit import (
     load_rejection_records,
     write_rejection_audit_report,
 )

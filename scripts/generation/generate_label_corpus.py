@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Generate targeted Meddies Labels synthetic rows with OpenAI-compatible providers."""
+"""Generate targeted Anonymous Labels synthetic rows with OpenAI-compatible providers."""
 
 from __future__ import annotations
 
@@ -11,19 +11,19 @@ import logging
 
 from dotenv import load_dotenv
 
-from meddies_pii.generation.label_corpus.catalog import (
+from anonymous_pii.generation.label_corpus.catalog import (
     DOMAIN_PROFILES,
     REQUIRED_LABEL_MODES,
     SPLIT_PURPOSES,
 )
-from meddies_pii.generation.label_corpus.runner import (
+from anonymous_pii.generation.label_corpus.runner import (
     SyntheticGenerationRequest,
     run_synthetic_generation,
 )
-from meddies_pii.generation.label_corpus.synthetic import (
+from anonymous_pii.generation.label_corpus.synthetic import (
     DEFAULT_TARGETED_GENERATION_DIR,
 )
-from meddies_pii.taxonomy import PII_LABELS, require_pii_label
+from anonymous_pii.taxonomy import PII_LABELS, require_pii_label
 
 
 def parse_args() -> argparse.Namespace:
@@ -53,7 +53,7 @@ def parse_args() -> argparse.Namespace:
         action="append",
         default=[],
         choices=PII_LABELS,
-        help="Require this extra Meddies Labels label in every accepted sample; can be repeated.",
+        help="Require this extra Anonymous Labels label in every accepted sample; can be repeated.",
     )
     parser.add_argument(
         "--required-label-mode",

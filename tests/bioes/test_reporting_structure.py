@@ -6,9 +6,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from meddies_pii.training.bioes.eval.audit import EvalAuditIssue, audit_records
-from meddies_pii.training.bioes.reports import eval_prediction_audit, inference_preview, training_setup_preview
-from meddies_pii.training.bioes.reports.eval_prediction_audit_html import (
+from anonymous_pii.training.bioes.eval.audit import EvalAuditIssue, audit_records
+from anonymous_pii.training.bioes.reports import eval_prediction_audit, inference_preview, training_setup_preview
+from anonymous_pii.training.bioes.reports.eval_prediction_audit_html import (
     render_eval_prediction_audit_html,
 )
 

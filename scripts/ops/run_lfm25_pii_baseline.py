@@ -1,10 +1,10 @@
-"""Evaluate Liquid's exact public Space runtime through the Meddies harness.
+"""Evaluate Liquid's exact public Space runtime through the Anonymous harness.
 
 All dataset access and model inference run remotely on Modal.
 
-    MODAL_PROFILE=meddies-run uv run modal run \
+    MODAL_PROFILE=anonymous-run uv run modal run \
       scripts/ops/run_lfm25_pii_baseline.py::run_matrix --full --force
-    MODAL_PROFILE=meddies-run uv run modal run \
+    MODAL_PROFILE=anonymous-run uv run modal run \
       scripts/ops/run_lfm25_pii_baseline.py::run_aggregate
 """
 
@@ -37,47 +37,47 @@ from typing import TYPE_CHECKING, Any
 
 import modal
 
-from meddies_pii.eval_baseline.adapters.lfm25_pii import (
+from anonymous_pii.eval_baseline.adapters.lfm25_pii import (
     MODEL_ID,
     MODEL_REVISION,
     load_pinned_space_detector,
 )
-from meddies_pii.eval_baseline.baseline.datasets import (
+from anonymous_pii.eval_baseline.baseline.datasets import (
     EVAL_DATASETS,
     EVAL_EXPECTED_ROWS,
     EXTERNAL_DATASET_REVISION,
     V2_DATASET_REVISION,
 )
-from meddies_pii.eval_baseline.baseline.views import (
+from anonymous_pii.eval_baseline.baseline.views import (
     MODEL_CORE_VIEW,
     VENDOR_HYBRID_VIEW,
     EvaluationView,
 )
-from meddies_pii.modal_runtime import (
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
     use_pinned_debian_snapshot,
 )
 
 if TYPE_CHECKING:
-    from meddies_pii.evaluation.identity import EvaluationContract
+    from anonymous_pii.evaluation.identity import EvaluationContract
 
 
 def _evaluation_contract(view: EvaluationView) -> EvaluationContract:
-    from meddies_pii import __file__ as package_file
-    from meddies_pii.eval_baseline.adapters import lfm25_pii
-    from meddies_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
-    from meddies_pii.evaluation.identity import (
+    from anonymous_pii import __file__ as package_file
+    from anonymous_pii.eval_baseline.adapters import lfm25_pii
+    from anonymous_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
+    from anonymous_pii.evaluation.identity import (
         evaluation_contract,
         manifest_artifact,
         payload_artifact,
     )
-    from meddies_pii.evaluation.runtime_provenance import (
+    from anonymous_pii.evaluation.runtime_provenance import (
         evaluation_runtime_source_artifact,
     )
 
     if package_file is None:
-        msg = "cannot observe the Meddies evaluation runtime source"
+        msg = "cannot observe the Anonymous evaluation runtime source"
         raise RuntimeError(msg)
     runtime_source = evaluation_runtime_source_artifact(Path(package_file).parent, __file__)
     return evaluation_contract(
@@ -115,7 +115,7 @@ def _evaluation_contract(view: EvaluationView) -> EvaluationContract:
     )
 
 
-APP_NAME = "meddies-pii-lfm25-pii-baseline"
+APP_NAME = "anonymous-pii-lfm25-pii-baseline"
 MODEL_NAME = "lfm25-pii"
 SPACE_REVISION = "f645508a233038955a4e20bc1ccfcfb771bee1da"
 SPACE_SOURCE_SHA256 = "00b4e681fdecc70e33e58588f1f7db63302a370b7cc4a72604fc5cfefba7f1af"
@@ -132,8 +132,8 @@ PARITY_SMOKE_TEXTS = (
     "Credential sk-abcdefghijklmnopqrstuv was rotated.",
     "Passport No: A12345678 was verified.",
 )
-BASELINE_VOLUME_NAME = os.environ.get("MEDDIES_PII_EVAL_RESULTS_VOLUME", "meddies-pii-baseline-eval-lfm25-pii")
-CACHE_VOLUME_NAME = os.environ.get("MEDDIES_PII_EVAL_CACHE_VOLUME", "lfm25-pii-eval-hf-cache")
+BASELINE_VOLUME_NAME = os.environ.get("ANONYMOUS_PII_EVAL_RESULTS_VOLUME", "anonymous-pii-baseline-eval-lfm25-pii")
+CACHE_VOLUME_NAME = os.environ.get("ANONYMOUS_PII_EVAL_CACHE_VOLUME", "lfm25-pii-eval-hf-cache")
 COMPILER_APT_PACKAGES = ("gcc=4:12.2.0-3",)
 
 
@@ -142,7 +142,7 @@ def _space_reference_local_or_none() -> Path | None:
         return Path(SPACE_REFERENCE_MOUNT)
     source = Path(__file__).resolve()
     for ancestor in source.parents:
-        candidate = ancestor / "meddies-pii-context" / "references" / "liquidai-pii-detection-space"
+        candidate = ancestor / "anonymous-pii-context" / "references" / "liquidai-pii-detection-space"
         if candidate.is_dir():
             return candidate
     return None
@@ -153,7 +153,7 @@ def _space_reference_local() -> Path:
     if reference is None:
         msg = (
             "local pinned Liquid Space reference is missing; expected an ancestor "
-            "containing meddies-pii-context/references/liquidai-pii-detection-space"
+            "containing anonymous-pii-context/references/liquidai-pii-detection-space"
         )
         raise FileNotFoundError(msg)
     return reference
@@ -239,9 +239,9 @@ def eval_cell(
     full: bool = False,  # ruff: ignore[boolean-type-hint-positional-argument,boolean-default-value-positional-argument]
     force: bool = False,  # ruff: ignore[boolean-type-hint-positional-argument,boolean-default-value-positional-argument]
 ) -> str:
-    from meddies_pii.eval_baseline.adapters.lfm25_pii import Lfm25PiiSpaceAdapter
-    from meddies_pii.eval_baseline.baseline.datasets import load_eval_cell
-    from meddies_pii.eval_baseline.baseline.run import (
+    from anonymous_pii.eval_baseline.adapters.lfm25_pii import Lfm25PiiSpaceAdapter
+    from anonymous_pii.eval_baseline.baseline.datasets import load_eval_cell
+    from anonymous_pii.eval_baseline.baseline.run import (
         ShardSpec,
         run_dual_view_shards,
         shard_result_json,
@@ -366,7 +366,7 @@ def eval_cell(
 )
 def parity_smoke() -> str:
     """Compare one-forward hybrid output to pinned ``detect`` on fixed smoke text."""
-    from meddies_pii.eval_baseline.adapters.lfm25_pii import (
+    from anonymous_pii.eval_baseline.adapters.lfm25_pii import (
         Lfm25PiiSpaceAdapter,
         map_hybrid_spans,
     )
@@ -423,14 +423,14 @@ def parity_smoke() -> str:
     volumes={BASELINE_MOUNT: baseline_volume},
 )
 def aggregate(view: EvaluationView = MODEL_CORE_VIEW) -> None:
-    from meddies_pii.eval_baseline.adapters.lfm25_pii import (
+    from anonymous_pii.eval_baseline.adapters.lfm25_pii import (
         LFM25_PII_SUPPORTED_LABELS,
     )
-    from meddies_pii.eval_baseline.baseline.aggregate import (
+    from anonymous_pii.eval_baseline.baseline.aggregate import (
         aggregate_results,
         format_aggregate_report,
     )
-    from meddies_pii.eval_baseline.baseline.run import (
+    from anonymous_pii.eval_baseline.baseline.run import (
         assert_frozen_fixture,
         expected_matrix_shard_identities,
         read_matrix_results,
@@ -488,7 +488,7 @@ def aggregate(view: EvaluationView = MODEL_CORE_VIEW) -> None:
             "dtype": "float32",
             "tf32": True,
             "accelerator": "A10G",
-            "scorer": "Meddies fixed-nine exact and containment span F1",
+            "scorer": "Anonymous fixed-nine exact and containment span F1",
             "external_revision": EXTERNAL_DATASET_REVISION,
             "v2_revision": V2_DATASET_REVISION,
             "rows_by_cell": EVAL_EXPECTED_ROWS,
@@ -511,7 +511,7 @@ def run_matrix(
     full: bool = False,  # ruff: ignore[boolean-type-hint-positional-argument,boolean-default-value-positional-argument]
     force: bool = False,  # ruff: ignore[boolean-type-hint-positional-argument,boolean-default-value-positional-argument]
 ) -> None:
-    from meddies_pii.eval_baseline.baseline.datasets import select_eval_datasets
+    from anonymous_pii.eval_baseline.baseline.datasets import select_eval_datasets
 
     _space_reference_local()
     selected = select_eval_datasets(datasets)

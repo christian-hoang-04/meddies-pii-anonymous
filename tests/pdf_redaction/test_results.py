@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.pdf_redaction.benchmark.results import (
+from anonymous_pii.pdf_redaction.benchmark.results import (
     TIMING_STAGES,
     ArtifactIdentity,
     FailedCandidateResult,
@@ -20,7 +20,7 @@ from meddies_pii.pdf_redaction.benchmark.results import (
 )
 
 if TYPE_CHECKING:
-    from meddies_pii.pdf_redaction.benchmark.registry import CandidateId
+    from anonymous_pii.pdf_redaction.benchmark.registry import CandidateId
 
 _DIGEST = "a" * 64
 

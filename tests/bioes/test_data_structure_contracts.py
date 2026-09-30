@@ -3,9 +3,9 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.training.bioes.data.augmentation import load_augmentation_rows
-from meddies_pii.training.bioes.data.mixed_sources import load_local_external_rows
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.training.bioes.data.augmentation import load_augmentation_rows
+from anonymous_pii.training.bioes.data.mixed_sources import load_local_external_rows
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

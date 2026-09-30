@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from meddies_pii.historical_artifacts import (
+from anonymous_pii.historical_artifacts import (
     LEGACY_LABEL_POLICY,
     LEGACY_RECORD_ID_PREFIX,
     LEGACY_SYNTHETIC_DATASET_IDS,
 )
-from meddies_pii.training.bioes.data.augmentation import normalize_record
+from anonymous_pii.training.bioes.data.augmentation import normalize_record
 
 
 def test_normalize_record_preserves_generation_metadata() -> None:

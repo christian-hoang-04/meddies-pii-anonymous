@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from meddies_pii.training.bioes.reports.span_filter_review import (
+from anonymous_pii.training.bioes.reports.span_filter_review import (
     collect_span_filter_review,
     render_span_filter_review_html,
     source_label_for_path,

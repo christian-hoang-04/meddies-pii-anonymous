@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Run the planned MiMo 20k general/adversarial Meddies Labels generation job."""
+"""Run the planned MiMo 20k general/adversarial Anonymous Labels generation job."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from typing import TYPE_CHECKING
 
 from dotenv import load_dotenv
 
-from meddies_pii.generation.label_corpus.runner import (
+from anonymous_pii.generation.label_corpus.runner import (
     GenerationRunError,
     GenerationRunPlan,
     build_mimo_general_segments,

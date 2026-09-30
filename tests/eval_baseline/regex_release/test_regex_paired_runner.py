@@ -7,30 +7,30 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.eval_baseline.baseline.datasets import EvalRow
-from meddies_pii.eval_baseline.baseline.run import (
+from anonymous_pii.eval_baseline.baseline.datasets import EvalRow
+from anonymous_pii.eval_baseline.baseline.run import (
     ShardSpec,
     shard_output_path,
 )
-from meddies_pii.eval_baseline.baseline.views import (
+from anonymous_pii.eval_baseline.baseline.views import (
     MODEL_CORE_VIEW,
     MODEL_PLUS_REGEX_VIEW,
 )
-from meddies_pii.eval_baseline.regex_release.paired_evaluation import (
+from anonymous_pii.eval_baseline.regex_release.paired_evaluation import (
     paired_regex_document_counts,
     run_regex_view_shards,
 )
-from meddies_pii.eval_baseline.regex_release.regex_bootstrap import source_row_sha256
-from meddies_pii.eval_baseline.regex_release.regex_ignore_list import ignore_list_from_rows
-from meddies_pii.eval_baseline.regex_release.regex_report import RegexCorpusManifest
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.eval_baseline.regex_release.regex_bootstrap import source_row_sha256
+from anonymous_pii.eval_baseline.regex_release.regex_ignore_list import ignore_list_from_rows
+from anonymous_pii.eval_baseline.regex_release.regex_report import RegexCorpusManifest
+from anonymous_pii.evaluation.identity import (
     ArtifactIdentity,
     EvaluationContract,
     dataset_shard_identity,
     file_sha256,
 )
-from meddies_pii.spans import CharSpan, char_span_to_dict
-from meddies_pii.taxonomy import PII_LABEL_SET
+from anonymous_pii.spans import CharSpan, char_span_to_dict
+from anonymous_pii.taxonomy import PII_LABEL_SET
 
 if TYPE_CHECKING:
     from pathlib import Path

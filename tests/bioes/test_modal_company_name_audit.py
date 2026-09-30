@@ -11,8 +11,8 @@ from typing import TYPE_CHECKING, Self
 
 import pytest
 
-from meddies_pii.training.bioes.modal import company_name_audit as modal_audit
-from meddies_pii.training.bioes.trainers import company_name_audit as audit
+from anonymous_pii.training.bioes.modal import company_name_audit as modal_audit
+from anonymous_pii.training.bioes.trainers import company_name_audit as audit
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -25,7 +25,9 @@ def test_cpu_modal_audit_uses_exact_pins_and_no_gpu() -> None:
     assert modal_audit.FULL_AUDIT_WORKERS == 12
     assert modal_audit.PACKED_DATASET_REVISION == audit.PACKED_DATASET_REVISION
     assert modal_audit.EVAL_DATASET_REVISION == audit.EVAL_DATASET_REVISION
-    assert modal_audit.STOP_COMMAND == ("MODAL_PROFILE=meddies-pii uv run modal app stop meddies-bioes-company-name-audit")
+    assert modal_audit.STOP_COMMAND == (
+        "MODAL_PROFILE=anonymous-pii uv run modal app stop anonymous-bioes-company-name-audit"
+    )
 
 
 def test_remote_guard_requires_confirmation() -> None:
@@ -42,8 +44,8 @@ def test_progress_writer_prints_and_persists_jsonl(tmp_path: Path, capsys: pytes
 
 
 def test_render_path_is_pure_and_does_not_start_modal_work() -> None:
-    rendered = modal_audit.render_dry_run("meddies-pii")
-    assert rendered == audit.render_modal_command("meddies-pii")
+    rendered = modal_audit.render_dry_run("anonymous-pii")
+    assert rendered == audit.render_modal_command("anonymous-pii")
 
 
 def test_streaming_audit_uses_12_workers_and_keeps_prefix_ordered(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

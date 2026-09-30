@@ -1,4 +1,4 @@
-"""Inline ``[value]<label>`` parsing for the Meddies/meddies-pii configs.
+"""Inline ``[value]<label>`` parsing for the anonymous-placeholder/anonymous-pii configs.
 
 The vietnamese-translated config rows carry no `language` field; the config name supplies it so they aren't bucketed as
 "unknown" (which the gate resolver drops from the coverage grid and the language entropy).
@@ -7,7 +7,7 @@ The vietnamese-translated config rows carry no `language` field; the config name
 
 from __future__ import annotations
 
-from meddies_pii.training.bioes.data.inline_tags import (
+from anonymous_pii.training.bioes.data.inline_tags import (
     convert_config_row,
     parse_inline_tagged,
 )

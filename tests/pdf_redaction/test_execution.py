@@ -12,13 +12,13 @@ import pytest
 from pypdf import PdfWriter
 from pypdf.generic import NameObject, NumberObject, RectangleObject
 
-from meddies_pii.bioes_inference import SpanDetection
-from meddies_pii.pdf_redaction.benchmark.execution_environment import (
+from anonymous_pii.bioes_inference import SpanDetection
+from anonymous_pii.pdf_redaction.benchmark.execution_environment import (
     _automated_redaction_status,
     _current_rss_bytes,
     _page_invariants,
 )
-from meddies_pii.pdf_redaction.benchmark.runtime import (
+from anonymous_pii.pdf_redaction.benchmark.runtime import (
     ModelCandidateGateError,
     OcrCandidateGateError,
     _has_exact_detection_consensus,
@@ -27,19 +27,19 @@ from meddies_pii.pdf_redaction.benchmark.runtime import (
     fixed_failure_row,
     select_ocr_model_files,
 )
-from meddies_pii.pdf_redaction.benchmark.spatial import (
+from anonymous_pii.pdf_redaction.benchmark.spatial import (
     OracleRegion,
     PageQuad,
     measure_spatial_coverage,
     model_coverage_breakdown,
 )
-from meddies_pii.pdf_redaction.contracts import PageRegion, Point, Quad
-from meddies_pii.pdf_redaction.document import DocumentInspection, PageInspection
-from meddies_pii.pdf_redaction.ocr import OcrAdapterError
-from meddies_pii.pdf_redaction.routing import PageRouteSignals, classify_page
+from anonymous_pii.pdf_redaction.contracts import PageRegion, Point, Quad
+from anonymous_pii.pdf_redaction.document import DocumentInspection, PageInspection
+from anonymous_pii.pdf_redaction.ocr import OcrAdapterError
+from anonymous_pii.pdf_redaction.routing import PageRouteSignals, classify_page
 
 if TYPE_CHECKING:
-    from meddies_pii.bioes_inference import BioesSpanDetector
+    from anonymous_pii.bioes_inference import BioesSpanDetector
 
 
 def _quad(x0: float, y0: float, x1: float, y1: float) -> Quad:
@@ -389,33 +389,33 @@ def test_full_matrix_report_assembles_measured_evidence(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """The orchestrator delegates the stable result schema to report assembly."""
-    from meddies_pii.bioes_inference.artifacts import (
+    from anonymous_pii.bioes_inference.artifacts import (
         HydratedArtifactIdentity,
         HydratedFileIdentity,
     )
-    from meddies_pii.pdf_redaction.benchmark import execution_report
-    from meddies_pii.pdf_redaction.benchmark.execution_report import (
+    from anonymous_pii.pdf_redaction.benchmark import execution_report
+    from anonymous_pii.pdf_redaction.benchmark.execution_report import (
         FullMatrixEvidence,
         build_full_matrix_result,
     )
-    from meddies_pii.pdf_redaction.benchmark.execution_types import FullMatrixInputs
-    from meddies_pii.pdf_redaction.benchmark.fidelity import RenderFidelity
-    from meddies_pii.pdf_redaction.benchmark.results import (
+    from anonymous_pii.pdf_redaction.benchmark.execution_types import FullMatrixInputs
+    from anonymous_pii.pdf_redaction.benchmark.fidelity import RenderFidelity
+    from anonymous_pii.pdf_redaction.benchmark.results import (
         TIMING_STAGES,
         StageTimingRecord,
     )
-    from meddies_pii.pdf_redaction.benchmark.runtime import ModelGate, OcrSuccess
-    from meddies_pii.pdf_redaction.benchmark.spatial import (
+    from anonymous_pii.pdf_redaction.benchmark.runtime import ModelGate, OcrSuccess
+    from anonymous_pii.pdf_redaction.benchmark.spatial import (
         OracleRegion,
         SpatialCoverage,
     )
-    from meddies_pii.pdf_redaction.contracts import GeometryPage
-    from meddies_pii.pdf_redaction.ocr import GeometryOcr
-    from meddies_pii.pdf_redaction.verification import (
+    from anonymous_pii.pdf_redaction.contracts import GeometryPage
+    from anonymous_pii.pdf_redaction.ocr import GeometryOcr
+    from anonymous_pii.pdf_redaction.verification import (
         VerificationFinding,
         VerificationReport,
     )
-    from meddies_pii.pdf_redaction.writers import RedactionWriteResult
+    from anonymous_pii.pdf_redaction.writers import RedactionWriteResult
 
     source = tmp_path / "source.pdf"
     output = tmp_path / "output.pdf"
@@ -466,7 +466,7 @@ def test_full_matrix_report_assembles_measured_evidence(
     fidelity = RenderFidelity(1, 72, 16, 2, 100, 0, 0.0, ())
     artifact = HydratedArtifactIdentity(
         artifact_id="test_model",
-        repo_id="Meddies/test-model",
+        repo_id="anonymous-placeholder/test-model",
         revision="b" * 40,
         root=tmp_path,
         tokenizer_directory=tmp_path,

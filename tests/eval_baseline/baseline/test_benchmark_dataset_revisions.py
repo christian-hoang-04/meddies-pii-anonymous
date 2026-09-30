@@ -4,7 +4,7 @@ import sys
 from types import SimpleNamespace
 from typing import TYPE_CHECKING
 
-from meddies_pii.eval_baseline.baseline.datasets import (
+from anonymous_pii.eval_baseline.baseline.datasets import (
     EXTERNAL_DATASET_REVISION,
     V2_DATASET_REVISION,
     load_external_rows,
@@ -60,7 +60,7 @@ def test_load_rows_passes_the_pinned_dataset_revision(monkeypatch: pytest.Monkey
     )
 
     rows = load_rows(
-        "Meddies/example",
+        "anonymous-placeholder/example",
         "config",
         split="eval",
         dataset="external",
@@ -70,7 +70,7 @@ def test_load_rows_passes_the_pinned_dataset_revision(monkeypatch: pytest.Monkey
     assert len(rows) == 1
     assert calls == [
         (
-            "Meddies/example",
+            "anonymous-placeholder/example",
             "config",
             {
                 "split": "eval",
@@ -88,7 +88,7 @@ def test_load_external_rows_uses_the_benchmark_revision_by_default(
     assert load_external_rows("ai4privacy_en") == []
     assert calls == [
         (
-            "Meddies/meddies-pii-external",
+            "anonymous-placeholder/anonymous-pii-external",
             "ai4privacy_en",
             {
                 "split": "eval",
@@ -106,7 +106,7 @@ def test_load_v2_eval_rows_uses_the_benchmark_revision_by_default(
     assert load_v2_eval_rows("eval-challenge") == []
     assert calls == [
         (
-            "Meddies/meddies-pii-v2",
+            "anonymous-placeholder/anonymous-pii-v2",
             "eval-challenge",
             {
                 "split": "train",
@@ -125,7 +125,7 @@ def test_benchmark_dataset_loaders_allow_explicit_revision_overrides(
     assert load_v2_eval_rows("eval", revision="v2-override") == []
     assert calls == [
         (
-            "Meddies/meddies-pii-external",
+            "anonymous-placeholder/anonymous-pii-external",
             "ai4privacy_en",
             {
                 "split": "eval",
@@ -133,7 +133,7 @@ def test_benchmark_dataset_loaders_allow_explicit_revision_overrides(
             },
         ),
         (
-            "Meddies/meddies-pii-v2",
+            "anonymous-placeholder/anonymous-pii-v2",
             "eval",
             {
                 "split": "train",

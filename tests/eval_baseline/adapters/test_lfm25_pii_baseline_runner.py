@@ -9,7 +9,7 @@ from typing import ClassVar, Protocol, cast
 
 import pytest
 
-from meddies_pii.eval_baseline.adapters.lfm25_pii import (
+from anonymous_pii.eval_baseline.adapters.lfm25_pii import (
     MODEL_ID,
     MODEL_REVISION,
     _snapshot_file,
@@ -126,10 +126,10 @@ def test_runner_downloads_only_the_pinned_model_snapshot(
     assert calls == [(MODEL_ID, MODEL_REVISION, "/cache/huggingface")]
 
 
-def test_runner_defaults_to_meddies_workspace_volumes_and_exposes_bounded_smoke() -> None:
+def test_runner_defaults_to_anonymous_workspace_volumes_and_exposes_bounded_smoke() -> None:
     runner = _load_runner_module()
 
-    assert runner.BASELINE_VOLUME_NAME == "meddies-pii-baseline-eval-lfm25-pii"
+    assert runner.BASELINE_VOLUME_NAME == "anonymous-pii-baseline-eval-lfm25-pii"
     assert runner.CACHE_VOLUME_NAME == "lfm25-pii-eval-hf-cache"
     assert runner.MODEL_NAME == "lfm25-pii"
     assert callable(runner.smoke)
@@ -155,7 +155,7 @@ def test_runner_pins_a_debian_compiler_before_python_packages() -> None:
 
 def _pinned_space_reference_available() -> bool:
     return any(
-        (ancestor / "meddies-pii-context" / "references" / "liquidai-pii-detection-space").is_dir()
+        (ancestor / "anonymous-pii-context" / "references" / "liquidai-pii-detection-space").is_dir()
         for ancestor in Path(__file__).resolve().parents
     )
 

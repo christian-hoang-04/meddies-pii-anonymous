@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from meddies_pii.training.bioes.eval.audit import audit_record
+from anonymous_pii.training.bioes.eval.audit import audit_record
 
 
 @pytest.mark.parametrize(

@@ -18,7 +18,7 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-from meddies_pii.training.bioes.data.corpus_manifest import (
+from anonymous_pii.training.bioes.data.corpus_manifest import (
     sha256_16,
     verify_manifest,
     write_manifest,

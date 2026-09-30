@@ -43,59 +43,59 @@ from typing import TYPE_CHECKING, Any, cast
 
 import modal
 
-from meddies_pii.annotations.source_mapping import normalize_native_label
-from meddies_pii.eval_baseline.adapters.opf import OPF_LABEL_FOLD
-from meddies_pii.eval_baseline.adapters.opf_backend import (
+from anonymous_pii.annotations.source_mapping import normalize_native_label
+from anonymous_pii.eval_baseline.adapters.opf import OPF_LABEL_FOLD
+from anonymous_pii.eval_baseline.adapters.opf_backend import (
     DEFAULT_NATIVE_CHECKPOINT_DIR,
     MODEL_ID,
 )
-from meddies_pii.eval_baseline.adapters.opf_backend import (
+from anonymous_pii.eval_baseline.adapters.opf_backend import (
     apply_native_env as _apply_native_env,
 )
-from meddies_pii.eval_baseline.adapters.opf_backend import (
+from anonymous_pii.eval_baseline.adapters.opf_backend import (
     build_native_batched_predictor as _build_native_batched_predictor,
 )
-from meddies_pii.eval_baseline.adapters.opf_backend import (
+from anonymous_pii.eval_baseline.adapters.opf_backend import (
     detected_span_to_char_span as _detected_span_to_char_span,
 )
-from meddies_pii.eval_baseline.adapters.opf_backend import (
+from anonymous_pii.eval_baseline.adapters.opf_backend import (
     prepare_native_checkpoint as _prepare_native_checkpoint,
 )
-from meddies_pii.eval_baseline.baseline.datasets import (
+from anonymous_pii.eval_baseline.baseline.datasets import (
     EXTERNAL_CONFIGS,
     EvalRow,
     load_external_rows,
     load_v2_eval_rows,
 )
-from meddies_pii.eval_baseline.opf_benchmark.dataset import (
+from anonymous_pii.eval_baseline.opf_benchmark.dataset import (
     BenchmarkDoc,
     PinnedBenchmarkDocSet,
     build_pinned_benchmark_doc_set,
 )
-from meddies_pii.eval_baseline.opf_benchmark.decoding import (
+from anonymous_pii.eval_baseline.opf_benchmark.decoding import (
     bioes_token_entities_to_spans,
     token_logits_to_bioes_spans,
 )
-from meddies_pii.eval_baseline.opf_benchmark.harness import run_mock_benchmark
-from meddies_pii.eval_baseline.opf_benchmark.metrics import (
+from anonymous_pii.eval_baseline.opf_benchmark.harness import run_mock_benchmark
+from anonymous_pii.eval_baseline.opf_benchmark.metrics import (
     TimingRepeat,
     compute_correctness,
     summarize_timing,
 )
-from meddies_pii.eval_baseline.opf_benchmark.registry import (
+from anonymous_pii.eval_baseline.opf_benchmark.registry import (
     BenchmarkConfig,
     build_config_registry,
     select_representative_configs,
 )
-from meddies_pii.eval_baseline.opf_benchmark.results import (
+from anonymous_pii.eval_baseline.opf_benchmark.results import (
     BenchmarkResultRow,
     format_results_grid,
 )
-from meddies_pii.modal_runtime import (
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
 )
-from meddies_pii.spans import CharSpan
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     import numpy as np
@@ -112,12 +112,12 @@ crash-loop every container at import. These local-source constants are only read
 (add_local_dir below), never in-container, so fall back safely when the repo layout isn't present.
 
 """
-CONTEXT_ROOT = REPO_ROOT.parent / "meddies-pii-context"
+CONTEXT_ROOT = REPO_ROOT.parent / "anonymous-pii-context"
 OPF_REFERENCE_ROOT = CONTEXT_ROOT / "references/openai-privacy-filter"
 OPF_REMOTE_ROOT = "/root/openai-privacy-filter"
 
-APP_NAME = "meddies-opf-inference-benchmark"
-OUTPUT_VOLUME_NAME = "meddies-pii-opf-benchmark"
+APP_NAME = "anonymous-opf-inference-benchmark"
+OUTPUT_VOLUME_NAME = "anonymous-pii-opf-benchmark"
 OUTPUT_MOUNT = "/benchmark"
 CACHE_VOLUME_NAME = "hf-cache"
 CACHE_MOUNT = "/cache"
@@ -1002,7 +1002,7 @@ def _parse_reference_span(raw: object) -> CharSpan | None:
 
 
 def _recommendation_payload(rows: Sequence[BenchmarkResultRow]) -> dict[str, object]:
-    from meddies_pii.eval_baseline.opf_benchmark.ranking import rank_benchmark_results
+    from anonymous_pii.eval_baseline.opf_benchmark.ranking import rank_benchmark_results
 
     recommendation = rank_benchmark_results(tuple(rows))
     return {

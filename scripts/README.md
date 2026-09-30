@@ -1,9 +1,9 @@
 # Maintainer scripts
 
-The Python package under `src/meddies_pii/` owns reusable behavior. The files
+The Python package under `src/anonymous_pii/` owns reusable behavior. The files
 under `scripts/` are thin adapters for dataset construction, generation,
 evaluation, reporting, and operational jobs; they are not part of the public
-`meddies-pii` CLI surface.
+`anonymous-pii` CLI surface.
 
 ## Directory guide
 
@@ -19,7 +19,7 @@ evaluation, reporting, and operational jobs; they are not part of the public
 ## How to choose a home for new code
 
 1. Put reusable parsing, validation, policy, scoring, and data transformation
-   in `src/meddies_pii/` first.
+   in `src/anonymous_pii/` first.
 2. Keep the script as a small argument/configuration adapter around that package
    code.
 3. Put a workflow in `ops/` only when it requires Modal, a GPU, a secret, a

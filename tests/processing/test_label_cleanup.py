@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from meddies_pii.processing.label_cleanup import (
+from anonymous_pii.processing.label_cleanup import (
     apply_quality_filters,
     clean_bracket_artifacts,
 )

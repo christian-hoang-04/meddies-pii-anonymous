@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from meddies_pii.eval_baseline.baseline.datasets import (
+from anonymous_pii.eval_baseline.baseline.datasets import (
     EVAL_DATASETS,
     EXTERNAL_CONFIGS,
     canonical_language,
@@ -91,14 +91,14 @@ def test_load_rows_passes_limit_skips_bad_rows_and_preserves_shard(
 
     monkeypatch.setitem(sys.modules, "datasets", SimpleNamespace(load_dataset=fake_load_dataset))
     rows = load_rows(
-        "Meddies/fake",
+        "anonymous-placeholder/fake",
         "fixture",
         split="eval",
         dataset="external",
         shard="fixture-shard",
         limit=2,
     )
-    assert calls == [(("Meddies/fake", "fixture"), {"split": "eval[:2]"})]
+    assert calls == [(("anonymous-placeholder/fake", "fixture"), {"split": "eval[:2]"})]
     assert len(rows) == 1
     assert rows[0].dataset == "external"
     assert rows[0].shard == "fixture-shard"
@@ -139,19 +139,19 @@ def test_loader_dispatch_rejects_bad_config_and_routes_families(
     )
     assert calls == [
         (
-            ("Meddies/meddies-pii-v2", "eval"),
+            ("anonymous-placeholder/anonymous-pii-v2", "eval"),
             {"split": "train[:3]", "revision": "v2-pin"},
         ),
         (
-            ("Meddies/meddies-pii-external", EXTERNAL_CONFIGS[0]),
+            ("anonymous-placeholder/anonymous-pii-external", EXTERNAL_CONFIGS[0]),
             {"split": "eval[:4]", "revision": "external-pin"},
         ),
         (
-            ("Meddies/meddies-pii-v2", "eval-challenge"),
+            ("anonymous-placeholder/anonymous-pii-v2", "eval-challenge"),
             {"split": "train[:5]", "revision": "v2-cell"},
         ),
         (
-            ("Meddies/meddies-pii-external", EXTERNAL_CONFIGS[0]),
+            ("anonymous-placeholder/anonymous-pii-external", EXTERNAL_CONFIGS[0]),
             {"split": "eval[:6]", "revision": "external-cell"},
         ),
     ]
@@ -196,5 +196,5 @@ def test_subset_loaders_use_all_external_configs_and_light_source_cap(
     light_subset = load_first_light_subset(limit=100, per_source_limit=1)
     assert len(light_rows) == 2
     assert len(light_subset.rows) == 6
-    assert calls.count(("Meddies/meddies-pii-v2", "eval")) == 2
-    assert calls.count(("Meddies/meddies-pii-v2", "eval-challenge")) == 2
+    assert calls.count(("anonymous-placeholder/anonymous-pii-v2", "eval")) == 2
+    assert calls.count(("anonymous-placeholder/anonymous-pii-v2", "eval-challenge")) == 2

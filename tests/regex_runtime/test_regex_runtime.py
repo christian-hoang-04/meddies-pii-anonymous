@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from meddies_pii.regex_runtime import apply
-from meddies_pii.spans import CharSpan
+from anonymous_pii.regex_runtime import apply
+from anonymous_pii.spans import CharSpan
 
 
 def test_runtime_owns_union_provenance_manifest_and_fail_closed_policy() -> None:

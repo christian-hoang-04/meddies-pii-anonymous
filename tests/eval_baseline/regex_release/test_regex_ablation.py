@@ -8,25 +8,25 @@ from typing import TYPE_CHECKING, TypeGuard
 
 import pytest
 
-from meddies_pii import regex_runtime
-from meddies_pii.eval_baseline.baseline.views import (
+from anonymous_pii import regex_runtime
+from anonymous_pii.eval_baseline.baseline.views import (
     MODEL_CORE_VIEW,
     MODEL_PLUS_REGEX_VIEW,
     REGEX_EVALUATION_VIEWS,
 )
-from meddies_pii.eval_baseline.regex_release.regex_fixtures import (
+from anonymous_pii.eval_baseline.regex_release.regex_fixtures import (
     LANGUAGE_SCOPED_LOCKED_NEGATIVES,
     LOCKED_CLINICAL_NEGATIVES,
     POSITIVE_SELECTION_FIXTURES,
 )
-from meddies_pii.regex_runtime import language as regex_language
-from meddies_pii.regex_runtime import manifest as regex_manifest_module
-from meddies_pii.regex_runtime import postprocess as regex_postprocess
-from meddies_pii.regex_runtime import regex_manifest
-from meddies_pii.regex_runtime import rules as regex_rules
-from meddies_pii.regex_runtime.postprocess import apply_regex_postprocess
-from meddies_pii.regex_runtime.rules import regex_candidates
-from meddies_pii.spans import CharSpan
+from anonymous_pii.regex_runtime import language as regex_language
+from anonymous_pii.regex_runtime import manifest as regex_manifest_module
+from anonymous_pii.regex_runtime import postprocess as regex_postprocess
+from anonymous_pii.regex_runtime import regex_manifest
+from anonymous_pii.regex_runtime import rules as regex_rules
+from anonymous_pii.regex_runtime.postprocess import apply_regex_postprocess
+from anonymous_pii.regex_runtime.rules import regex_candidates
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     from types import ModuleType

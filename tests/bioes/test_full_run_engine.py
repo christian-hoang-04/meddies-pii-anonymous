@@ -11,13 +11,13 @@ from typing import TYPE_CHECKING, override
 
 import pytest
 
-from meddies_pii.training.bioes.trainers.full_run import (
+from anonymous_pii.training.bioes.trainers.full_run import (
     EVAL_DATASET_REVISION,
     PACKED_DATASET_REVISION,
     PACKED_MANIFEST_SHA256,
     PACKED_UNIT_COUNT,
 )
-from meddies_pii.training.bioes.trainers.full_run_engine import (
+from anonymous_pii.training.bioes.trainers.full_run_engine import (
     RuntimeResumeState,
     RunWriter,
     checkpoint_metadata,
@@ -124,8 +124,8 @@ def test_resume_restores_default_adapter_without_changing_optimizer_parameter_ow
     import torch
     from peft import PeftType
 
-    from meddies_pii.training.bioes.trainers import full_run
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers import full_run
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _resume_if_requested,
     )
 
@@ -237,7 +237,7 @@ def test_resume_restores_default_adapter_without_changing_optimizer_parameter_ow
 def test_resume_rejects_missing_or_unexpected_adapter_tensors() -> None:
     from types import SimpleNamespace
 
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _require_exact_adapter_load,
     )
 
@@ -250,7 +250,7 @@ def test_resume_rejects_missing_or_unexpected_adapter_tensors() -> None:
 def test_adapter_only_missing_key_filter_allows_frozen_body_but_not_lora_or_extra() -> None:
     from types import SimpleNamespace
 
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _require_exact_adapter_load,
     )
 
@@ -285,7 +285,7 @@ def test_adapter_only_restore_allows_frozen_peft_missing_keys_and_proves_values(
     from peft import PeftType
     from safetensors import torch as safetensors_torch
 
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _restore_pii_training_payloads,
     )
 
@@ -371,7 +371,7 @@ def test_adapter_only_restore_allows_frozen_peft_missing_keys_and_proves_values(
 def test_pii_body_attestation_rejects_missing_or_mismatched_encoder_tensors() -> None:
     import torch
 
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         pii_body_state_attestation,
         require_pii_body_state_attestation,
     )
@@ -408,7 +408,7 @@ def test_pii_checkpoint_attestation_normalizes_unsloth_namespace_but_checks_valu
     import torch
     from safetensors.torch import save_file
 
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         lfm2_checkpoint_body_state_attestation,
         pii_tensor_state_attestation,
         require_lfm2_checkpoint_body_state_attestation,
@@ -432,8 +432,8 @@ def test_pii_checkpoint_attestation_normalizes_unsloth_namespace_but_checks_valu
 def test_unsloth_encoder_lora_uses_feature_extraction_not_causal_generation() -> None:
     from types import SimpleNamespace
 
-    from meddies_pii.training.bioes.trainers import full_run
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers import full_run
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _attach_unsloth_feature_extraction_lora,
     )
 
@@ -487,7 +487,7 @@ def test_unsloth_encoder_lora_uses_feature_extraction_not_causal_generation() ->
         )
 
 
-@pytest.mark.parametrize("profile", ["meddies-pii", "anhthunguyenump"])
+@pytest.mark.parametrize("profile", ["anonymous-pii", "anhthunguyenump"])
 def test_pii350_encoder_path_uses_the_immutable_contract_lora_mechanics(
     profile: str,
     monkeypatch: pytest.MonkeyPatch,
@@ -496,8 +496,8 @@ def test_pii350_encoder_path_uses_the_immutable_contract_lora_mechanics(
     import sys
     from types import ModuleType, SimpleNamespace
 
-    from meddies_pii.training.bioes.data import tagger as tagger_module
-    from meddies_pii.training.bioes.trainers import (
+    from anonymous_pii.training.bioes.data import tagger as tagger_module
+    from anonymous_pii.training.bioes.trainers import (
         base230_unsloth_probe,
         full_run,
         full_run_runtime,
@@ -587,7 +587,7 @@ def test_resume_moves_optimizer_state_to_each_parameter_device() -> None:
 
     import torch
 
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _move_optimizer_state_to_parameter_devices,
     )
 
@@ -603,7 +603,7 @@ def test_runtime_label_vocabulary_mismatch_fails_closed_and_persists_exact_order
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from meddies_pii.training.bioes.trainers import full_run, full_run_runtime
+    from anonymous_pii.training.bioes.trainers import full_run, full_run_runtime
 
     contract = full_run.render_full_run("base230")
     labels = full_run_runtime._validate_runtime_label_vocabulary(contract)
@@ -621,8 +621,8 @@ def test_runtime_label_vocabulary_mismatch_fails_closed_and_persists_exact_order
 def test_trainable_lora_proof_requires_every_target_and_fp32_adapters() -> None:
     from types import SimpleNamespace
 
-    from meddies_pii.training.bioes.trainers.config import LORA_TARGET_MODULES
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.config import LORA_TARGET_MODULES
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _validate_trainable_lora_parameters,
     )
 
@@ -648,7 +648,7 @@ def test_trainable_lora_proof_requires_every_target_and_fp32_adapters() -> None:
 
 
 def test_optimizer_progress_reports_remaining_epoch_and_deadline_projections() -> None:
-    from meddies_pii.training.bioes.trainers.full_run_runtime import _optimizer_progress
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import _optimizer_progress
 
     progress = _optimizer_progress(
         cursor=240,
@@ -669,7 +669,7 @@ def test_optimizer_progress_reports_remaining_epoch_and_deadline_projections() -
 def test_runtime_attestation_requires_observable_training_state_and_reports_attention() -> None:
     from types import SimpleNamespace
 
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _observed_attention_implementation,
         _validate_observed_training_state,
     )
@@ -692,7 +692,7 @@ def test_runtime_attestation_requires_observable_training_state_and_reports_atte
 def test_unsloth_encoder_body_preserves_true_wrapper_remote_code_provenance() -> None:
     from types import SimpleNamespace
 
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _propagate_unsloth_remote_code_provenance,
     )
 
@@ -707,7 +707,7 @@ def test_unsloth_encoder_body_rejects_missing_false_or_non_bool_provenance(
 ) -> None:
     from types import SimpleNamespace
 
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _propagate_unsloth_remote_code_provenance,
     )
 
@@ -719,7 +719,7 @@ def test_unsloth_encoder_body_rejects_missing_false_or_non_bool_provenance(
 
 
 def test_runtime_package_attestation_fails_closed_for_wrong_candidate_image() -> None:
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _require_exact_runtime_package_versions,
     )
 
@@ -733,12 +733,12 @@ def test_runtime_package_attestation_fails_closed_for_wrong_candidate_image() ->
 
 
 def test_runtime_adamw_parameters_are_validated_from_the_immutable_contract() -> None:
-    from meddies_pii.training.bioes.trainers import full_run
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers import full_run
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _contract_adamw_parameters,
     )
 
-    contract = full_run.render_pii350_milestone_run_contract("meddies-pii")
+    contract = full_run.render_pii350_milestone_run_contract("anonymous-pii")
     assert asdict(_contract_adamw_parameters(contract)) == {
         "lr": 1e-4,
         "betas": (0.9, 0.999),
@@ -750,7 +750,7 @@ def test_runtime_adamw_parameters_are_validated_from_the_immutable_contract() ->
     contract["optimizer"]["lr"] = 2e-4
     with pytest.raises(RuntimeError, match="disagree"):
         _contract_adamw_parameters(contract)
-    contract = full_run.render_pii350_milestone_run_contract("meddies-pii")
+    contract = full_run.render_pii350_milestone_run_contract("anonymous-pii")
     contract["optimizer"]["schedule"] = "linear"
     with pytest.raises(RuntimeError, match="constant"):
         _contract_adamw_parameters(contract)
@@ -759,8 +759,8 @@ def test_runtime_adamw_parameters_are_validated_from_the_immutable_contract() ->
 def test_wsd_scheduler_contract_trace_and_fixed_step_stop_are_exact() -> None:
     import torch
 
-    from meddies_pii.training.bioes.trainers import full_run
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers import full_run
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _apply_optimizer_step,
         _build_scheduler,
         _contract_scheduler_parameters,
@@ -866,7 +866,7 @@ def test_60_step_scout_runtime_persists_one_terminal_checkpoint_and_evaluates_on
 ) -> None:
     import torch
 
-    from meddies_pii.training.bioes.trainers import full_run, full_run_runtime
+    from anonymous_pii.training.bioes.trainers import full_run, full_run_runtime
 
     class _Backbone(torch.nn.Module):
         @staticmethod
@@ -976,8 +976,8 @@ def test_base230_comparison_runtime_attestation_uses_its_july_contract_pins(
 
     import torch
 
-    from meddies_pii.training.bioes.trainers import full_run, full_run_runtime
-    from meddies_pii.training.bioes.trainers.config import LORA_TARGET_MODULES
+    from anonymous_pii.training.bioes.trainers import full_run, full_run_runtime
+    from anonymous_pii.training.bioes.trainers.config import LORA_TARGET_MODULES
 
     comparison = full_run.render_m230_comparison_run_contract("base230")
     observed = {
@@ -1031,8 +1031,8 @@ def test_base230_comparison_runtime_attestation_uses_its_july_contract_pins(
 
 
 def test_milestone_attestation_requires_exact_step_cursor_and_non_stopping_evaluation() -> None:
-    from meddies_pii.training.bioes.trainers import full_run
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers import full_run
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _is_milestone_step,
         _require_milestone_state,
     )
@@ -1062,9 +1062,9 @@ def test_milestone_evaluation_restores_training_and_emits_completion_or_error(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from meddies_pii.training.bioes.trainers import full_run, full_run_runtime
+    from anonymous_pii.training.bioes.trainers import full_run, full_run_runtime
 
-    contract = full_run.render_pii350_milestone_run_contract("meddies-pii")
+    contract = full_run.render_pii350_milestone_run_contract("anonymous-pii")
     state = RuntimeResumeState(
         candidate_key="pii350",
         config_digest=contract["config_digest"],

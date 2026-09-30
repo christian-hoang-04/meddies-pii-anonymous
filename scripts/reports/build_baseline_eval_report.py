@@ -7,7 +7,7 @@ per_config / per_language / per_label) lives on its Modal Volume at
 
     uv run python scripts/reports/build_baseline_eval_report.py \
         --input-dir <dir-of-model-aggregates> \
-        --out ../meddies-pii-context/reports/2026-06-30-baseline-eval.md \
+        --out ../anonymous-pii-context/reports/2026-06-30-baseline-eval.md \
         --generated 2026-06-30
 
 The report compares every model across the 17 eval configs + per-language +
@@ -36,13 +36,13 @@ from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from typing import Any, cast
 
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.evaluation.identity import (
     EvaluationContract,
     canonical_sha256,
     is_sha256,
     parse_evaluation_contract,
 )
-from meddies_pii.json_types import is_str_mapping
+from anonymous_pii.json_types import is_str_mapping
 
 _MISSING = "—"
 _NOT_SUPPORTED = "n/s"
@@ -188,7 +188,7 @@ def build_report(  # ruff: ignore[complex-structure,too-many-locals,too-many-sta
     }
 
     lines: list[str] = [
-        f"# Baseline eval — {len(models)} PII models x Meddies Labels",
+        f"# Baseline eval — {len(models)} PII models x Anonymous Labels",
         "",
         (
             f"Generated {generated}. The primary comparison uses one fixed nine-label taxonomy, "
@@ -370,7 +370,7 @@ def _inference_section(profile: Mapping[str, Any]) -> list[str]:
 
     This is throughput on a fixed benchmark doc set, distinct from the eval F1 above.
     """
-    lines = ["", "## Inference profile — serving speed (opf = meddies-pii-v2 arch)", ""]
+    lines = ["", "## Inference profile — serving speed (opf = anonymous-pii-v2 arch)", ""]
     note = profile.get("note")
     if note:
         lines += [str(note), ""]

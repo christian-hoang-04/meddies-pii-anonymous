@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.training.bioes.data import mixed_build
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.training.bioes.data import mixed_build
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

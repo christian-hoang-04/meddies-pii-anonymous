@@ -3,10 +3,10 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-from meddies_pii.annotations.span_records import parse_labeled_record
-from meddies_pii.historical_artifacts import legacy_jsonl_locator
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.training.bioes.data.legacy_to_pii_labels import (
+from anonymous_pii.annotations.span_records import parse_labeled_record
+from anonymous_pii.historical_artifacts import legacy_jsonl_locator
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.training.bioes.data.legacy_to_pii_labels import (
     convert_legacy_row_to_pii_labels,
     write_legacy_conversion_artifacts,
 )

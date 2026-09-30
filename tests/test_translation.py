@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from meddies_pii.translation import clean_output
+from anonymous_pii.translation import clean_output
 
 
 def test_clean_output_strips_think_block() -> None:

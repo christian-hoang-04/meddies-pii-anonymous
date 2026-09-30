@@ -5,7 +5,7 @@ from typing import override
 import torch
 from torch import nn
 
-from meddies_pii.training.bioes.data.tagger import HiddenStateTokenTagger
+from anonymous_pii.training.bioes.data.tagger import HiddenStateTokenTagger
 
 
 class RecordingBackbone(nn.Module):

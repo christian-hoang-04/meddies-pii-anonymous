@@ -10,8 +10,8 @@ from typing import TYPE_CHECKING, cast
 
 import pytest
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.pdf_redaction.harness import (
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.pdf_redaction.harness import (
     UnsafeResultPayloadError,
     copy_verified_once,
     safe_failure_record,
@@ -188,7 +188,7 @@ def test_failure_record_preserves_safe_stack_frames() -> None:
 def test_modal_script_pins_cpu_only_synthetic_bounded_execution() -> None:
     source = MODAL_SCRIPT.read_text()
 
-    assert 'OUTPUT_VOLUME_NAME = "meddies-pii-pdf-redaction-benchmark"' in source
+    assert 'OUTPUT_VOLUME_NAME = "anonymous-pii-pdf-redaction-benchmark"' in source
     assert 'CACHE_VOLUME_NAME = "hf-cache"' in source
     assert 'modal.Secret.from_name("huggingface-secret")' in source
     assert "CPU_CORES = 8.0" in source

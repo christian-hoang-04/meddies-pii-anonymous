@@ -15,7 +15,7 @@ import argparse
 import os
 from typing import TYPE_CHECKING
 
-from meddies_pii.tags import TAG_PATTERN
+from anonymous_pii.tags import TAG_PATTERN
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
@@ -99,8 +99,8 @@ def process_config(  # ruff: ignore[too-many-arguments,too-many-positional-argum
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--configs", nargs="+", default=ALL_CONFIGS)
-    parser.add_argument("--source", default="Meddies/meddies-pii-cleaned")
-    parser.add_argument("--target", default="Meddies/meddies-pii")
+    parser.add_argument("--source", default="anonymous-placeholder/anonymous-pii-cleaned")
+    parser.add_argument("--target", default="anonymous-placeholder/anonymous-pii")
     parser.add_argument("--skip", nargs="+", default=[], help="Configs to skip")
     parser.add_argument("--allow-partial", action="store_true")
     parser.add_argument(
@@ -152,7 +152,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     try:
         total += process_config(
-            "Meddies/vie-pii",
+            "anonymous-placeholder/vie-pii",
             None,
             args.target,
             "vietnamese-translated",

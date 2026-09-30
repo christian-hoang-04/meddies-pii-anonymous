@@ -3,8 +3,8 @@ from __future__ import annotations
 from collections import Counter
 from typing import TYPE_CHECKING
 
-from meddies_pii.training.bioes.reports import render_training_report_html
-from meddies_pii.training.bioes.reports.models import (
+from anonymous_pii.training.bioes.reports import render_training_report_html
+from anonymous_pii.training.bioes.reports.models import (
     TrainingReportOptions,
     TrainingScan,
 )

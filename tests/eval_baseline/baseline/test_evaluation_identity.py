@@ -7,16 +7,16 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.eval_baseline.baseline import datasets as datasets_module
-from meddies_pii.eval_baseline.baseline import run as run_module
-from meddies_pii.eval_baseline.baseline.aggregate import AggregateReport, aggregate_results
-from meddies_pii.eval_baseline.baseline.datasets import EvalRow
-from meddies_pii.eval_baseline.baseline.run import (
+from anonymous_pii.eval_baseline.baseline import datasets as datasets_module
+from anonymous_pii.eval_baseline.baseline import run as run_module
+from anonymous_pii.eval_baseline.baseline.aggregate import AggregateReport, aggregate_results
+from anonymous_pii.eval_baseline.baseline.datasets import EvalRow
+from anonymous_pii.eval_baseline.baseline.run import (
     ShardSpec,
     assert_frozen_fixture,
     run_shard,
 )
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.evaluation.identity import (
     ArtifactIdentity,
     DatasetShardIdentity,
     EvaluationContract,
@@ -26,8 +26,8 @@ from meddies_pii.evaluation.identity import (
     dataset_shard_identity,
     file_sha256,
 )
-from meddies_pii.jsonl import read_jsonl
-from meddies_pii.spans import CharSpan
+from anonymous_pii.jsonl import read_jsonl
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -35,7 +35,7 @@ if TYPE_CHECKING:
     from types import TracebackType
     from typing import IO, Self
 
-    from meddies_pii.taxonomy import PiiLabel
+    from anonymous_pii.taxonomy import PiiLabel
 
 
 def _digest(character: str) -> str:

@@ -44,8 +44,8 @@ def _write_wheel(path: Path, members: tuple[str, ...] = ()) -> None:
 def _release_artifacts(tmp_path: Path) -> Path:
     artifacts = tmp_path / "dist"
     artifacts.mkdir()
-    _write_sdist(artifacts / "meddies_pii-0.1.0.tar.gz", ("src/meddies_pii/__init__.py",))
-    _write_wheel(artifacts / "meddies_pii-0.1.0-py3-none-any.whl", ("meddies_pii/__init__.py",))
+    _write_sdist(artifacts / "anonymous_pii-0.1.0.tar.gz", ("src/anonymous_pii/__init__.py",))
+    _write_wheel(artifacts / "anonymous_pii-0.1.0-py3-none-any.whl", ("anonymous_pii/__init__.py",))
     return artifacts
 
 
@@ -63,21 +63,21 @@ def test_accepts_one_readable_wheel_and_sdist_without_forbidden_repository_files
     ("artifact_name", "forbidden_member"),
     [
         (
-            "meddies_pii-0.1.0.tar.gz",
-            "meddies_pii-0.1.0/experiments/archive/old_experiment.py",
+            "anonymous_pii-0.1.0.tar.gz",
+            "anonymous_pii-0.1.0/experiments/archive/old_experiment.py",
         ),
         (
-            "meddies_pii-0.1.0-py3-none-any.whl",
+            "anonymous_pii-0.1.0-py3-none-any.whl",
             "experiments/archive/old_experiment.py",
         ),
         (
-            "meddies_pii-0.1.0-py3-none-any.whl",
+            "anonymous_pii-0.1.0-py3-none-any.whl",
             "experiments/current_experiment.py",
         ),
-        ("meddies_pii-0.1.0.tar.gz", "meddies_pii-0.1.0/coverage.json"),
-        ("meddies_pii-0.1.0.tar.gz", "meddies_pii-0.1.0/coverage.xml"),
-        ("meddies_pii-0.1.0-py3-none-any.whl", "coverage.json"),
-        ("meddies_pii-0.1.0-py3-none-any.whl", "coverage.xml"),
+        ("anonymous_pii-0.1.0.tar.gz", "anonymous_pii-0.1.0/coverage.json"),
+        ("anonymous_pii-0.1.0.tar.gz", "anonymous_pii-0.1.0/coverage.xml"),
+        ("anonymous_pii-0.1.0-py3-none-any.whl", "coverage.json"),
+        ("anonymous_pii-0.1.0-py3-none-any.whl", "coverage.xml"),
     ],
 )
 def test_rejects_forbidden_members_in_either_release_artifact(
@@ -102,7 +102,7 @@ def test_rejects_forbidden_members_in_either_release_artifact(
     ("setup", "expected_error"),
     [
         (
-            lambda artifacts: (artifacts / "meddies_pii-0.1.0-py3-none-any.whl").unlink(),
+            lambda artifacts: (artifacts / "anonymous_pii-0.1.0-py3-none-any.whl").unlink(),
             "expected exactly one wheel (*.whl), found 0",
         ),
         (
@@ -110,7 +110,7 @@ def test_rejects_forbidden_members_in_either_release_artifact(
             "expected exactly one wheel (*.whl), found 2",
         ),
         (
-            lambda artifacts: (artifacts / "meddies_pii-0.1.0.tar.gz").unlink(),
+            lambda artifacts: (artifacts / "anonymous_pii-0.1.0.tar.gz").unlink(),
             "expected exactly one source distribution (*.tar.gz), found 0",
         ),
     ],
@@ -143,14 +143,14 @@ def test_rejects_non_directory_artifact_path(tmp_path: Path) -> None:
     ("artifact_name", "contents", "expected_error"),
     [
         (
-            "meddies_pii-0.1.0.tar.gz",
+            "anonymous_pii-0.1.0.tar.gz",
             b"not a tarball",
-            "cannot read source distribution meddies_pii-0.1.0.tar.gz",
+            "cannot read source distribution anonymous_pii-0.1.0.tar.gz",
         ),
         (
-            "meddies_pii-0.1.0-py3-none-any.whl",
+            "anonymous_pii-0.1.0-py3-none-any.whl",
             b"not a wheel",
-            "cannot read wheel meddies_pii-0.1.0-py3-none-any.whl",
+            "cannot read wheel anonymous_pii-0.1.0-py3-none-any.whl",
         ),
     ],
 )

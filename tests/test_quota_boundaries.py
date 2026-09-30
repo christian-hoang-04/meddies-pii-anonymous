@@ -6,8 +6,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from meddies_pii.generation.openai_compatible import quota
-from meddies_pii.generation.openai_compatible.quota import (
+from anonymous_pii.generation.openai_compatible import quota
+from anonymous_pii.generation.openai_compatible.quota import (
     AsyncRateLimiter,
     DailyTokenBudget,
     billable_tokens,

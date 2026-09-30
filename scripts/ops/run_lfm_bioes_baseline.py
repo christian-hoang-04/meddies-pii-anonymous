@@ -1,4 +1,4 @@
-"""Modal eval harness for the LFM2.5-350M BIOES spike on the Meddies eval matrix.
+"""Modal eval harness for the LFM2.5-350M BIOES spike on the Anonymous eval matrix.
 
 The first checkpoint of the own-architecture PII tagger (150 steps,
 ``bioes/20260604_h100_8192_r128a256_pack_bs128_150step_ckpt10``) scored as a 5th
@@ -42,33 +42,33 @@ from typing import TYPE_CHECKING
 
 import modal
 
-from meddies_pii.eval_baseline.baseline.datasets import EVAL_DATASETS, EVAL_EXPECTED_ROWS
-from meddies_pii.modal_runtime import (
+from anonymous_pii.eval_baseline.baseline.datasets import EVAL_DATASETS, EVAL_EXPECTED_ROWS
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
     use_pinned_debian_snapshot,
 )
 
 if TYPE_CHECKING:
-    from meddies_pii.evaluation.identity import EvaluationContract
+    from anonymous_pii.evaluation.identity import EvaluationContract
 
 
 def _evaluation_contract() -> EvaluationContract:
-    from meddies_pii import __file__ as package_file
-    from meddies_pii.eval_baseline.adapters import lfm_bioes
-    from meddies_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
-    from meddies_pii.evaluation.identity import (
+    from anonymous_pii import __file__ as package_file
+    from anonymous_pii.eval_baseline.adapters import lfm_bioes
+    from anonymous_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
+    from anonymous_pii.evaluation.identity import (
         checkpoint_tree_artifact,
         evaluation_contract,
         manifest_artifact,
         payload_artifact,
     )
-    from meddies_pii.evaluation.runtime_provenance import (
+    from anonymous_pii.evaluation.runtime_provenance import (
         evaluation_runtime_source_artifact,
     )
 
     if package_file is None:
-        msg = "cannot observe the Meddies evaluation runtime source"
+        msg = "cannot observe the Anonymous evaluation runtime source"
         raise RuntimeError(msg)
     runtime_source = evaluation_runtime_source_artifact(Path(package_file).parent, __file__)
     base_model = manifest_artifact(f"hf://{lfm_bioes.MODEL_ID}", lfm_bioes.MODEL_REVISION)
@@ -94,9 +94,9 @@ def _evaluation_contract() -> EvaluationContract:
 
 FIRST_LIGHT_MAX_ROWS = 32
 
-BASELINE_VOLUME_NAME = "meddies-pii-baseline-eval-lfm-bioes"
+BASELINE_VOLUME_NAME = "anonymous-pii-baseline-eval-lfm-bioes"
 BASELINE_VOLUME_MOUNT = "/baseline"
-ARTIFACT_VOLUME_NAME = "meddies-pii-bioes-artifacts"
+ARTIFACT_VOLUME_NAME = "anonymous-pii-bioes-artifacts"
 ARTIFACT_VOLUME_MOUNT = "/artifacts"
 CACHE_VOLUME_NAME = "hf-cache"
 CACHE_MOUNT = "/cache"
@@ -146,7 +146,7 @@ Set env first, then mount src (the package) and tests (for the preflight).
 
 """
 
-app = modal.App("meddies-pii-lfm-bioes-baseline-eval")
+app = modal.App("anonymous-pii-lfm-bioes-baseline-eval")
 
 EXTERNAL_CELL_LIMIT = 2000
 MODEL_NAME = "lfm-bioes-spike"
@@ -164,7 +164,7 @@ def preflight() -> None:
     a GPU. This confirms the code is importable, the labels are the full nine, the
     checkpoint files are present on the mounted Volume, and the decode logic is green.
     """
-    from meddies_pii.eval_baseline.adapters.lfm_bioes import (
+    from anonymous_pii.eval_baseline.adapters.lfm_bioes import (
         LFM_BIOES_SUPPORTED_LABELS,
         LfmBioesAdapter,
     )
@@ -231,11 +231,11 @@ def native_span_parity(max_rows: int = 8) -> None:  # ruff: ignore[complex-struc
     """
     from collections import Counter
 
-    from meddies_pii.eval_baseline.adapters.lfm_bioes import LfmBioesAdapter
-    from meddies_pii.eval_baseline.baseline.datasets import load_first_light_subset
-    from meddies_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
-    from meddies_pii.json_types import is_str_mapping
-    from meddies_pii.jsonl import read_jsonl
+    from anonymous_pii.eval_baseline.adapters.lfm_bioes import LfmBioesAdapter
+    from anonymous_pii.eval_baseline.baseline.datasets import load_first_light_subset
+    from anonymous_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
+    from anonymous_pii.json_types import is_str_mapping
+    from anonymous_pii.jsonl import read_jsonl
 
     if not 1 <= max_rows <= FIRST_LIGHT_MAX_ROWS:
         msg = "native parity max_rows must be in [1, 32]"
@@ -344,10 +344,10 @@ def lfm_first_light(max_rows: int = 8) -> None:
     Multilingual) text before trusting the matrix: GOLD vs PRED should line up on multibyte scripts.
 
     """
-    from meddies_pii.eval_baseline.adapters.lfm_bioes import LfmBioesAdapter
-    from meddies_pii.eval_baseline.baseline.datasets import load_first_light_subset
-    from meddies_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
-    from meddies_pii.eval_baseline.baseline.subset import write_subset_manifest
+    from anonymous_pii.eval_baseline.adapters.lfm_bioes import LfmBioesAdapter
+    from anonymous_pii.eval_baseline.baseline.datasets import load_first_light_subset
+    from anonymous_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
+    from anonymous_pii.eval_baseline.baseline.subset import write_subset_manifest
 
     if max_rows > FIRST_LIGHT_MAX_ROWS:
         msg = "first-light is capped at 32 rows"
@@ -414,9 +414,9 @@ def lfm_eval_cell(dataset: str, max_rows: int = 0, full: bool = False, force: bo
     ``full`` drops the per-config 2k external cap to score the WHOLE split; ``force``
     re-runs past an existing ``.done``. Resume-safe when the persisted fixture identity matches.
     """
-    from meddies_pii.eval_baseline.adapters.lfm_bioes import LfmBioesAdapter
-    from meddies_pii.eval_baseline.baseline.datasets import load_eval_cell
-    from meddies_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
+    from anonymous_pii.eval_baseline.adapters.lfm_bioes import LfmBioesAdapter
+    from anonymous_pii.eval_baseline.baseline.datasets import load_eval_cell
+    from anonymous_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
 
     rows = load_eval_cell(
         dataset,
@@ -448,7 +448,7 @@ def run_lfm_matrix(max_rows: int = 0, datasets: str = "", full: bool = False, fo
     Pass --datasets "a,b,c" to target cells, --full to score whole splits, and --force
     to overwrite an existing ``.done``.
     """
-    from meddies_pii.eval_baseline.baseline.datasets import select_eval_datasets
+    from anonymous_pii.eval_baseline.baseline.datasets import select_eval_datasets
 
     selected = select_eval_datasets(datasets)
     handles = [(dataset, lfm_eval_cell.spawn(dataset, max_rows, full, force)) for dataset in selected]
@@ -473,12 +473,12 @@ def run_lfm_matrix(max_rows: int = 0, datasets: str = "", full: bool = False, fo
 )
 def aggregate_lfm() -> None:
     """CPU: score every results/lfm-bioes-spike/<config>/full.jsonl -> aggregate JSON."""
-    from meddies_pii.eval_baseline.adapters.lfm_bioes import LFM_BIOES_SUPPORTED_LABELS
-    from meddies_pii.eval_baseline.baseline.aggregate import (
+    from anonymous_pii.eval_baseline.adapters.lfm_bioes import LFM_BIOES_SUPPORTED_LABELS
+    from anonymous_pii.eval_baseline.baseline.aggregate import (
         aggregate_results,
         format_aggregate_report,
     )
-    from meddies_pii.eval_baseline.baseline.run import (
+    from anonymous_pii.eval_baseline.baseline.run import (
         assert_frozen_fixture,
         expected_matrix_shard_identities,
         read_matrix_results,

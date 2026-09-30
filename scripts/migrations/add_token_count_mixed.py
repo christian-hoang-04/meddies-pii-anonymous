@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Add a per-row ``token_count_lfm25`` column to ``Meddies/meddies-pii-mixed``.
+"""Add a per-row ``token_count_lfm25`` column to ``anonymous-placeholder/anonymous-pii-mixed``.
 
 Every row gets the length (in LFM2.5 tokens) of its ``text`` field, so the corpus
 can be filtered/sorted by length and the training truncation cap can be chosen from
@@ -40,12 +40,12 @@ from huggingface_hub import HfApi
 # reason: _LazyModule, so no static reader can prove the symbol is present; it resolves at import time here.
 from transformers import AutoTokenizer, PreTrainedTokenizerBase  # ty: ignore[possibly-missing-import]
 
-from meddies_pii.json_types import is_str_list
+from anonymous_pii.json_types import is_str_list
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
 
-REPO = "Meddies/meddies-pii-mixed"
+REPO = "anonymous-placeholder/anonymous-pii-mixed"
 CONFIG = "default"
 SPLIT = "train"
 TOKENIZER_ID = "LiquidAI/LFM2.5-230M-Base"

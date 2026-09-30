@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from meddies_pii.spans import CharSpan
-from meddies_pii.training.bioes.eval.harness import (
+from anonymous_pii.spans import CharSpan
+from anonymous_pii.training.bioes.eval.harness import (
     classify_adversarial_slices,
     new_slice_filter_report,
     record_slice_event,

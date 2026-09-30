@@ -21,7 +21,9 @@ OPF_TEST_PATHS = (
 
 def test_evaluation_architecture_describes_the_enforced_identity_contract() -> None:
     architecture = (REPOSITORY_ROOT / "docs" / "ARCHITECTURE.md").read_text(encoding="utf-8")
-    identity_source = (REPOSITORY_ROOT / "src" / "meddies_pii" / "evaluation" / "identity.py").read_text(encoding="utf-8")
+    identity_source = (
+        REPOSITORY_ROOT / "src" / "anonymous_pii" / "evaluation" / "identity.py"
+    ).read_text(encoding="utf-8")
     required_identity_fields = {
         "model": "model artifact",
         "vendor_inference_source": "vendor inference source",
@@ -53,7 +55,7 @@ def test_type_gate_docs_match_the_configured_source_scope() -> None:
     assert basedpyright["exclude"] == [".venv"]
 
     expected_statement = (
-        "Strict MyPy checks every module under `src/meddies_pii` with no MyPy exclusions. "
+        "Strict MyPy checks every module under `src/anonymous_pii` with no MyPy exclusions. "
         "BasedPyright runs in standard mode across the same source and excludes only `.venv`."
     )
     for documentation_path in ("README.md", "CONTRIBUTING.md"):
@@ -86,7 +88,7 @@ def test_full_lintmax_gate_is_pinned_in_ci_and_contributor_pr_checklist() -> Non
 
 
 def test_evaluation_documentation_paths_match_the_canonical_tree() -> None:
-    evaluation_root = REPOSITORY_ROOT / "src" / "meddies_pii" / "eval_baseline"
+    evaluation_root = REPOSITORY_ROOT / "src" / "anonymous_pii" / "eval_baseline"
     for module in EVALUATION_MODULES:
         assert (evaluation_root / module).is_dir()
 
@@ -116,7 +118,7 @@ def test_verification_map_matches_the_split_quality_and_security_workflows() -> 
     quality_workflow = (REPOSITORY_ROOT / ".github" / "workflows" / "quality.yml").read_text(encoding="utf-8")
 
     assert "uv audit --locked" in security_workflow
-    assert "bandit -r src/meddies_pii scripts" in security_workflow
+    assert "bandit -r src/anonymous_pii scripts" in security_workflow
     assert "uv audit --locked" not in quality_workflow
 
     assert (
@@ -127,7 +129,7 @@ def test_verification_map_matches_the_split_quality_and_security_workflows() -> 
     assert (
         "| Security CI | `.github/workflows/security.yml` on pull requests, pushes "
         "to `main`, and weekly schedule | The security workflow owns `uv audit --locked` "
-        "and runs Bandit against `src/meddies_pii` and `scripts/` at high severity "
+        "and runs Bandit against `src/anonymous_pii` and `scripts/` at high severity "
         "and confidence. |"
     ) in architecture
     assert "CodeQL" not in architecture

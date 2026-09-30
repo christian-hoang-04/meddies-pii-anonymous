@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 import pytest
 from google.genai import types
 
-from meddies_pii.generation.gemini import inference
+from anonymous_pii.generation.gemini import inference
 
 if TYPE_CHECKING:
     from pathlib import Path

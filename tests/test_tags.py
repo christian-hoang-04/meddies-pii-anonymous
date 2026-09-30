@@ -9,9 +9,9 @@ from datasets import load_dataset
 from datasets.exceptions import DatasetNotFoundError
 from dotenv import dotenv_values
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.tags import extract_pii, fix_labels, process_row
-from meddies_pii.taxonomy import PII_LABELS_BRACKETED
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.tags import extract_pii, fix_labels, process_row
+from anonymous_pii.taxonomy import PII_LABELS_BRACKETED
 
 
 def _hf_token() -> str | None:
@@ -25,10 +25,13 @@ def _hf_token() -> str | None:
 def load_dataset_rows() -> list[dict[str, object]]:
     token = _hf_token()
     try:
-        ds = load_dataset("Meddies/vie-pii", token=token)
+        ds = load_dataset("anonymous-placeholder/vie-pii", token=token)
     except DatasetNotFoundError as exc:
         if "gated dataset" in str(exc).lower() or "authenticated" in str(exc).lower():
-            pytest.skip("Meddies/vie-pii gated dataset is unavailable; set a valid HF_TOKEN to run dataset contract tests")
+            pytest.skip(
+                "anonymous-placeholder/vie-pii gated dataset is unavailable; "
+                "set a valid HF_TOKEN to run dataset contract tests"
+            )
         raise
     rows: list[dict[str, object]] = []
     for split in ds:

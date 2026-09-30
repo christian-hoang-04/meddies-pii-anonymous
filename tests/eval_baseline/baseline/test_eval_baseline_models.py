@@ -29,9 +29,9 @@ def test_subset_import_does_not_load_dataset_module() -> None:
     result = _run_import_probe(
         """
 import sys
-import meddies_pii.eval_baseline.baseline.subset
+import anonymous_pii.eval_baseline.baseline.subset
 
-assert "meddies_pii.eval_baseline.baseline.datasets" not in sys.modules
+assert "anonymous_pii.eval_baseline.baseline.datasets" not in sys.modules
 """,
     )
 
@@ -41,8 +41,8 @@ assert "meddies_pii.eval_baseline.baseline.datasets" not in sys.modules
 def test_dataset_import_reexports_neutral_eval_row_owner() -> None:
     result = _run_import_probe(
         """
-from meddies_pii.eval_baseline.baseline.datasets import EvalRow as compatibility_row
-from meddies_pii.eval_baseline.baseline.models import EvalRow as model_row
+from anonymous_pii.eval_baseline.baseline.datasets import EvalRow as compatibility_row
+from anonymous_pii.eval_baseline.baseline.models import EvalRow as model_row
 
 assert compatibility_row is model_row
 """,

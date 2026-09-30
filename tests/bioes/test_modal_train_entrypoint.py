@@ -6,14 +6,14 @@ from typing import TYPE_CHECKING, NoReturn
 
 import pytest
 
-from meddies_pii.training.bioes.modal import train as modal_train
-from meddies_pii.training.bioes.trainers import trainer
+from anonymous_pii.training.bioes.modal import train as modal_train
+from anonymous_pii.training.bioes.trainers import trainer
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from pathlib import Path
 
-    from meddies_pii.training.bioes.trainers.config import SmokeTrainingConfig
+    from anonymous_pii.training.bioes.trainers.config import SmokeTrainingConfig
 
 
 def test_run_smoke_local_forwards_smoke_config_to_training_boundary(
@@ -68,7 +68,7 @@ def test_run_smoke_local_commits_and_marks_volume_artifacts(monkeypatch: pytest.
     assert result == {
         "status": "fake",
         "artifact_root": "/artifacts/runs/smoke",
-        "artifact_volume": "meddies-pii-bioes-artifacts",
+        "artifact_volume": "anonymous-pii-bioes-artifacts",
         "artifact_persisted": True,
     }
     assert commits == ["commit", "commit"]

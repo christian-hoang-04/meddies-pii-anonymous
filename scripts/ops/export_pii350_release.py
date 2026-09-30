@@ -1,4 +1,4 @@
-"""Package the verified step-250 PII350 checkpoint as the Meddies v2 release.
+"""Package the verified step-250 PII350 checkpoint as the Anonymous v2 release.
 
 The release claim is decode parity with the benchmark. The published inference
 path therefore does not reimplement BIOES decoding: this script vendors the
@@ -40,7 +40,7 @@ from typing import TYPE_CHECKING, Any, Protocol, cast, override
 
 import modal
 
-from meddies_pii.eval_baseline.pii350_release.q8_head_preserved import (
+from anonymous_pii.eval_baseline.pii350_release.q8_head_preserved import (
     SourceArtifactIdentity,
     build_r1_preflight,
     export_head_preserved_q8,
@@ -48,7 +48,7 @@ from meddies_pii.eval_baseline.pii350_release.q8_head_preserved import (
     verify_r1_preflight_receipt_bytes,
     write_r1_preflight_receipt,
 )
-from meddies_pii.eval_baseline.pii350_release.release_payload import (
+from anonymous_pii.eval_baseline.pii350_release.release_payload import (
     CHANGE_NOTICE,
     LICENSE_FILENAME,
     MERGED_CLASSIFIER_PREFIX,
@@ -104,7 +104,7 @@ from meddies_pii.eval_baseline.pii350_release.release_payload import (
     verify_manifest_tree,
     verify_payload_complete,
 )
-from meddies_pii.modal_runtime import (
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
     use_pinned_debian_snapshot,
@@ -113,9 +113,9 @@ from meddies_pii.modal_runtime import (
 if TYPE_CHECKING:
     from torch import Tensor
 
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import VerifiedCheckpoint
-    from meddies_pii.spans import CharSpan
-    from meddies_pii.training.bioes.data.tagger import HiddenStateTokenTagger
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import VerifiedCheckpoint
+    from anonymous_pii.spans import CharSpan
+    from anonymous_pii.training.bioes.data.tagger import HiddenStateTokenTagger
 
 
 class _ReleaseTokenizer(Protocol):
@@ -190,7 +190,7 @@ __all__ = (
     "verify_payload_complete",
 )
 
-APP_NAME = "meddies-pii350-release-export"
+APP_NAME = "anonymous-pii350-release-export"
 R1_OUTPUT_FILENAME = "model.int8.r1-head-preserved.onnx"
 R1_MANIFEST_FILENAME = "model.int8.r1-manifest.json"
 R1_PREFLIGHT_RECEIPT_DIRECTORY = "preflight/pii350-r1"
@@ -238,8 +238,8 @@ receipt_image = add_source_pythonpath(
     ),
 ).add_local_dir("src", remote_path=MODAL_SOURCE_ROOT)
 app = modal.App(APP_NAME, image=image)
-release_volume = modal.Volume.from_name("meddies-pii350-release", create_if_missing=True)
-checkpoint_cache = modal.Volume.from_name("meddies-pii350-checkpoint-cache", create_if_missing=True)
+release_volume = modal.Volume.from_name("anonymous-pii350-release", create_if_missing=True)
+checkpoint_cache = modal.Volume.from_name("anonymous-pii350-checkpoint-cache", create_if_missing=True)
 huggingface_cache = modal.Volume.from_name("huggingface-cache", create_if_missing=False)
 
 
@@ -265,14 +265,14 @@ def _adapter_form_tagger(
     from peft import PeftModel
     from transformers import AutoModelForTokenClassification, AutoTokenizer  # ty: ignore[possibly-missing-import]
 
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
         BASE_MODEL_ID,
         BASE_MODEL_REVISION,
         CLASSIFIER_FILENAME,
         HEAD_HIDDEN_SIZE,
         HEAD_LABEL_COUNT,
     )
-    from meddies_pii.training.bioes.data.tagger import HiddenStateTokenTagger
+    from anonymous_pii.training.bioes.data.tagger import HiddenStateTokenTagger
 
     dtype = {"float32": torch.float32, "bfloat16": torch.bfloat16}[dtype_name]
     wrapper = AutoModelForTokenClassification.from_pretrained(
@@ -359,7 +359,7 @@ def _copy_base_license(payload_root: Path) -> None:
     """Ship the base licence, which its redistribution terms require."""
     from huggingface_hub import hf_hub_download
 
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
         BASE_MODEL_ID,
         BASE_MODEL_REVISION,
     )
@@ -375,7 +375,7 @@ def _decode_with_tagger(
 ) -> list[list[CharSpan]]:
     import torch
 
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import MAX_SEQUENCE_LENGTH
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import MAX_SEQUENCE_LENGTH
 
     id_to_label = bioes_label_map()
     decoded: list[list[CharSpan]] = []
@@ -452,7 +452,7 @@ def merge_and_package(upload: bool = True) -> dict[str, Any]:  # ruff: ignore[to
     verified = verified_checkpoint_root(destination)
     checkpoint_cache.commit()
 
-    payload_root = Path(RELEASE_MOUNT) / "meddies-pii-v2"
+    payload_root = Path(RELEASE_MOUNT) / "anonymous-pii-v2"
     if payload_root.exists():
         shutil.rmtree(payload_root)
     payload_root.mkdir(parents=True)
@@ -460,7 +460,7 @@ def merge_and_package(upload: bool = True) -> dict[str, Any]:  # ruff: ignore[to
     tagger, tokenizer = _adapter_form_tagger(verified, device="cuda")
     tokenizer.save_pretrained(payload_root)
 
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
         ADAPTER_CONFIG_FILENAME,
         ADAPTER_WEIGHTS_FILENAME,
         BASE_MODEL_ID,
@@ -484,7 +484,7 @@ def merge_and_package(upload: bool = True) -> dict[str, Any]:  # ruff: ignore[to
     config = json.loads(config_path.read_text(encoding="utf-8")) if config_path.is_file() else {}
     config.update({
         **labels,
-        "meddies_release": {
+        "anonymous_release": {
             "schema_version": RELEASE_SCHEMA_VERSION,
             "kind": RELEASE_KIND_TORCH,
             "checkpoint_digest": STEP250_CHECKPOINT_DIGEST,
@@ -501,7 +501,7 @@ def merge_and_package(upload: bool = True) -> dict[str, Any]:  # ruff: ignore[to
             "lora_alpha": LORA_ALPHA,
             "adapter_applied_at_load": True,
         },
-        "meddies_loader": f"{REMOTE_CODE_FILENAME[:-3]}.MeddiesPiiExtractor",
+        "anonymous_loader": f"{REMOTE_CODE_FILENAME[:-3]}.AnonymousPiiExtractor",
     })
     config_path.write_text(json.dumps(config, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
@@ -534,7 +534,7 @@ def merge_and_package(upload: bool = True) -> dict[str, Any]:  # ruff: ignore[to
     parity["merged_mismatched_rows"] = merged_delta["mismatched_rows"]
     del merged_tagger, merged_tokenizer
 
-    config["meddies_release"]["parity"] = release_parity_record(parity)
+    config["anonymous_release"]["parity"] = release_parity_record(parity)
     config_path.write_text(json.dumps(config, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     payload_files = verify_payload_complete(payload_root)
     release_volume.commit()
@@ -555,7 +555,7 @@ def merge_and_package(upload: bool = True) -> dict[str, Any]:  # ruff: ignore[to
 
 def _reference_adapter_spans(verified: VerifiedCheckpoint, texts: Sequence[str]) -> list[list[Any]]:
     """Decode the same rows through the unmodified evaluation adapter."""
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
         Pii350CheckpointAdapter,
     )
 
@@ -572,7 +572,7 @@ def _reference_single_spans(verified: VerifiedCheckpoint, texts: Sequence[str]) 
     therefore compares at the batch-of-1 shape the published loader actually
     runs; the batched delta is recorded in the receipt, never gated.
     """
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import build_checkpoint_tagger
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import build_checkpoint_tagger
 
     reference_tagger, reference_tokenizer = build_checkpoint_tagger(verified)
     return _decode_with_tagger(reference_tagger, reference_tokenizer, texts)
@@ -619,13 +619,13 @@ def export_onnx(upload: bool = True) -> dict[str, Any]:  # ruff: ignore[too-many
     verified = verified_checkpoint_root(destination)
     tagger, tokenizer = _adapter_form_tagger(verified, dtype_name="float32")
 
-    onnx_root = Path(RELEASE_MOUNT) / "meddies-pii-v2-onnx"
+    onnx_root = Path(RELEASE_MOUNT) / "anonymous-pii-v2-onnx"
     if onnx_root.exists():
         shutil.rmtree(onnx_root)
     onnx_root.mkdir(parents=True)
 
     sample = tokenizer(
-        ["Meddies release parity sample."],
+        ["Anonymous release parity sample."],
         return_tensors="pt",
         truncation=True,
         max_length=512,
@@ -832,7 +832,7 @@ def export_r1_q8_head_preserved(
     )
     source = SourceArtifactIdentity(**preflight["source"])
     source_file = _release_volume_path(source.path)
-    onnx_root = Path(RELEASE_MOUNT) / "meddies-pii-v2-onnx"
+    onnx_root = Path(RELEASE_MOUNT) / "anonymous-pii-v2-onnx"
     output_file = onnx_root / R1_OUTPUT_FILENAME
     manifest_file = onnx_root / R1_MANIFEST_FILENAME
     manifest = export_head_preserved_q8(
@@ -896,7 +896,7 @@ def verify_release(model_revision: str, onnx_revision: str) -> dict[str, Any]:  
     import torch
     from huggingface_hub import snapshot_download
 
-    with tempfile.TemporaryDirectory(prefix="meddies-release-verify-") as directory:
+    with tempfile.TemporaryDirectory(prefix="anonymous-release-verify-") as directory:
         model_root = Path(
             snapshot_download(
                 RELEASE_MODEL_REPO,
@@ -926,14 +926,16 @@ def verify_release(model_revision: str, onnx_revision: str) -> dict[str, Any]:  
         fp32_tagger, fp32_tokenizer = _adapter_form_tagger(verified, dtype_name="float32")
         fp32_reference_spans = _decode_with_tagger(fp32_tagger, fp32_tokenizer, texts)
 
-        loader_spec = importlib.util.spec_from_file_location("meddies_pii_v2_published", model_root / REMOTE_CODE_FILENAME)
+        loader_spec = importlib.util.spec_from_file_location(
+            "anonymous_pii_v2_published", model_root / REMOTE_CODE_FILENAME
+        )
         if loader_spec is None or loader_spec.loader is None:
             msg = "published release does not expose its loader module"
             raise RuntimeError(msg)
         loader_module = importlib.util.module_from_spec(loader_spec)
         sys.modules[loader_spec.name] = loader_module
         loader_spec.loader.exec_module(loader_module)
-        published = loader_module.MeddiesPiiExtractor.from_pretrained(str(model_root), device="cuda")
+        published = loader_module.AnonymousPiiExtractor.from_pretrained(str(model_root), device="cuda")
         tokenizer = published.tokenizer
         torch_spans = [list(published.extract(text)) for text in texts]
         id_to_label = bioes_label_map()

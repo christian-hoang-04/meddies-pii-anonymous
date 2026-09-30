@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.training.bioes.data.mixed_sources import (
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.training.bioes.data.mixed_sources import (
     EXTERNAL_DATASETS,
     dataset_id_for_stem,
     load_local_external_rows,
@@ -80,7 +80,7 @@ def test_local_source_stems_dispatch_converters_and_report_unknown_files(
 def test_remote_loading_honors_quotas_languages_scan_boundaries_and_shortfalls(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from meddies_pii.training.bioes.data import mixed_sources
+    from anonymous_pii.training.bioes.data import mixed_sources
 
     rows_by_dataset: dict[str, list[dict[str, object]]] = {
         "nvidia/Nemotron-PII": [

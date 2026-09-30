@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.training.bioes.reports import inference_preview
+from anonymous_pii.training.bioes.reports import inference_preview
 
 if TYPE_CHECKING:
     from pathlib import Path

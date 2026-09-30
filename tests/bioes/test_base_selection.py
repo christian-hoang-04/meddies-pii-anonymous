@@ -10,7 +10,7 @@ import pytest
 import torch
 from torch import nn
 
-from meddies_pii.training.bioes.trainers import base_selection
+from anonymous_pii.training.bioes.trainers import base_selection
 
 
 class TinyBody(nn.Module):
@@ -87,7 +87,7 @@ def test_cost_gate_fails_closed_before_remote_launch() -> None:
 
 def test_lora_requires_all_logical_targets_and_keeps_head_trainable() -> None:
     body = TinyBody()
-    head = base_selection.build_meddies_head(seed=3407)
+    head = base_selection.build_anonymous_head(seed=3407)
     adapted, evidence = base_selection.apply_gate_lora(body, head, peft_module=FakePeft)
     assert adapted is body
     assert evidence.logical_targets == base_selection.LORA_TARGET_MODULES
@@ -98,9 +98,9 @@ def test_lora_requires_all_logical_targets_and_keeps_head_trainable() -> None:
 
 
 def test_head_is_bf16_and_seeded_identically() -> None:
-    first = base_selection.build_meddies_head(seed=3407)
+    first = base_selection.build_anonymous_head(seed=3407)
     torch.manual_seed(999)
-    second = base_selection.build_meddies_head(seed=3407)
+    second = base_selection.build_anonymous_head(seed=3407)
     first_dropout, first_linear = first[0], first[1]
     second_linear = second[1]
     assert isinstance(first_dropout, nn.Dropout)

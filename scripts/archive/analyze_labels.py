@@ -15,7 +15,7 @@ from typing import TypedDict
 from datasets import get_dataset_config_names, load_dataset
 from dotenv import load_dotenv
 
-from meddies_pii.taxonomy import PII_LABELS
+from anonymous_pii.taxonomy import PII_LABELS
 
 load_dotenv()
 
@@ -193,7 +193,7 @@ def print_summary(repo: str, all_results: list[ConfigAnalysis]) -> None:  # ruff
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Analyze PII label distributions")
-    parser.add_argument("--repo", default="Meddies/meddies-pii", help="HuggingFace repo to analyze")
+    parser.add_argument("--repo", default="anonymous-placeholder/anonymous-pii", help="HuggingFace repo to analyze")
     parser.add_argument("--output", help="Save raw results as JSON to this path")
     args = parser.parse_args()
 

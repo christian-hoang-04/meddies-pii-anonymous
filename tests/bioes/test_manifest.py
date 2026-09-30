@@ -1,7 +1,7 @@
 """Pin manifest shape after retiring the OPF-era ``label_space`` field.
 
 The ``label_space`` parameter was dead config: write-only, hardcoded to
-``"meddies"`` at every entry point, threaded through 6 modules without ever
+``"anonymous"`` at every entry point, threaded through 6 modules without ever
 being read. Refactor #6 PR 1 removes it end-to-end and bumps
 ``MANIFEST_SCHEMA_VERSION`` from 1 to 2 to mark the schema event.
 
@@ -15,7 +15,7 @@ from typing import Any
 
 import pytest
 
-from meddies_pii.training.bioes.data.manifest import (
+from anonymous_pii.training.bioes.data.manifest import (
     MANIFEST_SCHEMA_VERSION,
     WorkloadCandidate,
     build_workload_manifest,
@@ -34,7 +34,7 @@ def _candidate(uid: str = "row-1", token_length: int = 8) -> WorkloadCandidate:
 def _manifest_kwargs() -> dict[str, Any]:
     return {
         "name": "test-manifest",
-        "dataset_id": "Meddies/meddies-pii",
+        "dataset_id": "anonymous-placeholder/anonymous-pii",
         "dataset_config": "train",
         "dataset_split": "train",
         "dataset_revision": "abc",
@@ -59,7 +59,7 @@ def test_build_workload_manifest_rejects_label_space_kwarg() -> None:
     with pytest.raises(TypeError, match="label_space"):
         # reason: the unknown keyword is the behaviour under test — the manifest builder must refuse a
         # reason: `label_space` kwarg, so ty reporting it as unknown is the assertion agreeing.
-        build_workload_manifest(label_space="meddies", **_manifest_kwargs())  # ty: ignore[unknown-argument]
+        build_workload_manifest(label_space="anonymous", **_manifest_kwargs())  # ty: ignore[unknown-argument]
 
 
 def test_built_manifest_has_no_label_space_key() -> None:

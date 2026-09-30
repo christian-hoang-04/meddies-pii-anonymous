@@ -15,9 +15,9 @@ import os
 from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.tags import process_row
-from meddies_pii.taxonomy import PII_LABELS_BRACKETED
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.tags import process_row
+from anonymous_pii.taxonomy import PII_LABELS_BRACKETED
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -111,7 +111,7 @@ def process_config(
     print(f"Processing: {config}")
     print(f"{'=' * 60}")
 
-    ds = load_dataset("Meddies/meddies-pii", config, token=token)
+    ds = load_dataset("anonymous-placeholder/anonymous-pii", config, token=token)
     all_rows: list[dict[str, object]] = []
     for split in ds:
         all_rows.extend(dict(row) for row in ds[split] if is_str_mapping(row))
@@ -162,7 +162,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("-o", "--output_dir", default="data/subsets")
     parser.add_argument("--push", action="store_true")
-    parser.add_argument("--repo_id", default="Meddies/meddies-pii-cleaned")
+    parser.add_argument("--repo_id", default="anonymous-placeholder/anonymous-pii-cleaned")
     parser.add_argument("--skip", nargs="+", default=[], help="Configs to skip")
     parser.add_argument("--allow-partial", action="store_true")
     return parser.parse_args(argv)

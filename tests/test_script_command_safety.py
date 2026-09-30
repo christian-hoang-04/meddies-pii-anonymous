@@ -64,12 +64,12 @@ def import_script(path: Path, module_name: str) -> ModuleType:
     ("script_path", "module_name"),
     [
         (
-            REPO / "scripts/migrations/convert_meddies_configs.py",
-            "_convert_meddies_configs_safety_test",
+            REPO / "scripts/migrations/convert_anonymous_configs.py",
+            "_convert_anonymous_configs_safety_test",
         ),
         (
-            REPO / "scripts/migrations/download_meddies_pii_configs.py",
-            "_download_meddies_pii_configs_safety_test",
+            REPO / "scripts/migrations/download_anonymous_pii_configs.py",
+            "_download_anonymous_pii_configs_safety_test",
         ),
         (
             REPO / "scripts/reports/build_training_data_report.py",

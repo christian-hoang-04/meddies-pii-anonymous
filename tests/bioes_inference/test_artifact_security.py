@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-import meddies_pii.bioes_inference.artifacts as model_artifacts_module
-from meddies_pii.bioes_inference.artifacts import (
+import anonymous_pii.bioes_inference.artifacts as model_artifacts_module
+from anonymous_pii.bioes_inference.artifacts import (
     ArtifactHydrationError,
     PinnedArtifactSpec,
     PinnedFileSpec,
@@ -27,7 +27,7 @@ def _spec(*, tokenizer: bool = True) -> tuple[PinnedArtifactSpec, dict[str, byte
     return (
         PinnedArtifactSpec(
             artifact_id="synthetic",
-            repo_id="Meddies/synthetic",
+            repo_id="anonymous-placeholder/synthetic",
             revision="a" * 40,
             files=tuple(
                 PinnedFileSpec(
@@ -72,10 +72,10 @@ def test_pinned_file_spec_rejects_invalid_supply_chain_fields(
 @pytest.mark.parametrize(
     ("artifact_id", "repo_id", "file_count", "message"),
     [
-        ("not safe", "Meddies/model", 1, "artifact_id must be a safe identifier"),
+        ("not safe", "anonymous-placeholder/model", 1, "artifact_id must be a safe identifier"),
         ("safe", "not/a/slug", 1, "repo_id must be an owner/name identifier"),
-        ("safe", "Meddies/model", 0, "artifact spec must declare at least one file"),
-        ("safe", "Meddies/model", 2, "artifact file paths must be unique"),
+        ("safe", "anonymous-placeholder/model", 0, "artifact spec must declare at least one file"),
+        ("safe", "anonymous-placeholder/model", 2, "artifact file paths must be unique"),
     ],
 )
 def test_pinned_artifact_spec_rejects_unsafe_identity_and_duplicate_files(
@@ -189,11 +189,11 @@ def test_hydration_preserves_file_unreadable_classification_for_hash_failures(
 
 
 def test_hydrated_identity_requires_exactly_one_model_file(tmp_path: Path) -> None:
-    from meddies_pii.bioes_inference.artifacts import HydratedArtifactIdentity
+    from anonymous_pii.bioes_inference.artifacts import HydratedArtifactIdentity
 
     identity = HydratedArtifactIdentity(
         artifact_id="synthetic",
-        repo_id="Meddies/synthetic",
+        repo_id="anonymous-placeholder/synthetic",
         revision="a" * 40,
         root=tmp_path,
         tokenizer_directory=tmp_path / "tokenizer",
@@ -207,7 +207,7 @@ def test_hydrated_identity_requires_exactly_one_model_file(tmp_path: Path) -> No
 def test_default_detector_rejects_invalid_thread_count_before_hydration(
     tmp_path: Path,
 ) -> None:
-    from meddies_pii.bioes_inference.artifacts import create_default_detector
+    from anonymous_pii.bioes_inference.artifacts import create_default_detector
 
     with pytest.raises(ValueError, match="threads must be a positive integer"):
         create_default_detector(tmp_path, threads=0)

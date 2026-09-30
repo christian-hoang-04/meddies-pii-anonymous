@@ -17,7 +17,7 @@ from types import ModuleType, SimpleNamespace
 
 import pytest
 
-from meddies_pii.annotations.bioes import (
+from anonymous_pii.annotations.bioes import (
     ENTITY_LABELS,
     build_bioes_label_space,
     decode_bioes_from_offsets,
@@ -96,17 +96,17 @@ def test_packaging_binds_the_pinned_step250_identity(tmp_path: Path) -> None:
     assert len(release.STEP250_CHECKPOINT_DIGEST) == 64
 
 
-class _BlockInstalledMeddiesPii:
-    """Make `meddies_pii` unimportable so a leaked import cannot pass silently.
+class _BlockInstalledAnonymousPii:
+    """Make `anonymous_pii` unimportable so a leaked import cannot pass silently.
 
     The release payload runs on machines that do not have this repo installed.
-    Without this block the vendored modules happily resolve `meddies_pii.*` from
+    Without this block the vendored modules happily resolve `anonymous_pii.*` from
     the local site-packages and a broken rewrite still reads as green.
     """
 
     def find_spec(self, fullname: str, _path: object = None, _target: object = None) -> None:
-        if fullname == "meddies_pii" or fullname.startswith("meddies_pii."):
-            msg = f"meddies_pii is blocked for the standalone payload check: {fullname}"
+        if fullname == "anonymous_pii" or fullname.startswith("anonymous_pii."):
+            msg = f"anonymous_pii is blocked for the standalone payload check: {fullname}"
             raise ModuleNotFoundError(msg)
 
 
@@ -125,11 +125,11 @@ def _import_vendored(
     cached = {
         name: module
         for name, module in sys.modules.items()
-        if name in {package, "meddies_pii"} or name.startswith((f"{package}.", "meddies_pii."))
+        if name in {package, "anonymous_pii"} or name.startswith((f"{package}.", "anonymous_pii."))
     }
     for name in cached:
         del sys.modules[name]
-    blocker = _BlockInstalledMeddiesPii()
+    blocker = _BlockInstalledAnonymousPii()
     sys.meta_path.insert(0, blocker)
     sys.path.insert(0, str(tmp_path))
     try:
@@ -197,7 +197,7 @@ def test_vendoring_only_rewrites_the_import_prefixes() -> None:
             if original_line != line
         ]
         assert all(line.startswith("from ") for line in differing)
-    assert "meddies_pii." not in payload[f"{release.VENDORED_DECODE_PACKAGE}/bioes_spans.py"].decode("utf-8")
+    assert "anonymous_pii." not in payload[f"{release.VENDORED_DECODE_PACKAGE}/bioes_spans.py"].decode("utf-8")
 
 
 class _FakeHub:
@@ -218,7 +218,7 @@ class _FakeHub:
         commit_message: str,
     ) -> SimpleNamespace:
         assert repo_type == "model"
-        assert repo_id.startswith("Meddies/meddies-pii-v2")
+        assert repo_id.startswith("anonymous-placeholder/anonymous-pii-v2")
         assert commit_message
         payload = path_or_fileobj if isinstance(path_or_fileobj, bytes) else Path(str(path_or_fileobj)).read_bytes()
         self.order.append(path_in_repo)
@@ -230,10 +230,10 @@ class _FakeHub:
 def test_release_upload_commits_the_manifest_last(tmp_path: Path) -> None:
     release = _release()
     payload_root = tmp_path / "payload"
-    (payload_root / "meddies_pii_decode").mkdir(parents=True)
+    (payload_root / "anonymous_pii_decode").mkdir(parents=True)
     (payload_root / "config.json").write_text('{"a": 1}', encoding="utf-8")
     (payload_root / "model.safetensors").write_bytes(b"weights")
-    (payload_root / "meddies_pii_decode" / "viterbi.py").write_bytes(b"decode")
+    (payload_root / "anonymous_pii_decode" / "viterbi.py").write_bytes(b"decode")
     hub = _FakeHub()
 
     receipt = release.upload_release_tree(
@@ -245,13 +245,13 @@ def test_release_upload_commits_the_manifest_last(tmp_path: Path) -> None:
 
     assert hub.order[-1] == "manifest.json"
     assert len(hub.order) == 4
-    assert receipt["repo_id"] == "Meddies/meddies-pii-v2"
+    assert receipt["repo_id"] == "anonymous-placeholder/anonymous-pii-v2"
     assert receipt["repo_type"] == "model"
     assert receipt["private"] is True
     manifest = receipt["manifest"]
     assert [entry["path"] for entry in manifest["files"]] == sorted(hub.order[:-1])
     body = {key: value for key, value in manifest.items() if key != "manifest_digest"}
-    from meddies_pii.evaluation.identity import canonical_sha256
+    from anonymous_pii.evaluation.identity import canonical_sha256
 
     assert manifest["manifest_digest"] == canonical_sha256(body)
     assert manifest["checkpoint_digest"] == release.STEP250_CHECKPOINT_DIGEST
@@ -305,7 +305,7 @@ def test_release_keeps_adapter_form_as_the_verified_default() -> None:
     assert release.RELEASE_KIND_TORCH == "adapter_form_release"
     assert release.RELEASE_KIND_ONNX == "adapter_form_onnx"
     assert release.MERGED_WEIGHTS_FILENAME == "model.safetensors"
-    assert release.MERGED_WEIGHTS_FORMAT == "meddies-pii-v2-merged"
+    assert release.MERGED_WEIGHTS_FORMAT == "anonymous-pii-v2-merged"
 
 
 def test_r1_receipt_stages_between_distinct_roots_before_export(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -324,9 +324,9 @@ def test_r1_receipt_stages_between_distinct_roots_before_export(tmp_path: Path, 
     volume = FakeVolume()
     monkeypatch.setattr(release, "release_volume", volume)
     source = release.SourceArtifactIdentity(
-        repository="modal-volume://meddies-pii350-release",
+        repository="modal-volume://anonymous-pii350-release",
         revision="f" * 64,
-        path="meddies-pii-v2-onnx/model.onnx",
+        path="anonymous-pii-v2-onnx/model.onnx",
         bytes=1,
         sha256="1" * 64,
     )
@@ -492,7 +492,7 @@ def _loadremote_code_module_source(tmp_path: Path, release: ModuleType) -> Modul
         target.write_bytes(content)
     module_path = tmp_path / release.REMOTE_CODE_FILENAME
     module_path.write_text(release.remote_code_module_source(), encoding="utf-8")
-    spec = importlib.util.spec_from_file_location("meddies_pii_v2_loader_test", module_path)
+    spec = importlib.util.spec_from_file_location("anonymous_pii_v2_loader_test", module_path)
     assert spec is not None
     assert spec.loader is not None
     module = importlib.util.module_from_spec(spec)
@@ -517,7 +517,7 @@ def test_shipped_loader_rejects_an_unknown_weights_form(tmp_path: Path) -> None:
     loader = _loadremote_code_module_source(tmp_path, release)
 
     with pytest.raises(ValueError, match="weights must be"):
-        loader.MeddiesPiiExtractor.from_pretrained(str(tmp_path), weights="fp8")
+        loader.AnonymousPiiExtractor.from_pretrained(str(tmp_path), weights="fp8")
 
 
 def test_merged_weights_round_trip_into_the_namespaces_the_loader_reads(
@@ -584,7 +584,7 @@ def test_remote_code_merged_branch_skips_peft_and_the_base_weights() -> None:
     assert release.MERGED_ENCODER_PREFIX in module
     assert release.MERGED_CLASSIFIER_PREFIX in module
     assert "strict=True" in module
-    compile(module, "modeling_meddies_pii.py", "exec")
+    compile(module, "modeling_anonymous_pii.py", "exec")
 
 
 def test_remote_code_loads_base_and_applies_the_adapter_without_merging() -> None:
@@ -603,14 +603,14 @@ def test_remote_code_loads_base_and_applies_the_adapter_without_merging() -> Non
     assert "merge_and_unload" not in module
     assert 'weights="adapter"' in module
     assert "PeftModel.from_pretrained" in module
-    assert "class MeddiesPiiExtractor" in module
+    assert "class AnonymousPiiExtractor" in module
     for kwarg in ("use_cache=False", "return_dict=True", "output_hidden_states=False"):
         assert kwarg in module
     assert "last_hidden_state" in module
     assert f"from {release.VENDORED_DECODE_PACKAGE}.viterbi import" in module
     assert 'release["base_model_id"]' in module
     assert 'revision=release["base_model_revision"]' in module
-    compile(module, "modeling_meddies_pii.py", "exec")
+    compile(module, "modeling_anonymous_pii.py", "exec")
 
 
 def test_published_merged_spans_load_the_merged_form_on_cuda(tmp_path: Path) -> None:
@@ -620,7 +620,7 @@ def test_published_merged_spans_load_the_merged_form_on_cuda(tmp_path: Path) -> 
 
     """
     release = _release()
-    from meddies_pii.spans import CharSpan
+    from anonymous_pii.spans import CharSpan
 
     calls: list[dict[str, object]] = []
 
@@ -644,7 +644,7 @@ def test_published_merged_spans_load_the_merged_form_on_cuda(tmp_path: Path) -> 
         def extract(self, text: str) -> list[CharSpan]:
             return [CharSpan(0, len(text), text, "human_name")]
 
-    loader = SimpleNamespace(MeddiesPiiExtractor=_Extractor)
+    loader = SimpleNamespace(AnonymousPiiExtractor=_Extractor)
 
     spans = release.published_merged_spans(loader, tmp_path, ["Anna", "Lee Minh"])
 
@@ -664,7 +664,7 @@ def test_published_merged_spans_load_the_merged_form_on_cuda(tmp_path: Path) -> 
 
 def test_merged_parity_reconciles_against_the_recorded_delta() -> None:
     release = _release()
-    config = {"meddies_release": {"parity": {"merged_mismatched_rows": 11}}}
+    config = {"anonymous_release": {"parity": {"merged_mismatched_rows": 11}}}
 
     record = release.reconcile_merged_parity(config, {"rows": 200, "mismatched_rows": 11})
 
@@ -684,7 +684,7 @@ def test_merged_parity_fails_closed_when_the_published_weights_drift() -> None:
 
     """
     release = _release()
-    config = {"meddies_release": {"parity": {"merged_mismatched_rows": 11}}}
+    config = {"anonymous_release": {"parity": {"merged_mismatched_rows": 11}}}
 
     with pytest.raises(RuntimeError, match="reproduce the recorded span delta") as drift:
         release.reconcile_merged_parity(config, {"rows": 200, "mismatched_rows": 12})
@@ -692,7 +692,7 @@ def test_merged_parity_fails_closed_when_the_published_weights_drift() -> None:
     assert "12" in str(drift.value)
 
     with pytest.raises(KeyError, match="merged_mismatched_rows"):
-        release.reconcile_merged_parity({"meddies_release": {"parity": {}}}, {"rows": 200, "mismatched_rows": 0})
+        release.reconcile_merged_parity({"anonymous_release": {"parity": {}}}, {"rows": 200, "mismatched_rows": 0})
 
 
 def test_onnxpostprocess_module_source_is_importable_source() -> None:
@@ -700,13 +700,13 @@ def test_onnxpostprocess_module_source_is_importable_source() -> None:
     module = release.postprocess_module_source()
 
     assert f"from {release.VENDORED_DECODE_PACKAGE}.viterbi import" in module
-    compile(module, "meddies_pii_postprocess.py", "exec")
+    compile(module, "anonymous_pii_postprocess.py", "exec")
     compile(release.usage_snippet_source(), "usage_onnxruntime.py", "exec")
 
 
 def test_span_comparison_reports_mismatched_rows() -> None:
     release = _release()
-    from meddies_pii.spans import CharSpan
+    from anonymous_pii.spans import CharSpan
 
     left = [[CharSpan(0, 4, "Anna", "human_name")], []]
     same = [[CharSpan(0, 4, "Anna", "human_name")], []]

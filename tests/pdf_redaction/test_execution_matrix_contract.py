@@ -7,35 +7,35 @@ from typing import TYPE_CHECKING, cast
 
 import pytest
 
-from meddies_pii.pdf_redaction.benchmark.execution_report import FullMatrixEvidence
-from meddies_pii.pdf_redaction.benchmark.execution_types import FullMatrixInputs
-from meddies_pii.pdf_redaction.benchmark.runtime import (
+from anonymous_pii.pdf_redaction.benchmark.execution_report import FullMatrixEvidence
+from anonymous_pii.pdf_redaction.benchmark.execution_types import FullMatrixInputs
+from anonymous_pii.pdf_redaction.benchmark.runtime import (
     ModelGate,
     OcrCandidateGateError,
     OcrSuccess,
 )
-from meddies_pii.pdf_redaction.benchmark.spatial import OracleRegion, SpatialCoverage
-from meddies_pii.pdf_redaction.contracts import (
+from anonymous_pii.pdf_redaction.benchmark.spatial import OracleRegion, SpatialCoverage
+from anonymous_pii.pdf_redaction.contracts import (
     GeometryPage,
     GeometryToken,
     PageRegion,
     Point,
     Quad,
 )
-from meddies_pii.pdf_redaction.document import DocumentInspection, PageInspection
-from meddies_pii.pdf_redaction.routing import PageRouteSignals, classify_page
-from meddies_pii.pdf_redaction.verification import (
+from anonymous_pii.pdf_redaction.document import DocumentInspection, PageInspection
+from anonymous_pii.pdf_redaction.routing import PageRouteSignals, classify_page
+from anonymous_pii.pdf_redaction.verification import (
     VerificationFinding,
     VerificationReport,
 )
-from meddies_pii.pdf_redaction.writers import RedactionWriteResult
+from anonymous_pii.pdf_redaction.writers import RedactionWriteResult
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
     from pathlib import Path
 
-    from meddies_pii.bioes_inference import SpanDetection
-    from meddies_pii.pdf_redaction.ocr import RasterPage
+    from anonymous_pii.bioes_inference import SpanDetection
+    from anonymous_pii.pdf_redaction.ocr import RasterPage
 
 
 def _quad() -> Quad:
@@ -181,9 +181,9 @@ def _install_safe_matrix_fakes(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> tuple[dict[str, object], _Writer, _Verifier]:
-    import meddies_pii.pdf_redaction.benchmark.execution_matrix as matrix
-    from meddies_pii.bioes_inference import artifacts
-    from meddies_pii.pdf_redaction import document, extraction, geometry, verification, writers
+    import anonymous_pii.pdf_redaction.benchmark.execution_matrix as matrix
+    from anonymous_pii.bioes_inference import artifacts
+    from anonymous_pii.pdf_redaction import document, extraction, geometry, verification, writers
 
     writer = _Writer()
     verifier = _Verifier()
@@ -224,7 +224,7 @@ def _install_safe_matrix_fakes(
         lambda evidence: captured.update(evidence=evidence) or {"schema_version": 2, "stage": "full_matrix"},
     )
     fidelity = SimpleNamespace(changed_outside_mask_rate=0.0)
-    import meddies_pii.pdf_redaction.benchmark.fidelity as fidelity_module
+    import anonymous_pii.pdf_redaction.benchmark.fidelity as fidelity_module
 
     monkeypatch.setattr(
         fidelity_module,
@@ -254,7 +254,7 @@ def test_execute_full_matrix_records_fake_measurement_contract_without_remote_wo
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    import meddies_pii.pdf_redaction.benchmark.execution_matrix as matrix
+    import anonymous_pii.pdf_redaction.benchmark.execution_matrix as matrix
 
     captured, writer, verifier = _install_safe_matrix_fakes(monkeypatch, tmp_path)
     inputs = _inputs(tmp_path)
@@ -299,9 +299,9 @@ def test_execute_full_matrix_returns_safe_candidate_rows_when_no_ocr_candidate_i
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    import meddies_pii.pdf_redaction.benchmark.execution_matrix as matrix
-    from meddies_pii.bioes_inference import artifacts
-    from meddies_pii.pdf_redaction import document, extraction
+    import anonymous_pii.pdf_redaction.benchmark.execution_matrix as matrix
+    from anonymous_pii.bioes_inference import artifacts
+    from anonymous_pii.pdf_redaction import document, extraction
 
     artifact = SimpleNamespace(model_path=tmp_path / "model.onnx", tokenizer_root=tmp_path)
     artifact.model_path.write_bytes(b"model")
@@ -338,8 +338,8 @@ def test_execute_full_matrix_stops_at_non_promotable_gates(
     monkeypatch: pytest.MonkeyPatch,
     failure: str,
 ) -> None:
-    import meddies_pii.pdf_redaction.benchmark.execution_matrix as matrix
-    from meddies_pii.pdf_redaction import geometry
+    import anonymous_pii.pdf_redaction.benchmark.execution_matrix as matrix
+    from anonymous_pii.pdf_redaction import geometry
 
     _, _, verifier = _install_safe_matrix_fakes(monkeypatch, tmp_path)
     if failure == "model_regions":

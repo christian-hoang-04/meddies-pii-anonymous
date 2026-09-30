@@ -1,6 +1,6 @@
-# Meddies-PII
+# Anonymous-PII
 
-Official code and paper repository for **Meddies-PII: A Multilingual Framework
+Official code and paper repository for **Anonymous-PII: A Multilingual Framework
 for Personally Identifiable Information Extraction in Clinical
 De-identification**.
 
@@ -17,8 +17,8 @@ author and preprint links are intentionally omitted from this copy.
 
 | Resource | Link |
 | --- | --- |
-| Paper PDF | [`paper/meddies-pii-naacl-final.pdf`](paper/meddies-pii-naacl-final.pdf) |
-| LaTeX source | [`paper/meddies-pii-naacl-final.tex`](paper/meddies-pii-naacl-final.tex) |
+| Paper PDF | [`paper/anonymous-pii-naacl-final.pdf`](paper/anonymous-pii-naacl-final.pdf) |
+| LaTeX source | [`paper/anonymous-pii-naacl-final.tex`](paper/anonymous-pii-naacl-final.tex) |
 | Paper assets | [`paper/`](paper/) |
 
 The paper presents a synthetic clinical PII corpus with one million documents
@@ -28,22 +28,22 @@ gates check structural and annotation validity before samples are accepted.
 
 ## What the paper contributes
 
-- **Meddies-PII-Dataset:** one million synthetic clinical documents spanning
+- **Anonymous-PII-Dataset:** one million synthetic clinical documents spanning
   seventeen languages and nine PII labels.
 - **Controlled generation:** prompts explicitly control language, document type,
   text format, scenario, ontology constraints, and difficult surface forms.
 - **Deterministic verification:** generated samples are repaired or rejected
   through structural, annotation, offset, coverage, and duplicate checks.
-- **Meddies-PII-Model:** a BIOES token classifier used to evaluate the utility
+- **Anonymous-PII-Model:** a BIOES token classifier used to evaluate the utility
   of the generated data.
 - **Multilingual evaluation:** exact-match entity-level micro-F1 is reported on
-  fifteen external benchmarks and the Meddies-PII Benchmark.
+  fifteen external benchmarks and the Anonymous-PII Benchmark.
 
 ### Reported results
 
-The paper reports an external mean F1 of **0.827** for Meddies-PII-Model,
+The paper reports an external mean F1 of **0.827** for Anonymous-PII-Model,
 compared with **0.658** for the strongest baseline. On the in-domain
-Meddies-PII Benchmark, the model reaches **0.878** F1; the overall mean across
+Anonymous-PII Benchmark, the model reaches **0.878** F1; the overall mean across
 external and in-domain evaluation is **0.833**.
 
 These are paper-reported benchmark results, not a guarantee of safe deployment
@@ -52,8 +52,8 @@ or regulatory compliance.
 ## Repository structure
 
 ```text
-src/meddies_pii/             Package implementation and CLI
-src/meddies_pii/eval_baseline/
+src/anonymous_pii/             Package implementation and CLI
+src/anonymous_pii/eval_baseline/
     baseline/                Shared evaluation harness and aggregation
     adapters/                Model adapters
     regex_release/           Regex release evaluation
@@ -78,9 +78,9 @@ Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
 
 ```bash
 uv sync
-uv run meddies-pii labels
-uv run meddies-pii validate examples/sample.inline.jsonl
-uv run meddies-pii demo
+uv run anonymous-pii labels
+uv run anonymous-pii validate examples/sample.inline.jsonl
+uv run anonymous-pii demo
 ```
 
 The quick-start workflow is offline after dependencies are installed. It does
@@ -100,20 +100,20 @@ Run the core checks with:
 ```bash
 uv run pytest
 uv run ruff check --config ruff-strict.toml .
-uv run mypy src/meddies_pii
-uv run basedpyright src/meddies_pii
+uv run mypy src/anonymous_pii
+uv run basedpyright src/anonymous_pii
 ```
 
-Strict MyPy checks every module under `src/meddies_pii` with no MyPy exclusions. BasedPyright runs in standard mode across the same source and excludes only `.venv`.
+Strict MyPy checks every module under `src/anonymous_pii` with no MyPy exclusions. BasedPyright runs in standard mode across the same source and excludes only `.venv`.
 
 The broader generation, evaluation, training, and reporting workflows are
-implemented under `src/meddies_pii/` and `scripts/`. Their commands may require
+implemented under `src/anonymous_pii/` and `scripts/`. Their commands may require
 large model artifacts, external datasets, GPU runtimes, or provider
 credentials; the offline quick start is the minimal reproducibility path.
 
 ## Annotation format
 
-Meddies-PII uses inline annotations in the form `[value]<label>`:
+Anonymous-PII uses inline annotations in the form `[value]<label>`:
 
 ```text
 Patient [Nguyen Van A]<human_name> visited [Cho Ray Hospital]<company_name>
@@ -139,7 +139,7 @@ The nine-label ontology is:
 The corpus is entirely synthetic. Deterministic gates enforce declared
 structural and annotation requirements, but they do not directly measure the
 semantic naturalness of every generated document. The evaluation focuses on
-synthetic PII benchmarks and the Meddies-PII Benchmark; evaluation on
+synthetic PII benchmarks and the Anonymous-PII Benchmark; evaluation on
 appropriately governed real clinical records remains future work.
 
 This project is a research resource, not a certification that clinical text is
@@ -151,8 +151,8 @@ privacy review, audit controls, and human oversight.
 If you use this code or paper, please cite:
 
 ```bibtex
-@misc{meddiespii2026,
-  title         = {Meddies-PII: A Multilingual Framework for Personally Identifiable Information Extraction in Clinical De-identification},
+@misc{anonymouspii2026,
+  title         = {Anonymous-PII: A Multilingual Framework for Personally Identifiable Information Extraction in Clinical De-identification},
   author        = {Anonymous},
   year          = {2026},
   primaryClass  = {cs.CL},

@@ -30,35 +30,35 @@ from typing import TYPE_CHECKING
 
 import modal
 
-from meddies_pii.eval_baseline.baseline.datasets import (
+from anonymous_pii.eval_baseline.baseline.datasets import (
     EVAL_DATASETS,
     EVAL_EXPECTED_ROWS,
     EXTERNAL_CONFIGS,
 )
-from meddies_pii.modal_runtime import (
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
 )
 
 if TYPE_CHECKING:
-    from meddies_pii.evaluation.identity import EvaluationContract
+    from anonymous_pii.evaluation.identity import EvaluationContract
 
 
 def _evaluation_contract() -> EvaluationContract:
-    from meddies_pii import __file__ as package_file
-    from meddies_pii.eval_baseline.adapters import openmed
-    from meddies_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
-    from meddies_pii.evaluation.identity import (
+    from anonymous_pii import __file__ as package_file
+    from anonymous_pii.eval_baseline.adapters import openmed
+    from anonymous_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
+    from anonymous_pii.evaluation.identity import (
         evaluation_contract,
         manifest_artifact,
         payload_artifact,
     )
-    from meddies_pii.evaluation.runtime_provenance import (
+    from anonymous_pii.evaluation.runtime_provenance import (
         evaluation_runtime_source_artifact,
     )
 
     if package_file is None:
-        msg = "cannot observe the Meddies evaluation runtime source"
+        msg = "cannot observe the Anonymous evaluation runtime source"
         raise RuntimeError(msg)
     runtime_source = evaluation_runtime_source_artifact(Path(package_file).parent, __file__)
     return evaluation_contract(
@@ -76,7 +76,7 @@ def _evaluation_contract() -> EvaluationContract:
 
 FIRST_LIGHT_MAX_ROWS = 32
 
-BASELINE_VOLUME_NAME = "meddies-pii-baseline-eval"
+BASELINE_VOLUME_NAME = "anonymous-pii-baseline-eval"
 BASELINE_VOLUME_MOUNT = "/baseline"
 H100_GPU = "H100"
 TIMEOUT_SECONDS = 3 * 60 * 60
@@ -108,7 +108,7 @@ fragmenting fixed blocks, which is what tips a long-sequence batch over the edge
 
 """
 
-app = modal.App("meddies-pii-model-baseline-eval")
+app = modal.App("anonymous-pii-model-baseline-eval")
 
 
 @app.function(
@@ -119,14 +119,14 @@ app = modal.App("meddies-pii-model-baseline-eval")
     volumes={BASELINE_VOLUME_MOUNT: baseline_volume},
 )
 def openmed_first_light(max_rows: int = 32) -> None:
-    from meddies_pii.eval_baseline.adapters.openmed import OpenMedAdapter
-    from meddies_pii.eval_baseline.baseline.datasets import load_first_light_subset
-    from meddies_pii.eval_baseline.baseline.run import (
+    from anonymous_pii.eval_baseline.adapters.openmed import OpenMedAdapter
+    from anonymous_pii.eval_baseline.baseline.datasets import load_first_light_subset
+    from anonymous_pii.eval_baseline.baseline.run import (
         ShardSpec,
         run_shard,
         shard_result_json,
     )
-    from meddies_pii.eval_baseline.baseline.subset import write_subset_manifest
+    from anonymous_pii.eval_baseline.baseline.subset import write_subset_manifest
 
     if max_rows > FIRST_LIGHT_MAX_ROWS:
         msg = "Gate-1 first-light is capped at 32 rows"
@@ -183,9 +183,9 @@ def openmed_eval_cell(dataset: str, max_rows: int = 0, full: bool = False, force
     ``force`` re-runs past an existing .done (e.g. to overwrite a subset run with
     the full-scale one). Resume-safe when the persisted fixture identity matches.
     """
-    from meddies_pii.eval_baseline.adapters.openmed import OpenMedAdapter
-    from meddies_pii.eval_baseline.baseline.datasets import load_eval_cell
-    from meddies_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
+    from anonymous_pii.eval_baseline.adapters.openmed import OpenMedAdapter
+    from anonymous_pii.eval_baseline.baseline.datasets import load_eval_cell
+    from anonymous_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
 
     rows = load_eval_cell(
         dataset,
@@ -223,7 +223,7 @@ def inspect_external() -> None:
 
     for config in EXTERNAL_CONFIGS:
         try:
-            table = load_dataset("Meddies/meddies-pii-external", config, split="eval")
+            table = load_dataset("anonymous-placeholder/anonymous-pii-external", config, split="eval")
             sample = table[0] if table.num_rows else {}
             spans = len(sample.get("label") or [])
             print(
@@ -252,7 +252,7 @@ are skipped, but each skip still cold-starts an H100 and loads the model
     Pass --full to score the WHOLE eval split (drops the 2k external cap) and
     --force to overwrite an existing subset run with the full-scale one.
     """
-    from meddies_pii.eval_baseline.baseline.datasets import select_eval_datasets
+    from anonymous_pii.eval_baseline.baseline.datasets import select_eval_datasets
 
     selected = select_eval_datasets(datasets)
     handles = [(dataset, openmed_eval_cell.spawn(dataset, max_rows, full, force)) for dataset in selected]
@@ -278,12 +278,12 @@ def aggregate_openmed() -> None:
     Scoring runs through the shared aggregator, prints the per-config, per-language and
     per-label F1 grid, and persists the full nested report to reports/openmed-aggregate.json.
     """
-    from meddies_pii.eval_baseline.adapters.openmed import OPENMED_SUPPORTED_LABELS
-    from meddies_pii.eval_baseline.baseline.aggregate import (
+    from anonymous_pii.eval_baseline.adapters.openmed import OPENMED_SUPPORTED_LABELS
+    from anonymous_pii.eval_baseline.baseline.aggregate import (
         aggregate_results,
         format_aggregate_report,
     )
-    from meddies_pii.eval_baseline.baseline.run import (
+    from anonymous_pii.eval_baseline.baseline.run import (
         assert_frozen_fixture,
         expected_matrix_shard_identities,
         read_matrix_results,

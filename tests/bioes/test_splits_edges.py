@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.taxonomy import PII_LABELS
-from meddies_pii.training.bioes.data import splits
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.taxonomy import PII_LABELS
+from anonymous_pii.training.bioes.data import splits
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence

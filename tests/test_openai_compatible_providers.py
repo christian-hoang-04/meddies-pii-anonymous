@@ -5,10 +5,10 @@ from __future__ import annotations
 import os
 from unittest.mock import patch
 
-from meddies_pii.generation.label_corpus.provider_access import (
+from anonymous_pii.generation.label_corpus.provider_access import (
     provider_keys as preflight_provider_keys,
 )
-from meddies_pii.generation.openai_compatible.providers import (
+from anonymous_pii.generation.openai_compatible.providers import (
     get_provider_spec,
     provider_keys,
     resolve_provider_base_urls,

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii import translation
+from anonymous_pii import translation
 
 if TYPE_CHECKING:
     from pathlib import Path

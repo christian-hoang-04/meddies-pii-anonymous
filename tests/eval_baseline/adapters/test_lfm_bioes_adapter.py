@@ -16,17 +16,17 @@ from __future__ import annotations
 # reason: stays visible instead.
 import torch
 
-from meddies_pii.annotations.bioes import (
+from anonymous_pii.annotations.bioes import (
     ENTITY_LABELS,
     build_bioes_label_space,
     build_label_to_id,
 )
-from meddies_pii.eval_baseline.adapters.lfm_bioes import (
+from anonymous_pii.eval_baseline.adapters.lfm_bioes import (
     LFM_BIOES_SUPPORTED_LABELS,
     LfmBioesAdapter,
     spans_from_logits,
 )
-from meddies_pii.taxonomy import PII_LABEL_SET
+from anonymous_pii.taxonomy import PII_LABEL_SET
 
 _LABEL_VOCAB = build_bioes_label_space(ENTITY_LABELS)
 _LABEL_TO_ID = build_label_to_id(_LABEL_VOCAB)

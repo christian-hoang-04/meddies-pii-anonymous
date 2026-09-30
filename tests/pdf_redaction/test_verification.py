@@ -12,14 +12,14 @@ import pytest
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen.canvas import Canvas
 
-from meddies_pii.pdf_redaction.contracts import PageRegion, Point, Quad
-from meddies_pii.pdf_redaction.verification import (
+from anonymous_pii.pdf_redaction.contracts import PageRegion, Point, Quad
+from anonymous_pii.pdf_redaction.verification import (
     IndependentPdfVerifier,
     SubprocessToolRunner,
     ToolRun,
     VerificationToolchain,
 )
-from meddies_pii.pdf_redaction.writers import (
+from anonymous_pii.pdf_redaction.writers import (
     PyMuPdfRedactionWriter,
     RasterRebuildWriter,
     UnsafeOverlayWriter,

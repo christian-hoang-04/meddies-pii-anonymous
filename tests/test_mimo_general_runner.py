@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 import httpx
 
-from meddies_pii.generation.label_corpus import runner as generation_runner
+from anonymous_pii.generation.label_corpus import runner as generation_runner
 
 if TYPE_CHECKING:
     from types import ModuleType

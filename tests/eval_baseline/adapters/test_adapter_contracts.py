@@ -12,33 +12,33 @@ from typing import TYPE_CHECKING
 import pytest
 import torch
 
-from meddies_pii.annotations.bioes import (
+from anonymous_pii.annotations.bioes import (
     ENTITY_LABELS,
     build_bioes_label_space,
     build_label_to_id,
 )
-from meddies_pii.eval_baseline.adapters import opf_backend
-from meddies_pii.eval_baseline.adapters.lfm_bioes import LfmBioesAdapter
+from anonymous_pii.eval_baseline.adapters import opf_backend
+from anonymous_pii.eval_baseline.adapters.lfm_bioes import LfmBioesAdapter
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
-from meddies_pii.eval_baseline.adapters.openmed import (
+from anonymous_pii.eval_baseline.adapters.openmed import (
     MODEL_MAX_LENGTH,
     OpenMedAdapter,
 )
-from meddies_pii.eval_baseline.adapters.openmed import (
+from anonymous_pii.eval_baseline.adapters.openmed import (
     MODEL_REVISION as OPENMED_MODEL_REVISION,
 )
-from meddies_pii.eval_baseline.adapters.opf_backend import (
+from anonymous_pii.eval_baseline.adapters.opf_backend import (
     MODEL_REVISION as OPF_MODEL_REVISION,
 )
-from meddies_pii.eval_baseline.adapters.opf_backend import (
+from anonymous_pii.eval_baseline.adapters.opf_backend import (
     apply_native_env,
     build_native_batched_predictor,
     detected_span_to_char_span,
     prepare_native_checkpoint,
 )
-from meddies_pii.spans import CharSpan
+from anonymous_pii.spans import CharSpan
 
 
 class _Tokenizer:
@@ -204,7 +204,7 @@ def _install_lfm_loader(
     *,
     label_count: int,
 ) -> tuple[_LfmTagger, tuple[str, ...]]:
-    from meddies_pii.training.bioes.data import artifacts as artifacts_module
+    from anonymous_pii.training.bioes.data import artifacts as artifacts_module
 
     vocabulary = build_bioes_label_space(ENTITY_LABELS)
     label_to_id = build_label_to_id(vocabulary)

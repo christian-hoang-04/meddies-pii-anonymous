@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from meddies_pii.pdf_redaction.routing import PageRouteSignals, classify_page
+from anonymous_pii.pdf_redaction.routing import PageRouteSignals, classify_page
 
 
 @pytest.mark.parametrize(

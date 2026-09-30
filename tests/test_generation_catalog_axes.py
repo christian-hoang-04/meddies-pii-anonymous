@@ -16,21 +16,21 @@ from __future__ import annotations
 
 import random
 
-from meddies_pii.generation.label_corpus.catalog import (
+from anonymous_pii.generation.label_corpus.catalog import (
     DOCUMENT_TYPES,
     MEDICAL_SCENARIO_NAMES,
     SCENARIOS,
     TEXT_FORMATS,
     _scenario_by_name,
 )
-from meddies_pii.generation.label_corpus.edge_cases import (
+from anonymous_pii.generation.label_corpus.edge_cases import (
     ADVERSARIAL_EDGE_CASE_RANGE,
     EDGE_CASE_RATE,
     EDGE_CASES,
     sample_edge_cases,
 )
-from meddies_pii.generation.label_corpus.prompts import targeted_user_prompt
-from meddies_pii.languages import normalize_language
+from anonymous_pii.generation.label_corpus.prompts import targeted_user_prompt
+from anonymous_pii.languages import normalize_language
 
 
 def test_edge_cases_are_a_rated_orthogonal_axis() -> None:

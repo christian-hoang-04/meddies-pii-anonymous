@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-"""Build the CredData external Meddies Labels dataset (train + eval).
+"""Build the CredData external Anonymous Labels dataset (train + eval).
 
 The input is an acquired CredData dataset directory, the output of CredData's ``download_data.py``.
 
 Assumes acquisition is already done (the shallow per-commit clone + obfuscation).
 Iterates ``meta/*.csv`` (one CSV per repo), converts each repo's files into
-Meddies Labels windowed records via ``convert_creddata_file``, then splits BY REPO,
+Anonymous Labels windowed records via ``convert_creddata_file``, then splits BY REPO,
 holding out ~15% of credentials for ``eval`` — stratified so ``private_url`` and
 ``id_number`` (the rare labels) appear in eval. Writes JSONL + HF-ready parquet +
 a summary. This script NEVER publishes.
@@ -30,22 +30,22 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from meddies_pii.historical_artifacts import legacy_jsonl_locator
-from meddies_pii.training.bioes.data.augmentation import (
+from anonymous_pii.historical_artifacts import legacy_jsonl_locator
+from anonymous_pii.training.bioes.data.augmentation import (
     text_hash,
     write_json,
     write_jsonl,
     write_parquet,
 )
-from meddies_pii.training.bioes.data.creddata import (
+from anonymous_pii.training.bioes.data.creddata import (
     CredMetaRow,
     convert_creddata_file,
 )
-from meddies_pii.training.bioes.data.mixed import summarize_records
-from meddies_pii.training.bioes.data.splits import normalize_text
+from anonymous_pii.training.bioes.data.mixed import summarize_records
+from anonymous_pii.training.bioes.data.splits import normalize_text
 
 if TYPE_CHECKING:
-    from meddies_pii.training.bioes.data.record_schema import NormalizedRecord
+    from anonymous_pii.training.bioes.data.record_schema import NormalizedRecord
 
 
 def _repo_url_map(creddata_dir: Path) -> dict[str, str]:
@@ -69,7 +69,7 @@ def _convert_repo(
     meta_csv: Path,
     source: str,
 ) -> tuple[list[NormalizedRecord], Counter[str], Counter[str]]:
-    """Convert one repo's files (one meta CSV) into Meddies Labels records."""
+    """Convert one repo's files (one meta CSV) into Anonymous Labels records."""
     rows = list(csv.DictReader(meta_csv.open(encoding="utf-8")))
     by_file: dict[str, list[dict[str, str]]] = defaultdict(list)
     for row in rows:
@@ -192,7 +192,7 @@ def main() -> None:
 
     summary = {
         "dataset_id": "Samsung/CredData",
-        "repo_target": "Meddies/meddies-pii-external",
+        "repo_target": "anonymous-placeholder/anonymous-pii-external",
         "config": "creddata",
         "split_policy": f"by-repo holdout, eval_fraction={args.eval_fraction}",
         "total_repos": len(repos),

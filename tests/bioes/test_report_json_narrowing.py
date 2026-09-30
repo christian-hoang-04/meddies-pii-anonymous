@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.training.bioes.reports.json_narrowing import (
+from anonymous_pii.training.bioes.reports.json_narrowing import (
     load_optional_json_object,
     parse_json_object_line,
 )

@@ -9,10 +9,10 @@ from typing import TYPE_CHECKING, NoReturn
 
 import pytest
 
-from meddies_pii.training.bioes import assembly
-from meddies_pii.training.bioes.assembly import AssemblyGateError
-from meddies_pii.training.bioes.data import grpo_convert, inline_tags, mixed
-from meddies_pii.training.bioes.modal import data_pipeline
+from anonymous_pii.training.bioes import assembly
+from anonymous_pii.training.bioes.assembly import AssemblyGateError
+from anonymous_pii.training.bioes.data import grpo_convert, inline_tags, mixed
+from anonymous_pii.training.bioes.modal import data_pipeline
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -109,7 +109,7 @@ def test_download_convert_ai4privacy_local_uses_faked_stream_and_filters_languag
         ),
     )
     monkeypatch.setitem(__import__("sys").modules, "datasets", fake_datasets)
-    monkeypatch.setattr(mixed, "is_supported_meddies_language", lambda language: language == "vi")
+    monkeypatch.setattr(mixed, "is_supported_anonymous_language", lambda language: language == "vi")
     monkeypatch.setattr(
         mixed,
         "convert_ai4privacy_row",
@@ -141,7 +141,7 @@ def test_count_file_local_discards_non_objects_and_invalid_json(monkeypatch: pyt
             return {"kept": 2}
 
     monkeypatch.setattr(grpo_convert, "find_spans", grpo_convert.find_spans)
-    from meddies_pii.training.bioes.data import corpus_gate
+    from anonymous_pii.training.bioes.data import corpus_gate
 
     monkeypatch.setattr(corpus_gate, "count_corpus", lambda rows: _Counts() if len(rows) == 2 else None)
 
@@ -219,8 +219,8 @@ def test_download_configs_and_corpus_stats_local_use_faked_dataset_boundary(
         '{"text": 5, "label": [], "info": "wrong-shape"}\n',
         encoding="utf-8",
     )
-    from meddies_pii.generation import text_formats
-    from meddies_pii.training.bioes.data import corpus_gate
+    from anonymous_pii.generation import text_formats
+    from anonymous_pii.training.bioes.data import corpus_gate
 
     monkeypatch.setattr(corpus_gate, "_resolve_language", lambda language: "vi" if language else None)
     monkeypatch.setattr(corpus_gate, "_row_labels", lambda row: list(row["label"]))

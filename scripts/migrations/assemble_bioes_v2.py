@@ -9,7 +9,7 @@ import argparse
 import json
 from pathlib import Path
 
-from meddies_pii.training.bioes.assembly import (
+from anonymous_pii.training.bioes.assembly import (
     AssemblyGateError,
     assemble_bioes_v2_corpus,
     parse_waiver_cells,

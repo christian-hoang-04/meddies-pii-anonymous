@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from meddies_pii.training.bioes.data.legacy_to_pii_labels import (
+from anonymous_pii.training.bioes.data.legacy_to_pii_labels import (
     ConvertedLegacyRow,
     convert_legacy_row_to_pii_labels,
 )

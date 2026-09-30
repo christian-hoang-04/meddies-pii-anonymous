@@ -7,8 +7,8 @@ import onnx
 import pytest
 from onnx import TensorProto, helper
 
-from meddies_pii.eval_baseline.pii350_release import q8_head_preserved as q8_module
-from meddies_pii.eval_baseline.pii350_release.q8_head_preserved import (
+from anonymous_pii.eval_baseline.pii350_release import q8_head_preserved as q8_module
+from anonymous_pii.eval_baseline.pii350_release.q8_head_preserved import (
     Q8_BITS,
     Q8_BLOCK_SIZE,
     Q8_IS_SYMMETRIC,
@@ -19,7 +19,7 @@ from meddies_pii.eval_baseline.pii350_release.q8_head_preserved import (
     verify_r1_preflight_receipt,
     write_r1_preflight_receipt,
 )
-from meddies_pii.evaluation.identity import canonical_sha256, file_sha256
+from anonymous_pii.evaluation.identity import canonical_sha256, file_sha256
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -88,9 +88,9 @@ def _write_graph(
 
 def _source(path: Path) -> SourceArtifactIdentity:
     return SourceArtifactIdentity(
-        repository="modal-volume://meddies-pii350-release",
+        repository="modal-volume://anonymous-pii350-release",
         revision="f" * 64,
-        path="meddies-pii-v2-onnx/model.onnx",
+        path="anonymous-pii-v2-onnx/model.onnx",
         bytes=path.stat().st_size,
         sha256=file_sha256(path),
     )
@@ -278,9 +278,9 @@ def test_r1_keeps_the_previous_artifact_if_the_deterministic_rerun_fails(
 def test_r1_preflight_is_a_non_launching_exact_contract() -> None:
     contract = build_r1_preflight(
         source=SourceArtifactIdentity(
-            repository="modal-volume://meddies-pii350-release",
+            repository="modal-volume://anonymous-pii350-release",
             revision="f" * 64,
-            path="meddies-pii-v2-onnx/model.onnx",
+            path="anonymous-pii-v2-onnx/model.onnx",
             bytes=1_420_000_000,
             sha256="1" * 64,
         ),
@@ -291,7 +291,7 @@ def test_r1_preflight_is_a_non_launching_exact_contract() -> None:
 
     assert contract["launch"] is False
     assert contract["modal"] == {
-        "app": "meddies-pii350-release-export",
+        "app": "anonymous-pii350-release-export",
         "cpu": 8,
         "gpu": None,
         "memory_mib": 32768,
@@ -314,9 +314,9 @@ def test_r1_preflight_rejects_a_mutable_revision_or_traversing_source_path() -> 
     with pytest.raises(ValueError, match="immutable"):
         build_r1_preflight(
             source=SourceArtifactIdentity(
-                repository="modal-volume://meddies-pii350-release",
+                repository="modal-volume://anonymous-pii350-release",
                 revision="latest",
-                path="meddies-pii-v2-onnx/model.onnx",
+                path="anonymous-pii-v2-onnx/model.onnx",
                 bytes=1,
                 sha256="1" * 64,
             ),
@@ -327,7 +327,7 @@ def test_r1_preflight_rejects_a_mutable_revision_or_traversing_source_path() -> 
     with pytest.raises(ValueError, match="non-traversing"):
         build_r1_preflight(
             source=SourceArtifactIdentity(
-                repository="modal-volume://meddies-pii350-release",
+                repository="modal-volume://anonymous-pii350-release",
                 revision="f" * 64,
                 path="../model.onnx",
                 bytes=1,
@@ -343,9 +343,9 @@ def test_r1_export_authority_requires_a_persisted_approved_receipt(
     tmp_path: Path,
 ) -> None:
     source = SourceArtifactIdentity(
-        repository="modal-volume://meddies-pii350-release",
+        repository="modal-volume://anonymous-pii350-release",
         revision="f" * 64,
-        path="meddies-pii-v2-onnx/model.onnx",
+        path="anonymous-pii-v2-onnx/model.onnx",
         bytes=1_420_000_000,
         sha256="1" * 64,
     )
@@ -377,9 +377,9 @@ def test_r1_export_authority_rejects_status_string_and_tampered_receipt(
     tmp_path: Path,
 ) -> None:
     source = SourceArtifactIdentity(
-        repository="modal-volume://meddies-pii350-release",
+        repository="modal-volume://anonymous-pii350-release",
         revision="f" * 64,
-        path="meddies-pii-v2-onnx/model.onnx",
+        path="anonymous-pii-v2-onnx/model.onnx",
         bytes=1,
         sha256="1" * 64,
     )

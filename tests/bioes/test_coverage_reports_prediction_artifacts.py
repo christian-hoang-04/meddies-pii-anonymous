@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.training.bioes.eval.audit import EvalAuditIssue, Severity
-from meddies_pii.training.bioes.reports import eval_prediction_artifacts
+from anonymous_pii.training.bioes.eval.audit import EvalAuditIssue, Severity
+from anonymous_pii.training.bioes.reports import eval_prediction_artifacts
 
 if TYPE_CHECKING:
     from pathlib import Path

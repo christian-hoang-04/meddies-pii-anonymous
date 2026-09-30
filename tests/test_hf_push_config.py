@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 import datasets
 
-from meddies_pii.publishing import huggingface
+from anonymous_pii.publishing import huggingface
 
 if TYPE_CHECKING:
     import pytest
@@ -43,11 +43,11 @@ def test_push_config_pushes_rows_as_named_config_and_split(monkeypatch: pytest.M
         {"text": "b", "label": [], "info": {}},
     ]
 
-    count = huggingface.push_config("Meddies/meddies-pii", "eval", rows, split="train")
+    count = huggingface.push_config("anonymous-placeholder/anonymous-pii", "eval", rows, split="train")
 
     assert count == 2
     assert captured["rows"] == rows
-    assert captured["repo_id"] == "Meddies/meddies-pii"
+    assert captured["repo_id"] == "anonymous-placeholder/anonymous-pii"
     assert captured["kwargs"]["config_name"] == "eval"
     assert captured["kwargs"]["split"] == "train"
 
@@ -56,7 +56,7 @@ def test_push_config_omits_private_by_default(monkeypatch: pytest.MonkeyPatch) -
     """Default must not touch repo visibility — mirrors mix.py's push_to_hub call."""
     captured = _capture_push(monkeypatch)
 
-    huggingface.push_config("Meddies/meddies-pii", "eval", [{"text": "a"}])
+    huggingface.push_config("anonymous-placeholder/anonymous-pii", "eval", [{"text": "a"}])
 
     assert "private" not in captured["kwargs"]
     assert captured["kwargs"]["split"] == "train"

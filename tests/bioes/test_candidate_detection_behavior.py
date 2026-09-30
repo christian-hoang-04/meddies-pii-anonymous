@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from meddies_pii.training.bioes.eval.audit import find_label_candidates
+from anonymous_pii.training.bioes.eval.audit import find_label_candidates
 
 
 def test_public_reference_url_is_not_a_private_url_candidate() -> None:

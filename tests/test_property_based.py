@@ -5,7 +5,7 @@ import re
 from hypothesis import given
 from hypothesis import strategies as st
 
-from meddies_pii.tags import strip_code_blocks, strip_pii_tags
+from anonymous_pii.tags import strip_code_blocks, strip_pii_tags
 
 
 class TestPropertyBasedTagHelpers:

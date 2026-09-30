@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import random
 
-from meddies_pii.generation.label_corpus import catalog, generation_runs, runner
-from meddies_pii.generation.label_corpus.edge_cases import sample_edge_cases
+from anonymous_pii.generation.label_corpus import catalog, generation_runs, runner
+from anonymous_pii.generation.label_corpus.edge_cases import sample_edge_cases
 
 
 def test_edge_case_sampling_uses_catalog_scenarios_without_a_catalog_import_cycle() -> None:

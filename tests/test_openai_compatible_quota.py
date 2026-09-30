@@ -6,8 +6,8 @@ from datetime import date
 
 import pytest
 
-from meddies_pii.exceptions import DailyBudgetExceeded
-from meddies_pii.generation.openai_compatible.quota import (
+from anonymous_pii.exceptions import DailyBudgetExceeded
+from anonymous_pii.generation.openai_compatible.quota import (
     DailyTokenBudget,
     billable_tokens,
 )

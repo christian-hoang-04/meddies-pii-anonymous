@@ -3,25 +3,25 @@ from __future__ import annotations
 # ruff: file-ignore[float-equality-comparison]
 # reason: these assertions pin the exact value the code under test produces from deterministic
 # reason: inputs, so a tolerance would make the test accept a value the code does not produce.
-from meddies_pii.eval_baseline.baseline.datasets import EvalRow
-from meddies_pii.eval_baseline.opf_benchmark.dataset import (
+from anonymous_pii.eval_baseline.baseline.datasets import EvalRow
+from anonymous_pii.eval_baseline.opf_benchmark.dataset import (
     LENGTH_BUCKETS,
     build_pinned_benchmark_doc_set,
 )
-from meddies_pii.eval_baseline.opf_benchmark.decoding import (
+from anonymous_pii.eval_baseline.opf_benchmark.decoding import (
     bioes_token_entities_to_spans,
     token_logits_to_bioes_spans,
 )
-from meddies_pii.eval_baseline.opf_benchmark.harness import run_mock_benchmark
-from meddies_pii.eval_baseline.opf_benchmark.metrics import (
+from anonymous_pii.eval_baseline.opf_benchmark.harness import run_mock_benchmark
+from anonymous_pii.eval_baseline.opf_benchmark.metrics import (
     TimingRepeat,
     compute_correctness,
     summarize_timing,
 )
-from meddies_pii.eval_baseline.opf_benchmark.ranking import (
+from anonymous_pii.eval_baseline.opf_benchmark.ranking import (
     rank_benchmark_results,
 )
-from meddies_pii.eval_baseline.opf_benchmark.registry import (
+from anonymous_pii.eval_baseline.opf_benchmark.registry import (
     ATTENTION_KERNELS,
     BATCH_SIZES,
     COMPILE_MODES,
@@ -33,7 +33,7 @@ from meddies_pii.eval_baseline.opf_benchmark.registry import (
     select_representative_configs,
     validate_registry_completeness,
 )
-from meddies_pii.spans import CharSpan
+from anonymous_pii.spans import CharSpan
 
 
 def _row(doc_id: str, token_count: int, label: str = "human_name") -> EvalRow:

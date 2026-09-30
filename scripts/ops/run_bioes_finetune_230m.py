@@ -1,14 +1,14 @@
 #!/usr/bin/env python
-"""Launch the LFM2.5-230M BIOES fine-tune on ``meddies-pii-mixed``.
+"""Launch the LFM2.5-230M BIOES fine-tune on ``anonymous-pii-mixed``.
 
 Thin call site over the existing ``run_smoke_training`` — all training logic lives in
-``src/meddies_pii/training/bioes/``; this file only supplies the settled configuration
+``src/anonymous_pii/training/bioes/``; this file only supplies the settled configuration
 for the settled 230M recipe documented in issue #78:
-https://example.invalid/anonymous/meddies-pii/issues/78
+https://example.invalid/anonymous/anonymous-pii/issues/78
 
   * model     LiquidAI/LFM2.5-230M-Base      (base tokenizer loads without remote code)
-  * train     Meddies/meddies-pii-mixed / default / train   (1,000,000 rows)
-  * eval      Meddies/meddies-pii-v2 / eval / train         (1,700 rows, proven disjoint)
+  * train     anonymous-placeholder/anonymous-pii-mixed / default / train   (1,000,000 rows)
+  * eval      anonymous-placeholder/anonymous-pii-v2 / eval / train         (1,700 rows, proven disjoint)
   * max_len   8192   (drops ~0.044% of the corpus; protects high-fertility languages)
   * backend   unsloth, fused_adamw=False, no custom kernel  (issue #78 settled defaults)
 
@@ -37,7 +37,7 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from meddies_pii.training.bioes.trainers.trainer import (
+from anonymous_pii.training.bioes.trainers.trainer import (
     SmokeTrainingConfig,
     run_smoke_training,
 )
@@ -45,10 +45,10 @@ from meddies_pii.training.bioes.trainers.trainer import (
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-ISSUE_78_URL = "https://example.invalid/anonymous/meddies-pii/issues/78"
+ISSUE_78_URL = "https://example.invalid/anonymous/anonymous-pii/issues/78"
 MODEL_ID = "LiquidAI/LFM2.5-230M-Base"
-TRAIN_REPO = "Meddies/meddies-pii-mixed"
-EVAL_REPO = "Meddies/meddies-pii-v2"
+TRAIN_REPO = "anonymous-placeholder/anonymous-pii-mixed"
+EVAL_REPO = "anonymous-placeholder/anonymous-pii-v2"
 
 
 def build_config(args: argparse.Namespace) -> SmokeTrainingConfig:
@@ -89,7 +89,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     """Defaults mirror coworker's proven production recipe.
 
     Bioes/20260604_h100_8192_r128a256_pack_bs128_150step_ckpt10), swapping only model 350M->230M and data
-    pii-bioes->meddies-pii-mixed. Override for a local smoke: --backend hf --no-packing --batch-size 2 --steps 2
+    pii-bioes->anonymous-pii-mixed. Override for a local smoke: --backend hf --no-packing --batch-size 2 --steps 2
     --train-limit 8.
 
     """

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Daily OpenCode Zen clinical top-up runner for Meddies Labels synthetic rows."""
+"""Daily OpenCode Zen clinical top-up runner for Anonymous Labels synthetic rows."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 
 from dotenv import load_dotenv
 
-from meddies_pii.generation.label_corpus.runner import (
+from anonymous_pii.generation.label_corpus.runner import (
     GenerationRunError,
     GenerationRunPlan,
     build_opencode_zen_daily_segments,

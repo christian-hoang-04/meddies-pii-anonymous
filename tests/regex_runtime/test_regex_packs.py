@@ -6,23 +6,23 @@ from typing import get_args, get_type_hints
 
 import pytest
 
-from meddies_pii.eval_baseline.regex_release.regex_fixtures import (
+from anonymous_pii.eval_baseline.regex_release.regex_fixtures import (
     AUDITED_ENGINE_AND_AUTH_FIXTURES,
     AUDITED_ORG_KEEP_TEXTS,
     AUDITED_ORG_NEGATIVE_TEXTS,
     POSITIVE_SELECTION_FIXTURES,
     RegexExpectedFixture,
 )
-from meddies_pii.regex_runtime import regex_manifest
-from meddies_pii.regex_runtime.packs import ALL_PACKS, Cue, CuePack, pack_pattern
-from meddies_pii.regex_runtime.packs.vi import VI_ORG_PACK
-from meddies_pii.regex_runtime.postprocess import apply_regex_postprocess
-from meddies_pii.regex_runtime.rules import (
+from anonymous_pii.regex_runtime import regex_manifest
+from anonymous_pii.regex_runtime.packs import ALL_PACKS, Cue, CuePack, pack_pattern
+from anonymous_pii.regex_runtime.packs.vi import VI_ORG_PACK
+from anonymous_pii.regex_runtime.postprocess import apply_regex_postprocess
+from anonymous_pii.regex_runtime.rules import (
     REGEX_RULES,
     RegexRule,
     regex_candidates,
 )
-from meddies_pii.spans import CharSpan
+from anonymous_pii.spans import CharSpan
 
 NON_BREAKING_HYPHEN = "\N{NON-BREAKING HYPHEN}"
 

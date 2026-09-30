@@ -44,13 +44,13 @@ def imported_names(path: Path, module: str) -> set[str]:
 
 def test_active_modules_do_not_import_retired_training_modal_bootstrap() -> None:
     active_modules = (
-        *(REPO / "src/meddies_pii").rglob("*.py"),
+        *(REPO / "src/anonymous_pii").rglob("*.py"),
         *(path for path in (REPO / "scripts").rglob("*.py") if not path.is_relative_to(REPO / "scripts/archive")),
     )
     offenders = [
         path.relative_to(REPO)
         for path in sorted(active_modules)
-        if "meddies_pii.training.bioes.modal.bootstrap" in imported_modules(path)
+        if "anonymous_pii.training.bioes.modal.bootstrap" in imported_modules(path)
     ]
 
     assert offenders == []
@@ -102,7 +102,7 @@ def test_ops_scripts_import_the_neutral_modal_source_mount_contract() -> None:
         assert {
             "MODAL_SOURCE_ROOT",
             "add_source_pythonpath",
-        } <= imported_names(path, "meddies_pii.modal_runtime")
+        } <= imported_names(path, "anonymous_pii.modal_runtime")
         assert all(
             any(
                 keyword.arg == "remote_path"

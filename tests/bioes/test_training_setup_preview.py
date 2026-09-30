@@ -106,14 +106,14 @@ def test_training_setup_preview_writes_launch_artifacts(tmp_path: Path) -> None:
     hparams = json.loads((output_dir / "hyperparameters.json").read_text())
 
     assert report == output_dir / "index.html"
-    assert "Meddies PII — BIOES full training setup" in html
+    assert "Anonymous PII — BIOES full training setup" in html
     assert "Not launched yet" in html
     assert "r128 / alpha256" in html
     assert "Train cap" in html
     assert "Budget-bounded chunk" in html
     assert "Patient " in html
     assert 'class="pii label-human-name"' in html
-    assert "meddies-pii-bioes-artifacts" in html
+    assert "anonymous-pii-bioes-artifacts" in html
     assert "--max-length 8192" in command
     assert "modal run --detach --timestamps" in command
     assert "--batch-size 128" in command

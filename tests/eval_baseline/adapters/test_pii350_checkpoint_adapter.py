@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING, Any
 
 import pytest
 
-from meddies_pii.eval_baseline.adapters import pii350_checkpoint
-from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+from anonymous_pii.eval_baseline.adapters import pii350_checkpoint
+from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
     ADAPTER_CONFIG_FILENAME,
     ADAPTER_WEIGHTS_FILENAME,
     CLASSIFIER_FILENAME,
@@ -91,14 +91,14 @@ STEP100_WAVE1_METADATA_FIXTURE = {
         for rank in range(2)
     ],
     "epoch_complete": False,
-    "wave_profile": "meddiesresearch",
+    "wave_profile": "anonymousresearch",
     "wave_cumulative_all_in_cost_usd": 4.85716643914298,
 }
 
 
 def _legacy_step60_artifact() -> CheckpointArtifact:
     return CheckpointArtifact(
-        repo_id="Meddies/private-pii350",
+        repo_id="anonymous-placeholder/private-pii350",
         revision="c" * 40,
         path="full-runs/pii350/checkpoints/step-00000060",
         checkpoint_digest=LEGACY_STEP60_CHECKPOINT_DIGEST,
@@ -176,7 +176,7 @@ def test_allowlisted_legacy_step60_rejects_wrong_artifact_digest(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     wrong = CheckpointArtifact(
-        repo_id="Meddies/private-pii350",
+        repo_id="anonymous-placeholder/private-pii350",
         revision="c" * 40,
         path="full-runs/pii350/checkpoints/step-00000060",
         checkpoint_digest="0" * 64,
@@ -195,7 +195,7 @@ def test_allowlisted_step100_wave1_metadata_contract_is_exact(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     artifact = CheckpointArtifact(
-        repo_id="Meddies/pii350-trajectories-private",
+        repo_id="anonymous-placeholder/pii350-trajectories-private",
         revision="310864af3f15645f70d1c016b8645e5988fbfbcd",
         path="checkpoints/step-00000100",
         checkpoint_digest=STEP100_WAVE1_CHECKPOINT_DIGEST,
@@ -233,7 +233,7 @@ def test_allowlisted_step100_wave1_rejects_near_miss(
     metadata_override: dict[str, object],
 ) -> None:
     artifact = CheckpointArtifact(
-        repo_id="Meddies/pii350-trajectories-private",
+        repo_id="anonymous-placeholder/pii350-trajectories-private",
         revision="310864af3f15645f70d1c016b8645e5988fbfbcd",
         path="checkpoints/step-00000100",
         checkpoint_digest=artifact_digest,
@@ -275,7 +275,7 @@ def _write_artifact(root: Path, **metadata_overrides: object) -> CheckpointArtif
         },
         "rank_rng_states": [{"rank": rank, "cpu_rng": f"cpu-{rank}", "cuda_rng": f"cuda-{rank}"} for rank in range(4)],
         "epoch_complete": False,
-        "wave_profile": "meddiesresearch",
+        "wave_profile": "anonymousresearch",
         "wave_cumulative_all_in_cost_usd": 14.0,
     }
     metadata.update(metadata_overrides)
@@ -300,7 +300,7 @@ def _write_artifact(root: Path, **metadata_overrides: object) -> CheckpointArtif
         path.write_bytes(content)
     (root / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
     return CheckpointArtifact(
-        repo_id="Meddies/private-pii350",
+        repo_id="anonymous-placeholder/private-pii350",
         revision="b" * 40,
         path="step-00000100",
         checkpoint_digest=digest,
@@ -400,7 +400,7 @@ def test_allowlisted_terminal_step146_requires_exact_digest_cursor_and_commit(
 def test_manifest_digest_binds_producer_wave_metadata_parity(tmp_path: Path) -> None:
     artifact = _write_artifact(
         tmp_path,
-        wave_profile="meddies-ocr",
+        wave_profile="anonymous-ocr",
         wave_cumulative_all_in_cost_usd=0.0,
     )
     manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
@@ -481,7 +481,7 @@ def test_allowlisted_step150_wave2_metadata_contract_is_exact(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     artifact = CheckpointArtifact(
-        repo_id="Meddies/pii350-trajectories-private",
+        repo_id="anonymous-placeholder/pii350-trajectories-private",
         revision="74bfef38027a26a430cda60b9ee9e59b986c769e",
         path="trajectories/542478f63b1726aa863c9a0ecec1e84f6347855fa9b6776b451b40c37781dac4/checkpoints/step-00000150",
         checkpoint_digest=STEP150_WAVE2_CHECKPOINT_DIGEST,
@@ -526,7 +526,7 @@ def test_allowlisted_step150_wave2_rejects_near_miss(
     match: str,
 ) -> None:
     artifact = CheckpointArtifact(
-        repo_id="Meddies/pii350-trajectories-private",
+        repo_id="anonymous-placeholder/pii350-trajectories-private",
         revision="74bfef38027a26a430cda60b9ee9e59b986c769e",
         path=("trajectories/542478f63b1726aa863c9a0ecec1e84f6347855fa9b6776b451b40c37781dac4/checkpoints/step-00000150"),
         checkpoint_digest=artifact_digest,

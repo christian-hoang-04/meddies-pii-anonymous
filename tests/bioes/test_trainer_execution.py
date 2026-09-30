@@ -11,15 +11,15 @@ from typing import TYPE_CHECKING, NoReturn
 
 import pytest
 
-from meddies_pii.training.bioes.trainers import trainer
-from meddies_pii.training.bioes.trainers.config import SmokeTrainingConfig
+from anonymous_pii.training.bioes.trainers import trainer
+from anonymous_pii.training.bioes.trainers.config import SmokeTrainingConfig
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from pathlib import Path
 
-    from meddies_pii.json_types import JsonValue
-    from meddies_pii.training.bioes.trainers.config import SmokeTrainingPayload
+    from anonymous_pii.json_types import JsonValue
+    from anonymous_pii.training.bioes.trainers.config import SmokeTrainingPayload
 
 
 def _mapping_field(payload: SmokeTrainingPayload, key: str) -> dict[str, JsonValue]:
@@ -110,7 +110,7 @@ def test_run_smoke_training_evaluates_fake_logits_without_loading_a_model(
     monkeypatch: pytest.MonkeyPatch,
     install_smoke_training_fakes: Callable[..., tuple[list[int], Callable[[float], dict[str, object]]]],
 ) -> None:
-    from meddies_pii.training.bioes.trainers import evaluation
+    from anonymous_pii.training.bioes.trainers import evaluation
 
     install_smoke_training_fakes()
     monkeypatch.setattr(trainer, "_evaluate", evaluation._evaluate)
@@ -126,8 +126,8 @@ def test_run_smoke_training_reads_viterbi_artifact_and_local_runtime_metadata(
     tmp_path: Path,
     install_smoke_training_fakes: Callable[..., tuple[list[int], Callable[[float], dict[str, object]]]],
 ) -> None:
-    from meddies_pii.annotations.bioes import zero_viterbi_transition_biases
-    from meddies_pii.training.bioes.trainers import runtime
+    from anonymous_pii.annotations.bioes import zero_viterbi_transition_biases
+    from anonymous_pii.training.bioes.trainers import runtime
 
     install_smoke_training_fakes()
     calibration_path = tmp_path / "viterbi.json"
@@ -155,8 +155,8 @@ def test_run_smoke_training_uses_targeted_eval_selection_at_public_boundary(
     monkeypatch: pytest.MonkeyPatch,
     install_smoke_training_fakes: Callable[..., tuple[list[int], Callable[[float], dict[str, object]]]],
 ) -> None:
-    from meddies_pii.training.bioes.eval import selection
-    from meddies_pii.training.bioes.trainers import data_loading
+    from anonymous_pii.training.bioes.eval import selection
+    from anonymous_pii.training.bioes.trainers import data_loading
 
     _, metric = install_smoke_training_fakes()
     targeted = SimpleNamespace(

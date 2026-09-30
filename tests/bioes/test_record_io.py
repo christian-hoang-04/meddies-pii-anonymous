@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.training.bioes.data.record_io import write_jsonl
+from anonymous_pii.training.bioes.data.record_io import write_jsonl
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Mapping

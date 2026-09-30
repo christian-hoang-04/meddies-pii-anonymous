@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from meddies_pii import bioes_inference, pdf_redaction
+from anonymous_pii import bioes_inference, pdf_redaction
 
 
 def test_public_api_exposes_only_product_composition_seams() -> None:

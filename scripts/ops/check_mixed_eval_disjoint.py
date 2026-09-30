@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-"""Assert the chosen HF eval configs are text-disjoint from ``meddies-pii-mixed`` train.
+"""Assert the chosen HF eval configs are text-disjoint from ``anonymous-pii-mixed`` train.
 
-Phase-2 leakage gate for the LFM2.5-230M fine-tune. ``meddies-pii-mixed`` has only a
-``train`` split, so eval must be borrowed from held-out data — here ``meddies-pii-v2``
+Phase-2 leakage gate for the LFM2.5-230M fine-tune. ``anonymous-pii-mixed`` has only a
+``train`` split, so eval must be borrowed from held-out data — here ``anonymous-pii-v2``
 ``eval`` (primary) and ``eval-challenge`` (adversarial stress). Both come from the same
 generated corpus pool that mixed pooled its v2 *train* from, so physical
 separation does NOT guarantee content separation: a row can be byte-identical across two
@@ -38,9 +38,9 @@ if TYPE_CHECKING:
 COLLISION_PREVIEW_LIMIT = 12
 
 REPO = Path(__file__).resolve().parents[2]
-MIXED = "Meddies/meddies-pii-mixed"
-V2 = "Meddies/meddies-pii-v2"
-EXT = "Meddies/meddies-pii-external"
+MIXED = "anonymous-placeholder/anonymous-pii-mixed"
+V2 = "anonymous-placeholder/anonymous-pii-v2"
+EXT = "anonymous-placeholder/anonymous-pii-external"
 AI4_LANGS = ("de", "en", "es", "fil", "fr", "id", "ja", "ko", "ms", "pt", "vi", "zh")
 
 EVAL_SPECS: tuple[tuple[str, str, str, str], ...] = (

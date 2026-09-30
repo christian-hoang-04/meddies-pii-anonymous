@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from meddies_pii.generation import datasets_adapter
+from anonymous_pii.generation import datasets_adapter
 
 
 class _DatasetsBoundary:
@@ -31,10 +31,10 @@ def test_streaming_train_returns_the_iterable_train_split(
     module = _DatasetsBoundary({"train": iter([{"id": "a"}, {"id": "b"}])})
     _provide_module(monkeypatch, module)
 
-    rows = datasets_adapter.load_streaming_train("Meddies/source")
+    rows = datasets_adapter.load_streaming_train("anonymous-placeholder/source")
 
     assert list(rows) == [{"id": "a"}, {"id": "b"}]
-    assert module.calls == [(("Meddies/source",), {"streaming": True})]
+    assert module.calls == [(("anonymous-placeholder/source",), {"streaming": True})]
 
 
 def test_streaming_train_rejects_an_invalid_dataset_container(
@@ -43,7 +43,7 @@ def test_streaming_train_rejects_an_invalid_dataset_container(
     _provide_module(monkeypatch, _DatasetsBoundary(object()))
 
     with pytest.raises(RuntimeError, match="invalid streaming dataset"):
-        datasets_adapter.load_streaming_train("Meddies/source")
+        datasets_adapter.load_streaming_train("anonymous-placeholder/source")
 
 
 def test_streaming_train_rejects_a_noniterable_train_split(
@@ -52,7 +52,7 @@ def test_streaming_train_rejects_a_noniterable_train_split(
     _provide_module(monkeypatch, _DatasetsBoundary({"train": 7}))
 
     with pytest.raises(RuntimeError, match="train split is not iterable"):
-        datasets_adapter.load_streaming_train("Meddies/source")
+        datasets_adapter.load_streaming_train("anonymous-placeholder/source")
 
 
 def test_materialized_train_returns_sized_rows(
@@ -62,10 +62,10 @@ def test_materialized_train_returns_sized_rows(
     module = _DatasetsBoundary(materialized)
     _provide_module(monkeypatch, module)
 
-    rows = datasets_adapter.load_train_rows("Meddies/source", "en")
+    rows = datasets_adapter.load_train_rows("anonymous-placeholder/source", "en")
 
     assert rows is materialized
-    assert module.calls == [(("Meddies/source", "en"), {"split": "train"})]
+    assert module.calls == [(("anonymous-placeholder/source", "en"), {"split": "train"})]
 
 
 def test_materialized_train_rejects_rows_without_length(
@@ -74,7 +74,7 @@ def test_materialized_train_rejects_rows_without_length(
     _provide_module(monkeypatch, _DatasetsBoundary(iter([{"id": "a"}])))
 
     with pytest.raises(RuntimeError, match="invalid train split"):
-        datasets_adapter.load_train_rows("Meddies/source", "en")
+        datasets_adapter.load_train_rows("anonymous-placeholder/source", "en")
 
 
 def test_dataset_loading_rejects_a_module_without_the_required_api(
@@ -83,4 +83,4 @@ def test_dataset_loading_rejects_a_module_without_the_required_api(
     _provide_module(monkeypatch, SimpleNamespace())
 
     with pytest.raises(RuntimeError, match="does not expose load_dataset"):
-        datasets_adapter.load_streaming_train("Meddies/source")
+        datasets_adapter.load_streaming_train("anonymous-placeholder/source")

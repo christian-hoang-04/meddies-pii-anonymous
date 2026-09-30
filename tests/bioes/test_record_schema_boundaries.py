@@ -5,11 +5,11 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.training.bioes.data.augmentation import validate_record
-from meddies_pii.training.bioes.data.augmentation_artifacts import read_jsonl
-from meddies_pii.training.bioes.data.augmentation_tokens import token_lengths
-from meddies_pii.training.bioes.data.manifest import select_candidates_by_token_length
-from meddies_pii.training.bioes.data.record_schema import record_from_object
+from anonymous_pii.training.bioes.data.augmentation import validate_record
+from anonymous_pii.training.bioes.data.augmentation_artifacts import read_jsonl
+from anonymous_pii.training.bioes.data.augmentation_tokens import token_lengths
+from anonymous_pii.training.bioes.data.manifest import select_candidates_by_token_length
+from anonymous_pii.training.bioes.data.record_schema import record_from_object
 
 if TYPE_CHECKING:
     from pathlib import Path

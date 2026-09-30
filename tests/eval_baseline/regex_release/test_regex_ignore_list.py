@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.eval_baseline.regex_release.regex_ignore_list import (
+from anonymous_pii.eval_baseline.regex_release.regex_ignore_list import (
     AUDIT_POOL_PROVENANCE_NOTE,
     IgnoreListEntry,
     count_ignored_false_positives,
@@ -16,7 +16,7 @@ from meddies_pii.eval_baseline.regex_release.regex_ignore_list import (
     write_ignore_list_jsonl,
     write_ignore_list_provenance,
 )
-from meddies_pii.spans import CharSpan
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     from pathlib import Path

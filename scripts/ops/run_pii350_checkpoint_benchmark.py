@@ -62,13 +62,13 @@ if TYPE_CHECKING:
     from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
     from huggingface_hub import HfApi
 
-from meddies_pii.eval_baseline.baseline.datasets import (
+from anonymous_pii.eval_baseline.baseline.datasets import (
     EVAL_DATASETS,
     EVAL_EXPECTED_ROWS,
     EXTERNAL_DATASET_REVISION,
     V2_DATASET_REVISION,
 )
-from meddies_pii.eval_baseline.pii350_release.checkpoint_benchmark import (
+from anonymous_pii.eval_baseline.pii350_release.checkpoint_benchmark import (
     A10G_ALL_IN_RATE_USD_PER_SECOND,
     APPROVAL_LEDGER_SCHEMA_VERSION,
     APPROVAL_PRIVATE_KEY_ENV,
@@ -197,20 +197,20 @@ from meddies_pii.eval_baseline.pii350_release.checkpoint_benchmark import (
     step60_partial_16of17_coverage_report,
     verify_cadence_decision_receipt,
 )
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.evaluation.identity import (
     EvaluationContract,
     canonical_json_bytes,
     canonical_sha256,
     file_sha256,
     is_sha256,
 )
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.modal_runtime import (
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
     use_pinned_debian_snapshot,
 )
-from meddies_pii.taxonomy import PII_LABEL_SET
+from anonymous_pii.taxonomy import PII_LABEL_SET
 
 __all__ = (
     "A10G_ALL_IN_RATE_USD_PER_SECOND",
@@ -347,7 +347,7 @@ stays importable.
 
 """
 
-APP_NAME = "meddies-pii350-checkpoint-benchmark"
+APP_NAME = "anonymous-pii350-checkpoint-benchmark"
 BOOTSTRAP_CELL_SECONDS = 1_200.0
 CHECKPOINT_CACHE_MOUNT = "/cache/checkpoints"
 BENCHMARK_MOUNT = "/benchmark"
@@ -1133,12 +1133,12 @@ def enforce_internal_control_progress_budget(  # ruff: ignore[too-many-arguments
     )
 
 
-benchmark_volume = modal.Volume.from_name("meddies-pii350-checkpoint-benchmark", create_if_missing=True)
-nonce_claim_authority = modal.Dict.from_name("meddies-pii350-checkpoint-nonce-claims", create_if_missing=True)
+benchmark_volume = modal.Volume.from_name("anonymous-pii350-checkpoint-benchmark", create_if_missing=True)
+nonce_claim_authority = modal.Dict.from_name("anonymous-pii350-checkpoint-nonce-claims", create_if_missing=True)
 """Modal Dict.put(..., skip_if_exists=True) is the cross-container compare-and-set authority. Volume files remain audit
 evidence only; they are never admission.
 """
-checkpoint_cache = modal.Volume.from_name("meddies-pii350-checkpoint-cache", create_if_missing=True)
+checkpoint_cache = modal.Volume.from_name("anonymous-pii350-checkpoint-cache", create_if_missing=True)
 huggingface_cache = modal.Volume.from_name("huggingface-cache", create_if_missing=False)
 image = add_source_pythonpath(
     cast(
@@ -1423,11 +1423,11 @@ def hydrate_offline_cache(profile: str) -> dict[str, Any]:
     """CPU-only preflight for every network-dependent GPU input."""
     from huggingface_hub import snapshot_download
 
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
         BASE_MODEL_ID,
         BASE_MODEL_REVISION,
     )
-    from meddies_pii.eval_baseline.baseline.datasets import load_eval_cell
+    from anonymous_pii.eval_baseline.baseline.datasets import load_eval_cell
 
     publish_cache_preflight_progress(profile=profile, stage="base_model_start", cells_done=0, rows_done=0)
     snapshot_path = snapshot_download(BASE_MODEL_ID, revision=BASE_MODEL_REVISION)
@@ -1515,7 +1515,7 @@ def checkpoint_receipt(request_payload: dict[str, Any]) -> dict[str, Any]:
     """CPU-only private-HF download and manifest gate; no model deserialization."""
     from huggingface_hub import snapshot_download
 
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
         CheckpointArtifact,
         verify_checkpoint_artifact,
     )
@@ -1807,11 +1807,11 @@ def import_cell_results(request_payload: dict[str, Any], receipt_payload: dict[s
 
 
 def _evaluation_contract(request: BenchmarkRequest, trajectory_digest: str) -> EvaluationContract:
-    from meddies_pii import __file__ as package_file
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint
-    from meddies_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
-    from meddies_pii.evaluation.identity import evaluation_contract, payload_artifact
-    from meddies_pii.evaluation.runtime_provenance import (
+    from anonymous_pii import __file__ as package_file
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint
+    from anonymous_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
+    from anonymous_pii.evaluation.identity import evaluation_contract, payload_artifact
+    from anonymous_pii.evaluation.runtime_provenance import (
         evaluation_runtime_source_artifact,
     )
 
@@ -1838,7 +1838,7 @@ def _evaluation_contract(request: BenchmarkRequest, trajectory_digest: str) -> E
             },
         ),
         local_adapter_source=source,
-        applied_label_prediction_contract=payload_artifact("pii350-label-prediction", "meddies-37-bioes-full-nine"),
+        applied_label_prediction_contract=payload_artifact("pii350-label-prediction", "anonymous-37-bioes-full-nine"),
         decoder_contract=payload_artifact("pii350-decoder", "viterbi-bioes-char-offset-v1"),
         resolved_runtime_environment=payload_artifact("resolved-runtime", resolved_environment_fingerprint()),
         scorer_contract=source,
@@ -1898,14 +1898,14 @@ def step60_reuse_receipt(request_payload: dict[str, Any]) -> dict[str, Any]:
     """CPU-only proof that the user-excluded challenge will never be rerun."""
     request = BenchmarkRequest(**request_payload)
     enable_offline_runtime(request)
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
         CheckpointArtifact,
         verify_checkpoint_artifact,
     )
-    from meddies_pii.eval_baseline.baseline.aggregate import aggregate_results
-    from meddies_pii.eval_baseline.baseline.datasets import load_eval_cell
-    from meddies_pii.eval_baseline.baseline.run import read_matrix_results
-    from meddies_pii.evaluation.identity import dataset_shard_identity
+    from anonymous_pii.eval_baseline.baseline.aggregate import aggregate_results
+    from anonymous_pii.eval_baseline.baseline.datasets import load_eval_cell
+    from anonymous_pii.eval_baseline.baseline.run import read_matrix_results
+    from anonymous_pii.evaluation.identity import dataset_shard_identity
 
     contract = benchmark_contract(request, purpose=STEP60_BASELINE_PURPOSE)
     require_step60_baseline_matrix(contract)
@@ -2008,21 +2008,21 @@ def _run_complete_matrix(  # ruff: ignore[complex-structure,too-many-branches,to
         require_triton_c_compiler()
         import torch
 
-        from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+        from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
             CheckpointArtifact,
             Pii350CheckpointAdapter,
             verify_checkpoint_artifact,
         )
-        from meddies_pii.eval_baseline.baseline.aggregate import aggregate_results
-        from meddies_pii.eval_baseline.baseline.datasets import load_eval_cell
-        from meddies_pii.eval_baseline.baseline.run import (
+        from anonymous_pii.eval_baseline.baseline.aggregate import aggregate_results
+        from anonymous_pii.eval_baseline.baseline.datasets import load_eval_cell
+        from anonymous_pii.eval_baseline.baseline.run import (
             ShardSpec,
             assert_frozen_fixture,
             expected_matrix_shard_identities,
             read_matrix_results,
             run_shard,
         )
-        from meddies_pii.evaluation.identity import dataset_shard_identity
+        from anonymous_pii.evaluation.identity import dataset_shard_identity
 
         contract = benchmark_contract(request, purpose=purpose)
         if purpose == "full_benchmark":
@@ -2638,13 +2638,13 @@ def run_fill_missing_cells(  # ruff: ignore[complex-structure,too-many-locals,to
         require_triton_c_compiler()
         import torch
 
-        from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+        from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
             CheckpointArtifact,
             Pii350CheckpointAdapter,
             verify_checkpoint_artifact,
         )
-        from meddies_pii.eval_baseline.baseline.datasets import load_eval_cell
-        from meddies_pii.eval_baseline.baseline.run import (
+        from anonymous_pii.eval_baseline.baseline.datasets import load_eval_cell
+        from anonymous_pii.eval_baseline.baseline.run import (
             ShardSpec,
             expected_matrix_shard_identities,
             read_matrix_results,
@@ -2942,19 +2942,19 @@ def run_internal_control(  # ruff: ignore[too-many-locals,too-many-statements]
     claim_launch_nonce(approval)
     enable_offline_runtime(request)
     require_triton_c_compiler()
-    from meddies_pii.eval_baseline.adapters.pii350_checkpoint import (
+    from anonymous_pii.eval_baseline.adapters.pii350_checkpoint import (
         CheckpointArtifact,
         Pii350CheckpointAdapter,
         verify_checkpoint_artifact,
     )
-    from meddies_pii.eval_baseline.baseline.aggregate import aggregate_results
-    from meddies_pii.eval_baseline.baseline.datasets import load_eval_cell
-    from meddies_pii.eval_baseline.baseline.run import (
+    from anonymous_pii.eval_baseline.baseline.aggregate import aggregate_results
+    from anonymous_pii.eval_baseline.baseline.datasets import load_eval_cell
+    from anonymous_pii.eval_baseline.baseline.run import (
         ShardSpec,
         read_matrix_results,
         run_shard,
     )
-    from meddies_pii.evaluation.identity import dataset_shard_identity
+    from anonymous_pii.evaluation.identity import dataset_shard_identity
 
     contract = benchmark_contract(request, purpose="internal_control")
     verified = verify_checkpoint_artifact(

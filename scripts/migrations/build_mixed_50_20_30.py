@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-"""Build a combined 50/20/30 (en/vi/other) Meddies Labels training set and publish it to a NEW HF repo.
+"""Build a combined 50/20/30 (en/vi/other) Anonymous Labels training set and publish it to a NEW HF repo.
 
 The set is pooled from v1 + v2 + external-trio + ai4privacy.
 
 Sources (TRAIN splits only; eval sets left untouched):
-  * v1  (Meddies/meddies-pii)          — 17 per-language configs, inline ``[value]<label>``
+  * v1  (anonymous-placeholder/anonymous-pii)          — 17 per-language configs, inline ``[value]<label>``
         format -> converted via ``convert_config_row``; all clinical (medical).
-  * v2  (Meddies/meddies-pii-v2)       — 17 per-language configs, already char-spans;
+  * v2  (anonymous-placeholder/anonymous-pii-v2)       — 17 per-language configs, already char-spans;
         domain from ``info.domain_bucket`` (medical/general/code_logs).
   * trio (…-external gretel/nemotron/creddata_en) — English char-spans; domain from info.
   * ai4privacy (…-external ai4privacy_<code>)     — char-spans, all general, 12 langs.
@@ -41,7 +41,7 @@ from typing import TYPE_CHECKING, Any
 
 from datasets import Dataset, load_dataset
 
-from meddies_pii.training.bioes.data.inline_tags import convert_config_row
+from anonymous_pii.training.bioes.data.inline_tags import convert_config_row
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
@@ -51,9 +51,9 @@ type QuotaKey = tuple[str | tuple[str, str], str]
 type Record = dict[str, Any]
 
 V1, V2, EXT = (
-    "Meddies/meddies-pii",
-    "Meddies/meddies-pii-v2",
-    "Meddies/meddies-pii-external",
+    "anonymous-placeholder/anonymous-pii",
+    "anonymous-placeholder/anonymous-pii-v2",
+    "anonymous-placeholder/anonymous-pii-external",
 )
 SEED = 42
 SHARES = {"en": 0.40, "vi": 0.30, "other": 0.30}
@@ -127,11 +127,14 @@ def _sources() -> list[tuple[str, str, str, str, str | None, str]]:
     """
     s: list[tuple[str, str, str, str, str | None, str]] = []
     for lang in LANG17:
-        s.extend(((V1, lang, "meddies-pii-v1", lang, "medical", "v1"), (V2, lang, "meddies-pii-v2", lang, None, "span")))
+        s.extend(
+            ((V1, lang, "anonymous-pii-v1", lang, "medical", "v1"),
+             (V2, lang, "anonymous-pii-v2", lang, None, "span"))
+        )
     s.append((
         V1,
         "vietnamese-translated",
-        "meddies-pii-v1",
+        "anonymous-pii-v1",
         "vietnamese",
         "general",
         "v1trans",

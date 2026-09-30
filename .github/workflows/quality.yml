@@ -51,7 +51,7 @@ jobs:
 
       - name: Test with branch coverage
         run: >-
-          uv run pytest --cov=src/meddies_pii --cov-branch
+          uv run pytest --cov=src/anonymous_pii --cov-branch
           --cov-report=term-missing --cov-report=xml:coverage.xml
           --cov-report=json:coverage.json
 
@@ -68,10 +68,10 @@ jobs:
           retention-days: 14
 
       - name: Mypy source type gate
-        run: uv run mypy src/meddies_pii
+        run: uv run mypy src/anonymous_pii
 
       - name: Basedpyright source type gate
-        run: uv run basedpyright src/meddies_pii
+        run: uv run basedpyright src/anonymous_pii
 
       - name: Build package distributions
         run: uv build --out-dir dist

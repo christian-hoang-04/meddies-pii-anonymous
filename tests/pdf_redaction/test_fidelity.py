@@ -9,12 +9,12 @@ from typing import TYPE_CHECKING
 import pymupdf
 import pytest
 
-from meddies_pii.pdf_redaction.benchmark.fidelity import (
+from anonymous_pii.pdf_redaction.benchmark.fidelity import (
     measure_render_fidelity,
     write_raster_reference,
 )
-from meddies_pii.pdf_redaction.contracts import PageRegion, Point, Quad
-from meddies_pii.pdf_redaction.writers import RasterRebuildWriter
+from anonymous_pii.pdf_redaction.contracts import PageRegion, Point, Quad
+from anonymous_pii.pdf_redaction.writers import RasterRebuildWriter
 
 if TYPE_CHECKING:
     from pathlib import Path

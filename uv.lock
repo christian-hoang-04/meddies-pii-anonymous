@@ -1253,7 +1253,7 @@ wheels = [
 ]
 
 [[package]]
-name = "meddies-pii"
+name = "anonymous-pii"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
@@ -1293,7 +1293,7 @@ dev = [
     { name = "basedpyright" },
     { name = "faker" },
     { name = "hypothesis" },
-    { name = "meddies-pii", extra = ["pdf-redaction", "training"] },
+    { name = "anonymous-pii", extra = ["pdf-redaction", "training"] },
     { name = "mypy" },
     { name = "onnx-ir" },
     { name = "pandas-stubs" },
@@ -1340,7 +1340,7 @@ dev = [
     { name = "basedpyright", specifier = ">=1.39.9" },
     { name = "faker", specifier = ">=40.36.0" },
     { name = "hypothesis", specifier = ">=6.150.3" },
-    { name = "meddies-pii", extras = ["pdf-redaction", "training"] },
+    { name = "anonymous-pii", extras = ["pdf-redaction", "training"] },
     { name = "mypy", specifier = ">=2.3.0" },
     { name = "onnx-ir", specifier = "==0.2.1" },
     { name = "pandas-stubs", specifier = ">=3.0.3.260530" },

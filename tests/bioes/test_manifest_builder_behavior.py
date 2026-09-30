@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.training.bioes.data.build_manifest import (
+from anonymous_pii.training.bioes.data.build_manifest import (
     ManifestBuildConfig,
     build_manifest,
     write_manifest,
@@ -47,7 +47,7 @@ def _label_row(uid: str, text: str) -> dict[str, object]:
 def test_build_manifest_pins_revisions_and_excludes_truncated_candidates(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    import meddies_pii.training.bioes.data.build_manifest as manifest_build
+    import anonymous_pii.training.bioes.data.build_manifest as manifest_build
 
     class FakeApi:
         @staticmethod
@@ -109,7 +109,7 @@ def test_write_manifest_creates_parent_and_stable_json(tmp_path: Path) -> None:
 
 
 def test_manifest_main_writes_requested_json_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    import meddies_pii.training.bioes.data.build_manifest as manifest_build
+    import anonymous_pii.training.bioes.data.build_manifest as manifest_build
 
     class FakeApi:
         @staticmethod

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Remove rows over the 8192-token cap from ``meddies-pii-mixed`` and backfill.
+"""Remove rows over the 8192-token cap from ``anonymous-pii-mixed`` and backfill.
 
 The mixed corpus has 443 rows whose ``token_count_lfm25`` exceeds 8192 (the training
 cap) — the trainer already skips these, so they are dead weight. This replaces the 405
@@ -11,7 +11,7 @@ those pools were fully consumed by the build — so they are dropped without rep
 
 Result: 999,962 rows, max token_count ≤ 8192, per-"other"-language counts unchanged,
 English/Vietnamese reduced by 29/9. Deterministic (SEED). Dry-run by default; ``--push``
-republishes ``Meddies/meddies-pii-mixed`` in place.
+republishes ``anonymous-placeholder/anonymous-pii-mixed`` in place.
 """
 
 from __future__ import annotations
@@ -41,7 +41,7 @@ from transformers import AutoTokenizer  # ty: ignore[possibly-missing-import]
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
 
-REPO = "Meddies/meddies-pii-mixed"
+REPO = "anonymous-placeholder/anonymous-pii-mixed"
 TOKENIZER_ID = "LiquidAI/LFM2.5-230M-Base"
 COLUMN = "token_count_lfm25"
 CAP = 8192

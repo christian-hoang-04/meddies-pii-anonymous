@@ -24,15 +24,15 @@ from __future__ import annotations
 import random
 from typing import TYPE_CHECKING
 
-from meddies_pii.generation.label_corpus.catalog import (
+from anonymous_pii.generation.label_corpus.catalog import (
     SCENARIOS,
     SPAN_TARGET_RANGE,
     sample_span_target,
 )
-from meddies_pii.generation.label_corpus.validate import validate_tagged_document
+from anonymous_pii.generation.label_corpus.validate import validate_tagged_document
 
 if TYPE_CHECKING:
-    from meddies_pii.generation.label_corpus.validate import ValidationResult
+    from anonymous_pii.generation.label_corpus.validate import ValidationResult
 
 _PAD = (
     "Discharge note for the outpatient clinic follow-up visit. The attending "
@@ -96,8 +96,8 @@ def test_sample_span_target_in_range_and_feasible() -> None:
 
 
 def test_accepted_record_carries_edge_cases_for_observability() -> None:
-    from meddies_pii.generation.label_corpus.catalog import SCENARIOS
-    from meddies_pii.generation.label_corpus.validate import accepted_record
+    from anonymous_pii.generation.label_corpus.catalog import SCENARIOS
+    from anonymous_pii.generation.label_corpus.validate import accepted_record
 
     v = _validate(_doc("Patient [John Smith]<human_name>", "phone [+1 415 555 0132]<phone_number>"))
     rec = accepted_record(

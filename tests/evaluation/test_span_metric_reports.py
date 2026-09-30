@@ -9,7 +9,7 @@ from typing import cast
 
 import pytest
 
-from meddies_pii.evaluation.span_metrics import (
+from anonymous_pii.evaluation.span_metrics import (
     SpanMode,
     coerce_exact_span_report,
     containment_span_report_by_doc,
@@ -19,8 +19,8 @@ from meddies_pii.evaluation.span_metrics import (
     exact_span_slice_report_by_doc,
     typed_span_counts_by_label,
 )
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.spans import CharSpan
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.spans import CharSpan
 
 
 def _span(start: int, end: int, label: str = "human_name") -> CharSpan:

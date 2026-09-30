@@ -1,4 +1,4 @@
-"""Modal eval harness for openai/privacy-filter on the Meddies eval matrix.
+"""Modal eval harness for openai/privacy-filter on the Anonymous eval matrix.
 
 The adapter uses the native OPF A2 path: Triton MoE, batched window-pack, and
 Viterbi-CRF decode. One H100 cell scores one dataset/config and writes to a
@@ -30,37 +30,37 @@ from typing import TYPE_CHECKING
 
 import modal
 
-from meddies_pii.eval_baseline.adapters.opf_backend import (
+from anonymous_pii.eval_baseline.adapters.opf_backend import (
     DEFAULT_NATIVE_CHECKPOINT_DIR,
     MODEL_ID,
     MODEL_REVISION,
 )
-from meddies_pii.eval_baseline.baseline.datasets import EVAL_DATASETS, EVAL_EXPECTED_ROWS
-from meddies_pii.modal_runtime import (
+from anonymous_pii.eval_baseline.baseline.datasets import EVAL_DATASETS, EVAL_EXPECTED_ROWS
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
 )
 
 if TYPE_CHECKING:
-    from meddies_pii.evaluation.identity import EvaluationContract
+    from anonymous_pii.evaluation.identity import EvaluationContract
 
 
 def _evaluation_contract() -> EvaluationContract:
-    from meddies_pii import __file__ as package_file
-    from meddies_pii.eval_baseline.adapters import opf
-    from meddies_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
-    from meddies_pii.evaluation.identity import (
+    from anonymous_pii import __file__ as package_file
+    from anonymous_pii.eval_baseline.adapters import opf
+    from anonymous_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
+    from anonymous_pii.evaluation.identity import (
         evaluation_contract,
         manifest_artifact,
         payload_artifact,
     )
-    from meddies_pii.evaluation.runtime_provenance import (
+    from anonymous_pii.evaluation.runtime_provenance import (
         evaluation_runtime_source_artifact,
         source_tree_artifact,
     )
 
     if package_file is None:
-        msg = "cannot observe the Meddies evaluation runtime source"
+        msg = "cannot observe the Anonymous evaluation runtime source"
         raise RuntimeError(msg)
     runtime_source = evaluation_runtime_source_artifact(Path(package_file).parent, __file__)
     vendor_source = source_tree_artifact("mounted-vendor://openai/privacy-filter", OPF_REMOTE_ROOT)
@@ -81,11 +81,11 @@ FIRST_LIGHT_MAX_ROWS = 32
 
 _RESOLVED_SCRIPT = Path(__file__).resolve()
 REPO_ROOT = _RESOLVED_SCRIPT.parents[2] if len(_RESOLVED_SCRIPT.parents) > 2 else _RESOLVED_SCRIPT.parent  # ruff: ignore[magic-value-comparison] reason: structural arity; a name restates the literal
-CONTEXT_ROOT = REPO_ROOT.parent / "meddies-pii-context"
+CONTEXT_ROOT = REPO_ROOT.parent / "anonymous-pii-context"
 OPF_REFERENCE_ROOT = CONTEXT_ROOT / "references/openai-privacy-filter"
 OPF_REMOTE_ROOT = "/root/openai-privacy-filter"
 
-BASELINE_VOLUME_NAME = "meddies-pii-baseline-eval-opf"
+BASELINE_VOLUME_NAME = "anonymous-pii-baseline-eval-opf"
 BASELINE_VOLUME_MOUNT = "/baseline"
 CACHE_VOLUME_NAME = "hf-cache"
 CACHE_MOUNT = "/cache"
@@ -125,7 +125,7 @@ Set env first, then mount the OPF package snapshot and local src.
 
 """
 
-app = modal.App("meddies-pii-opf-baseline-eval")
+app = modal.App("anonymous-pii-opf-baseline-eval")
 
 EXTERNAL_CELL_LIMIT = 2000
 
@@ -138,10 +138,10 @@ EXTERNAL_CELL_LIMIT = 2000
     volumes={BASELINE_VOLUME_MOUNT: baseline_volume, CACHE_MOUNT: cache_volume},
 )
 def opf_first_light(max_rows: int = 8) -> None:
-    from meddies_pii.eval_baseline.adapters.opf import OpfAdapter
-    from meddies_pii.eval_baseline.baseline.datasets import load_first_light_subset
-    from meddies_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
-    from meddies_pii.eval_baseline.baseline.subset import write_subset_manifest
+    from anonymous_pii.eval_baseline.adapters.opf import OpfAdapter
+    from anonymous_pii.eval_baseline.baseline.datasets import load_first_light_subset
+    from anonymous_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
+    from anonymous_pii.eval_baseline.baseline.subset import write_subset_manifest
 
     if max_rows > FIRST_LIGHT_MAX_ROWS:
         msg = "OPF first-light is capped at 32 rows"
@@ -194,9 +194,9 @@ def opf_eval_cell(dataset: str, max_rows: int = 0, full: bool = False, force: bo
     ``force`` re-runs past an existing .done. Resume-safe when the persisted fixture
     identity matches.
     """
-    from meddies_pii.eval_baseline.adapters.opf import OpfAdapter
-    from meddies_pii.eval_baseline.baseline.datasets import load_eval_cell
-    from meddies_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
+    from anonymous_pii.eval_baseline.adapters.opf import OpfAdapter
+    from anonymous_pii.eval_baseline.baseline.datasets import load_eval_cell
+    from anonymous_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
 
     rows = load_eval_cell(
         dataset,
@@ -223,7 +223,7 @@ def opf_eval_cell(dataset: str, max_rows: int = 0, full: bool = False, force: bo
 @app.function(image=opf_image, timeout=TIMEOUT_SECONDS)
 def inspect_opf() -> None:
     """CPU preflight: verify label fold + mounted OPF package path, no model load."""
-    from meddies_pii.eval_baseline.adapters.opf import (
+    from anonymous_pii.eval_baseline.adapters.opf import (
         OPF_LABEL_FOLD,
         OPF_SUPPORTED_LABELS,
         OpfAdapter,
@@ -238,8 +238,8 @@ def inspect_opf() -> None:
         f"opf_package_exists={opf_package.exists()}",
         flush=True,
     )
-    for native, meddies in sorted(OPF_LABEL_FOLD.items()):
-        print(f"OPF_FOLD:: {native:<18} -> {meddies}", flush=True)
+    for native, anonymous in sorted(OPF_LABEL_FOLD.items()):
+        print(f"OPF_FOLD:: {native:<18} -> {anonymous}", flush=True)
     print(f"OPF_SUPPORTED_LABELS::{sorted(OPF_SUPPORTED_LABELS)}", flush=True)
 
 
@@ -256,7 +256,7 @@ def run_opf_matrix(max_rows: int = 0, datasets: str = "", full: bool = False, fo
     Pass --datasets "a,b,c" to target cells, --full to score whole splits, and
     --force to overwrite an existing .done.
     """
-    from meddies_pii.eval_baseline.baseline.datasets import select_eval_datasets
+    from anonymous_pii.eval_baseline.baseline.datasets import select_eval_datasets
 
     selected = select_eval_datasets(datasets)
     handles = [(dataset, opf_eval_cell.spawn(dataset, max_rows, full, force)) for dataset in selected]
@@ -278,12 +278,12 @@ def run_opf_matrix(max_rows: int = 0, datasets: str = "", full: bool = False, fo
 )
 def aggregate_opf() -> None:
     """CPU: score every results/opf/<config>/full.jsonl and write aggregate JSON."""
-    from meddies_pii.eval_baseline.adapters.opf import OPF_SUPPORTED_LABELS
-    from meddies_pii.eval_baseline.baseline.aggregate import (
+    from anonymous_pii.eval_baseline.adapters.opf import OPF_SUPPORTED_LABELS
+    from anonymous_pii.eval_baseline.baseline.aggregate import (
         aggregate_results,
         format_aggregate_report,
     )
-    from meddies_pii.eval_baseline.baseline.run import (
+    from anonymous_pii.eval_baseline.baseline.run import (
         assert_frozen_fixture,
         expected_matrix_shard_identities,
         read_matrix_results,

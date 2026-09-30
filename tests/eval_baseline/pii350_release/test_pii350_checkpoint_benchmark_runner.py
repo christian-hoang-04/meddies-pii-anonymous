@@ -27,13 +27,13 @@ import pytest
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
-from meddies_pii.eval_baseline.baseline.datasets import EVAL_DATASETS, EVAL_EXPECTED_ROWS
+from anonymous_pii.eval_baseline.baseline.datasets import EVAL_DATASETS, EVAL_EXPECTED_ROWS
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from meddies_pii.eval_baseline.baseline.run import ShardSpec
-    from meddies_pii.eval_baseline.pii350_release.checkpoint_benchmark import BenchmarkRequest
+    from anonymous_pii.eval_baseline.baseline.run import ShardSpec
+    from anonymous_pii.eval_baseline.pii350_release.checkpoint_benchmark import BenchmarkRequest
 
 
 def _runner() -> ModuleType:
@@ -51,7 +51,7 @@ def _request(runner: ModuleType, digest: str = "a" * 64) -> BenchmarkRequest:
     return cast(
         "BenchmarkRequest",
         runner.BenchmarkRequest(
-            repo_id="Meddies/private-pii350",
+            repo_id="anonymous-placeholder/private-pii350",
             revision="b" * 40,
             artifact_path="trajectories/pii350/checkpoints/step-00000100",
             checkpoint_digest=digest,
@@ -349,7 +349,7 @@ def test_launch_approval_binds_modeled_inventory_arithmetic_and_nonce_claim(
     assert approval["cumulative_modeled_ceiling_usd"] == "3.81484763390416214"
     assert approval["modeled_prior_attempts"] == list(runner.MODELED_PRIOR_DIFFUSION_ATTEMPTS)
     for field, value in (
-        ("profile", "meddies-pii"),
+        ("profile", "anonymous-pii"),
         ("checkpoint_digest", "b" * 64),
         ("purpose", "full_benchmark"),
         ("new_attempt_ceiling_usd", "2.8"),
@@ -564,14 +564,14 @@ def test_local_ed25519_issuer_bounds_allocation_and_remote_entrypoint_verifies_f
             ledger_path=ledger_path,
         )
 
-    other_request = runner.BenchmarkRequest(**{**asdict(request), "profile": "meddies-pii"})
+    other_request = runner.BenchmarkRequest(**{**asdict(request), "profile": "anonymous-pii"})
     other = runner.issue_launch_approval(
         other_request,
         purpose="full_benchmark",
         launch_nonce="3" * 64,
         ledger_path=ledger_path,
     )
-    assert other["profile"] == "meddies-pii"
+    assert other["profile"] == "anonymous-pii"
 
     calls: list[object] = []
     monkeypatch.setenv(runner.PROFILE_ENVIRONMENT_KEY, request.profile)
@@ -809,7 +809,7 @@ def test_paid_dispatch_requires_matching_active_external_ledger(monkeypatch: pyt
         )
     original = json.loads(ledger_path.read_text())
     for field, value in (
-        ("profile", "meddies-pii"),
+        ("profile", "anonymous-pii"),
         ("purpose", "internal_control"),
         ("launch_nonce", "b" * 64),
     ):
@@ -922,8 +922,8 @@ def test_internal_control_refuses_small_reservation_before_model_load(
         trajectory_digest = request.trajectory_digest
         optimizer_step = 100
 
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
-    from meddies_pii.eval_baseline.baseline import datasets as datasets_module
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
+    from anonymous_pii.eval_baseline.baseline import datasets as datasets_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     monkeypatch.setattr(runner, "benchmark_volume", FakeVolume())
@@ -1102,11 +1102,11 @@ def test_checkpoint_partial_fresh_runs_exact16_and_never_uses_full_fixture(  # r
     matrix_roots: list[Path] = []
     force_values: list[bool] = []
     read_calls = 0
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
-    from meddies_pii.eval_baseline.baseline import aggregate as aggregate_module
-    from meddies_pii.eval_baseline.baseline import datasets as datasets_module
-    from meddies_pii.eval_baseline.baseline import run as run_module
-    from meddies_pii.evaluation import identity as identity_module
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
+    from anonymous_pii.eval_baseline.baseline import aggregate as aggregate_module
+    from anonymous_pii.eval_baseline.baseline import datasets as datasets_module
+    from anonymous_pii.eval_baseline.baseline import run as run_module
+    from anonymous_pii.evaluation import identity as identity_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     old_generation = runner.evaluation_generation_root(request, "0" * 64)
@@ -1234,9 +1234,9 @@ def test_checkpoint_partial_aggregate_only_does_not_load_adapter(monkeypatch: py
         digest = "f" * 64
 
     identity = SimpleNamespace(digest="2" * 64)
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
-    from meddies_pii.eval_baseline.baseline import aggregate as aggregate_module
-    from meddies_pii.eval_baseline.baseline import run as run_module
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
+    from anonymous_pii.eval_baseline.baseline import aggregate as aggregate_module
+    from anonymous_pii.eval_baseline.baseline import run as run_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     monkeypatch.setattr(runner, "benchmark_volume", FakeVolume())
@@ -1347,11 +1347,11 @@ def test_step60_partial_single_missing_resume_reuses_validated_cells_without_bud
     reused = runner.STEP60_PARTIAL_16OF17_DATASETS[:-1]
     read_calls = 0
     shard_calls: list[tuple[str, bool]] = []
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
-    from meddies_pii.eval_baseline.baseline import aggregate as aggregate_module
-    from meddies_pii.eval_baseline.baseline import datasets as datasets_module
-    from meddies_pii.eval_baseline.baseline import run as run_module
-    from meddies_pii.evaluation import identity as identity_module
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
+    from anonymous_pii.eval_baseline.baseline import aggregate as aggregate_module
+    from anonymous_pii.eval_baseline.baseline import datasets as datasets_module
+    from anonymous_pii.eval_baseline.baseline import run as run_module
+    from anonymous_pii.evaluation import identity as identity_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     monkeypatch.setattr(runner, "benchmark_volume", FakeVolume())
@@ -1568,7 +1568,7 @@ def test_step60_baseline_action_refuses_non_step60_before_model_load(
         def commit(self) -> None:
             pass
 
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     monkeypatch.setattr(runner, "benchmark_volume", FakeVolume())
@@ -1610,10 +1610,10 @@ def test_step60_baseline_refuses_to_rerun_unverified_challenge(monkeypatch: pyte
         def __len__(self) -> int:
             return self.count
 
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
-    from meddies_pii.eval_baseline.baseline import datasets as datasets_module
-    from meddies_pii.eval_baseline.baseline import run as run_module
-    from meddies_pii.evaluation import identity as identity_module
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
+    from anonymous_pii.eval_baseline.baseline import datasets as datasets_module
+    from anonymous_pii.eval_baseline.baseline import run as run_module
+    from anonymous_pii.evaluation import identity as identity_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     monkeypatch.setattr(runner, "benchmark_volume", FakeVolume())
@@ -1702,10 +1702,10 @@ def test_step60_reuse_receipt_rejects_missing_challenge_on_cpu(monkeypatch: pyte
         def __len__(self) -> int:
             return self.count
 
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
-    from meddies_pii.eval_baseline.baseline import datasets as datasets_module
-    from meddies_pii.eval_baseline.baseline import run as run_module
-    from meddies_pii.evaluation import identity as identity_module
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
+    from anonymous_pii.eval_baseline.baseline import datasets as datasets_module
+    from anonymous_pii.eval_baseline.baseline import run as run_module
+    from anonymous_pii.evaluation import identity as identity_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     monkeypatch.setattr(runner, "benchmark_volume", FakeVolume())
@@ -1809,11 +1809,11 @@ def test_step60_baseline_reuses_only_the_verified_v2_result_and_aggregates_17_ce
         digest = "f" * 64
 
     seen_force: list[bool] = []
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
-    from meddies_pii.eval_baseline.baseline import aggregate as aggregate_module
-    from meddies_pii.eval_baseline.baseline import datasets as datasets_module
-    from meddies_pii.eval_baseline.baseline import run as run_module
-    from meddies_pii.evaluation import identity as identity_module
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
+    from anonymous_pii.eval_baseline.baseline import aggregate as aggregate_module
+    from anonymous_pii.eval_baseline.baseline import datasets as datasets_module
+    from anonymous_pii.eval_baseline.baseline import run as run_module
+    from anonymous_pii.evaluation import identity as identity_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     monkeypatch.setattr(runner, "benchmark_volume", FakeVolume())
@@ -2324,9 +2324,9 @@ def test_request_requires_its_workspace_pinned_budget_ceiling() -> None:
     assert runner.PROFILE_ALL_IN_CEILING_USD == {
         "diffusionllm": 4.0,
         "private-profile-d": 8.5,
-        "meddies-pii": 3.8,
+        "anonymous-pii": 3.8,
         "private-profile-c": 3.0,
-        "meddies-run": 2.9,
+        "anonymous-run": 2.9,
     }
     for profile, ceiling in runner.PROFILE_ALL_IN_CEILING_USD.items():
         pinned = runner.BenchmarkRequest(
@@ -2447,7 +2447,7 @@ def test_checkpoint_namespace_rejects_stale_done_from_another_checkpoint(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
-    from meddies_pii.eval_baseline.baseline.run import ShardSpec, shard_done_path
+    from anonymous_pii.eval_baseline.baseline.run import ShardSpec, shard_done_path
 
     runner = _runner()
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
@@ -2701,7 +2701,7 @@ def test_full_executor_persists_pre_dispatch_budget_stop_not_failure(
         def load(self) -> None:
             pass
 
-    import meddies_pii.eval_baseline.adapters.pii350_checkpoint as adapter_module
+    import anonymous_pii.eval_baseline.adapters.pii350_checkpoint as adapter_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     monkeypatch.setattr(runner, "benchmark_volume", FakeVolume())
@@ -2776,11 +2776,11 @@ def test_internal_control_returns_fixed_nine_metrics_bound_to_verified_shard(  #
         digest="1" * 64,
         fixture_identity=SimpleNamespace(digest="3" * 64),
     )
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
-    from meddies_pii.eval_baseline.baseline import aggregate as aggregate_module
-    from meddies_pii.eval_baseline.baseline import datasets as datasets_module
-    from meddies_pii.eval_baseline.baseline import run as run_module
-    from meddies_pii.evaluation import identity as identity_module
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
+    from anonymous_pii.eval_baseline.baseline import aggregate as aggregate_module
+    from anonymous_pii.eval_baseline.baseline import datasets as datasets_module
+    from anonymous_pii.eval_baseline.baseline import run as run_module
+    from anonymous_pii.evaluation import identity as identity_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     legacy_result_path = runner.checkpoint_output_root(request) / "internal_control" / "result.jsonl"
@@ -2881,12 +2881,12 @@ def test_internal_control_returns_fixed_nine_metrics_bound_to_verified_shard(  #
         request.artifact_path,
         "b" * 64,
         request.trajectory_digest,
-        runner.PROFILE_ALL_IN_CEILING_USD["meddies-pii"],
+        runner.PROFILE_ALL_IN_CEILING_USD["anonymous-pii"],
         request.all_in_rate_usd_per_second,
         request.reserve_seconds_per_cell,
-        "meddies-pii",
+        "anonymous-pii",
     )
-    cross_profile_volume = tmp_path / "meddies-pii-workspace"
+    cross_profile_volume = tmp_path / "anonymous-pii-workspace"
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(cross_profile_volume))
     FakeVerified.optimizer_step = 150
     metrics.update({"precision": 0.70, "recall": 0.60, "f1": 0.65})
@@ -2928,10 +2928,10 @@ def test_internal_control_returns_fixed_nine_metrics_bound_to_verified_shard(  #
         request.artifact_path,
         "c" * 64,
         request.trajectory_digest,
-        runner.PROFILE_ALL_IN_CEILING_USD["meddies-pii"],
+        runner.PROFILE_ALL_IN_CEILING_USD["anonymous-pii"],
         request.all_in_rate_usd_per_second,
         request.reserve_seconds_per_cell,
-        "meddies-pii",
+        "anonymous-pii",
     )
     FakeVerified.optimizer_step = 200
     metrics.update({"precision": 0.69, "recall": 0.59, "f1": 0.64})
@@ -3509,9 +3509,9 @@ def _fill_executor_world(
     class FakeEvaluation:
         digest = "f" * 64
 
-    from meddies_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
-    from meddies_pii.eval_baseline.baseline import datasets as datasets_module
-    from meddies_pii.eval_baseline.baseline import run as run_module
+    from anonymous_pii.eval_baseline.adapters import pii350_checkpoint as adapter_module
+    from anonymous_pii.eval_baseline.baseline import datasets as datasets_module
+    from anonymous_pii.eval_baseline.baseline import run as run_module
 
     monkeypatch.setattr(runner, "BENCHMARK_MOUNT", str(tmp_path))
     monkeypatch.setattr(runner, "benchmark_volume", FakeVolume())
@@ -3660,7 +3660,7 @@ class _FakeHub:
         repo_type: str,
         commit_message: str,
     ) -> SimpleNamespace:
-        assert repo_id == "Meddies/pii350-trajectories-private"
+        assert repo_id == "anonymous-placeholder/pii350-trajectories-private"
         assert repo_type == "model"
         assert commit_message
         payload = path_or_fileobj if isinstance(path_or_fileobj, bytes) else Path(str(path_or_fileobj)).read_bytes()
@@ -3670,7 +3670,7 @@ class _FakeHub:
         return SimpleNamespace(oid=f"{self._commits:040x}")
 
     def download(self, *, repo_id: str, path_in_repo: str, revision: str, destination: str) -> str:
-        assert repo_id == "Meddies/pii350-trajectories-private"
+        assert repo_id == "anonymous-placeholder/pii350-trajectories-private"
         assert revision
         if path_in_repo not in self.objects:
             raise FileNotFoundError(path_in_repo)

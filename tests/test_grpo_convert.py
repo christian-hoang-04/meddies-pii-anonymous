@@ -1,4 +1,4 @@
-"""GRPO Gemini-batch -> Meddies Labels conversion (scripts/migrations/convert_grpo_gemini.py).
+"""GRPO Gemini-batch -> Anonymous Labels conversion (scripts/migrations/convert_grpo_gemini.py).
 
 extraction hallucination: value absent from the doc -> no span.
 
@@ -16,7 +16,7 @@ import importlib.util
 from pathlib import Path
 from typing import cast
 
-from meddies_pii.training.bioes.data.grpo_convert import (
+from anonymous_pii.training.bioes.data.grpo_convert import (
     convert_grpo_hf_row,
     extract_document,
     find_spans,

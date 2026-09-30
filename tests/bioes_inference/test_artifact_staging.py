@@ -6,12 +6,12 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.bioes_inference.artifact_staging import (
+from anonymous_pii.bioes_inference.artifact_staging import (
     copy_verified_file,
     copy_verified_tokenizer_directory,
     validated_tokenizer_manifest,
 )
-from meddies_pii.bioes_inference.contracts import ExpectedFileIdentity
+from anonymous_pii.bioes_inference.contracts import ExpectedFileIdentity
 
 if TYPE_CHECKING:
     from pathlib import Path

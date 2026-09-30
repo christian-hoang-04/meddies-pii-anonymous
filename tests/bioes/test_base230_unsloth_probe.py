@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, ClassVar
 
 import pytest
 
-from meddies_pii.training.bioes.trainers import base230_unsloth_probe as probe
+from anonymous_pii.training.bioes.trainers import base230_unsloth_probe as probe
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -160,7 +160,7 @@ def test_pure_review_commands_do_not_import_modal_or_dispatch() -> None:
             [
                 sys.executable,
                 "-m",
-                "meddies_pii.training.bioes.trainers.base230_unsloth_probe",
+                "anonymous_pii.training.bioes.trainers.base230_unsloth_probe",
                 "--render-config",
                 "--batch-size",
                 str(batch),
@@ -176,7 +176,7 @@ def test_pure_review_commands_do_not_import_modal_or_dispatch() -> None:
             sys.executable,
             "-c",
             (
-                "import sys; import meddies_pii.training.bioes.trainers.base230_unsloth_probe; assert "
+                "import sys; import anonymous_pii.training.bioes.trainers.base230_unsloth_probe; assert "
                 "'modal' not in sys.modules; assert 'unsloth' not in sys.modules; print('pure')"
             ),
         ],

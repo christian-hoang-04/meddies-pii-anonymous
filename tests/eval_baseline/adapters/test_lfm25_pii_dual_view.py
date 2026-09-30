@@ -6,31 +6,31 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.eval_baseline.adapters.lfm25_pii import Lfm25PiiSpaceAdapter
-from meddies_pii.eval_baseline.baseline import artifact_export
-from meddies_pii.eval_baseline.baseline import run as run_module
-from meddies_pii.eval_baseline.baseline.artifact_export import (
+from anonymous_pii.eval_baseline.adapters.lfm25_pii import Lfm25PiiSpaceAdapter
+from anonymous_pii.eval_baseline.baseline import artifact_export
+from anonymous_pii.eval_baseline.baseline import run as run_module
+from anonymous_pii.eval_baseline.baseline.artifact_export import (
     export_hub_safe_shard_package,
     validate_hub_safe_shard_package,
 )
-from meddies_pii.eval_baseline.baseline.datasets import EvalRow
-from meddies_pii.eval_baseline.baseline.run import (
+from anonymous_pii.eval_baseline.baseline.datasets import EvalRow
+from anonymous_pii.eval_baseline.baseline.run import (
     ShardSpec,
     read_matrix_results,
     run_dual_view_shards,
     shard_output_path,
 )
-from meddies_pii.eval_baseline.baseline.views import (
+from anonymous_pii.eval_baseline.baseline.views import (
     MODEL_CORE_VIEW,
     VENDOR_HYBRID_VIEW,
 )
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.evaluation.identity import (
     ArtifactIdentity,
     EvaluationContract,
     dataset_shard_identity,
     file_sha256,
 )
-from meddies_pii.spans import CharSpan
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     from collections.abc import Sequence

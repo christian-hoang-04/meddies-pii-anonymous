@@ -1,4 +1,4 @@
-"""The 1.5m release ships vi + APAC languages that intersect the 17 Meddies-supported languages.
+"""The 1.5m release ships vi + APAC languages that intersect the 17 Anonymous-supported languages.
 
 Quotas must reach beyond the en/de/es/fr/pt set.
 
@@ -6,14 +6,14 @@ Quotas must reach beyond the en/de/es/fr/pt set.
 
 from __future__ import annotations
 
-from meddies_pii.training.bioes.data.augmentation import text_hash
-from meddies_pii.training.bioes.data.openpii_candidates import (
+from anonymous_pii.training.bioes.data.augmentation import text_hash
+from anonymous_pii.training.bioes.data.openpii_candidates import (
     DEFAULT_OPENPII_DATASET_ID,
     DEFAULT_OPENPII_LANGUAGE_QUOTAS,
     parse_language_quotas,
     select_openpii_candidates_from_rows,
 )
-from meddies_pii.training.bioes.data.splits import (
+from anonymous_pii.training.bioes.data.splits import (
     normalize_text,
 )
 

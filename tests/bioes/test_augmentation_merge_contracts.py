@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.training.bioes.data.augmentation import (
+from anonymous_pii.training.bioes.data.augmentation import (
     load_augmentation_rows,
     load_current_splits,
     validate_splits,
@@ -69,7 +69,7 @@ def test_augmentation_filters_invalid_long_duplicate_id_and_duplicate_text(
 def test_load_current_splits_requires_named_mapping(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from meddies_pii.training.bioes.data import augmentation
+    from anonymous_pii.training.bioes.data import augmentation
 
     monkeypatch.setattr(augmentation, "load_dataset", lambda *_: [])
     with pytest.raises(TypeError, match="named splits"):
@@ -113,7 +113,7 @@ def test_augmentation_main_writes_merged_artifacts_from_local_fakes(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
 
-    from meddies_pii.training.bioes.data import augmentation
+    from anonymous_pii.training.bioes.data import augmentation
 
     augmentation_path = tmp_path / "augmentation.jsonl"
     _write_jsonl(augmentation_path, [_row("new", "Clara")])

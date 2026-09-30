@@ -42,19 +42,19 @@ from uuid import uuid4
 
 import modal
 
-from meddies_pii.json_types import is_object_dict
-from meddies_pii.modal_runtime import (
+from anonymous_pii.json_types import is_object_dict
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
     use_pinned_debian_snapshot,
 )
-from meddies_pii.pdf_redaction.contracts import PageRegion, Point, Quad
+from anonymous_pii.pdf_redaction.contracts import PageRegion, Point, Quad
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
-APP_NAME = "meddies-pii-pdf-redaction-benchmark"
-OUTPUT_VOLUME_NAME = "meddies-pii-pdf-redaction-benchmark"
+APP_NAME = "anonymous-pii-pdf-redaction-benchmark"
+OUTPUT_VOLUME_NAME = "anonymous-pii-pdf-redaction-benchmark"
 OUTPUT_MOUNT = "/benchmark"
 CACHE_VOLUME_NAME = "hf-cache"
 CACHE_MOUNT = "/cache"
@@ -125,7 +125,7 @@ def _fixture_payload() -> tuple[
     tuple[str, ...],
     list[dict[str, Any]],
 ]:
-    from meddies_pii.pdf_redaction.benchmark.corpus import generate_challenge_corpus
+    from anonymous_pii.pdf_redaction.benchmark.corpus import generate_challenge_corpus
 
     fixture = generate_challenge_corpus()
     regions: list[dict[str, Any]] = []
@@ -279,13 +279,13 @@ def _run_preflight_impl(  # ruff: ignore[too-many-locals]
     oracle_records: list[dict[str, Any]],
     forbidden_values: tuple[str, ...],
 ) -> str:
-    from meddies_pii.pdf_redaction.harness import copy_verified_once, write_json_once
-    from meddies_pii.pdf_redaction.risk import classify_pdf_risk
-    from meddies_pii.pdf_redaction.verification import (
+    from anonymous_pii.pdf_redaction.harness import copy_verified_once, write_json_once
+    from anonymous_pii.pdf_redaction.risk import classify_pdf_risk
+    from anonymous_pii.pdf_redaction.verification import (
         IndependentPdfVerifier,
         VerificationToolchain,
     )
-    from meddies_pii.pdf_redaction.writers import (
+    from anonymous_pii.pdf_redaction.writers import (
         PyMuPdfRedactionWriter,
         RasterRebuildWriter,
         UnsafeOverlayWriter,
@@ -411,16 +411,16 @@ def _run_full_matrix_impl(
         oracle_records,
         forbidden_values,
     )
-    from meddies_pii.pdf_redaction.benchmark.execution import (
+    from anonymous_pii.pdf_redaction.benchmark.execution import (
         FullMatrixInputs,
         execute_full_matrix,
     )
-    from meddies_pii.pdf_redaction.benchmark.runtime import (
+    from anonymous_pii.pdf_redaction.benchmark.runtime import (
         ModelCandidateGateError,
         OcrCandidateGateError,
     )
-    from meddies_pii.pdf_redaction.benchmark.spatial import OracleRegion, PageQuad
-    from meddies_pii.pdf_redaction.harness import (
+    from anonymous_pii.pdf_redaction.benchmark.spatial import OracleRegion, PageQuad
+    from anonymous_pii.pdf_redaction.harness import (
         copy_verified_once,
         safe_failure_record,
         write_json_once,
@@ -584,7 +584,7 @@ def _execute_private_fixture(  # ruff: ignore[too-many-locals]
     work_root: Path,
     started: float,
 ) -> tuple[bytes, dict[str, object]]:
-    from meddies_pii.pdf_redaction import (
+    from anonymous_pii.pdf_redaction import (
         IndependentPdfVerifier,
         PdfGeometryPreparer,
         PdfiumDocumentAdapter,
@@ -774,7 +774,7 @@ def _remove_private_fixture_output(destination: Path) -> None:
 def _regions_from_payload(
     records: list[dict[str, Any]],
 ) -> tuple[PageRegion, ...]:
-    from meddies_pii.taxonomy import require_pii_label
+    from anonymous_pii.taxonomy import require_pii_label
 
     regions: list[PageRegion] = [
         PageRegion(

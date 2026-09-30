@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from meddies_pii.training.bioes.reports.training_setup_preview import (
+from anonymous_pii.training.bioes.reports.training_setup_preview import (
     DEFAULT_DATASET_SUMMARY_JSON,
     DEFAULT_OUTPUT_DIR,
     DEFAULT_SMOKE_RESULT_JSON,
@@ -18,7 +18,9 @@ from meddies_pii.training.bioes.reports.training_setup_preview import (
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Render the pre-launch HTML setup report for the Meddies BIOES H100 run.")
+    parser = argparse.ArgumentParser(
+        description="Render the pre-launch HTML setup report for the Anonymous BIOES H100 run."
+    )
     parser.add_argument("--train-jsonl", type=Path, default=DEFAULT_TRAIN_JSONL)
     parser.add_argument("--validation-jsonl", type=Path, default=DEFAULT_VALIDATION_JSONL)
     parser.add_argument("--split-summary-json", type=Path, default=DEFAULT_SPLIT_SUMMARY_JSON)

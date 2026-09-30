@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Validate sampled rows from the pushed Meddies PII Hugging Face dataset."""
+"""Validate sampled rows from the pushed Anonymous PII Hugging Face dataset."""
 
 from __future__ import annotations
 
@@ -18,8 +18,8 @@ import os
 import random
 from typing import TYPE_CHECKING, Any, Protocol, cast
 
-from meddies_pii.tags import TAG_PATTERN
-from meddies_pii.taxonomy import PII_LABEL_SET
+from anonymous_pii.tags import TAG_PATTERN
+from anonymous_pii.taxonomy import PII_LABEL_SET
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
@@ -38,13 +38,13 @@ class _SampledDataset(Protocol):
     def __getitem__(self, index: int) -> Mapping[str, Any]: ...
 
 
-DEFAULT_REPO_ID = "Meddies/meddies-pii"
+DEFAULT_REPO_ID = "anonymous-placeholder/anonymous-pii"
 LEGACY_REQUIRED_COLS = {"text", "raw", "label"}
 MODERN_REQUIRED_COLS = {"text", "label", "info"}
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Validate sampled rows from a pushed Meddies PII dataset.")
+    parser = argparse.ArgumentParser(description="Validate sampled rows from a pushed Anonymous PII dataset.")
     parser.add_argument("--repo-id", default=DEFAULT_REPO_ID, help="Hugging Face dataset repo id.")
     parser.add_argument(
         "--sample-size",
@@ -64,7 +64,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 def validate_config_rows(dataset: _SampledDataset, sample_indices: Sequence[int]) -> list[str]:
     """Dispatch on the row schema, which this repo carries in two shapes at once.
 
-    Legacy configs carry a `raw` column and a JSON-string `label`; modern Meddies Labels configs
+    Legacy configs carry a `raw` column and a JSON-string `label`; modern Anonymous Labels configs
     (pii-bioes, eval) carry `info` and a span list. The validator must recognize each.
     """
     columns = set(dataset.column_names)

@@ -18,10 +18,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from meddies_pii.training.bioes.modal import (
+from anonymous_pii.training.bioes.modal import (
     encoder350_unsloth_compat_probe as modal_probe,
 )
-from meddies_pii.training.bioes.trainers import encoder350_unsloth_compat_probe as probe
+from anonymous_pii.training.bioes.trainers import encoder350_unsloth_compat_probe as probe
 
 
 def _spec() -> modal_probe.ChildSpec:

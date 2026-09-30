@@ -11,12 +11,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from meddies_pii.annotations.span_records import parse_labeled_record
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.training.bioes.data.adversarial_synthetic import (
+from anonymous_pii.annotations.span_records import parse_labeled_record
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.training.bioes.data.adversarial_synthetic import (
     build_adversarial_pii_label_examples,
 )
-from meddies_pii.training.bioes.eval.harness import classify_adversarial_slices
+from anonymous_pii.training.bioes.eval.harness import classify_adversarial_slices
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

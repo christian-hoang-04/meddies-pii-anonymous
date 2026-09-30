@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import pytest
 
-from meddies_pii.eval_baseline.adapters.lfm25_pii import (
+from anonymous_pii.eval_baseline.adapters.lfm25_pii import (
     LFM25_PII_SUPPORTED_LABELS,
     LIQUID_LABEL_FOLD,
     Lfm25PiiSpaceAdapter,
     map_hybrid_spans,
 )
-from meddies_pii.taxonomy import PII_LABEL_SET
+from anonymous_pii.taxonomy import PII_LABEL_SET
 
 
 class _Detector:
@@ -21,7 +21,7 @@ class _Detector:
         return self.outputs[len(self.calls) - 1]
 
 
-def test_liquid_label_fold_accounts_for_every_native_label_and_all_meddies_labels() -> None:
+def test_liquid_label_fold_accounts_for_every_native_label_and_all_anonymous_labels() -> None:
     expected_fold = {
         "identity.person_name": "human_name",
         "identity.ssn": "id_number",

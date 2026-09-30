@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, cast
 
-from meddies_pii.annotations.bioes import TokenizedExample
-from meddies_pii.annotations.tagged_text import ParsedTaggedDocument
-from meddies_pii.spans import CharSpan
-from meddies_pii.training.bioes.data import preparation
-from meddies_pii.training.bioes.data.preparation import AuditedSourceRow, _prepare_rows
+from anonymous_pii.annotations.bioes import TokenizedExample
+from anonymous_pii.annotations.tagged_text import ParsedTaggedDocument
+from anonymous_pii.spans import CharSpan
+from anonymous_pii.training.bioes.data import preparation
+from anonymous_pii.training.bioes.data.preparation import AuditedSourceRow, _prepare_rows
 
 if TYPE_CHECKING:
     from collections.abc import Sequence

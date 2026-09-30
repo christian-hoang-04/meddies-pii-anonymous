@@ -7,8 +7,8 @@ from __future__ import annotations
 import hashlib
 from typing import TYPE_CHECKING
 
-from meddies_pii.eval_baseline.baseline.aggregate import aggregate_results
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.eval_baseline.baseline.aggregate import aggregate_results
+from anonymous_pii.evaluation.identity import (
     ArtifactIdentity,
     DatasetShardIdentity,
     EvaluationContract,
@@ -22,10 +22,10 @@ if TYPE_CHECKING:
 
     import pytest
 
-    from meddies_pii.evaluation.span_metrics import SpanMode
-    from meddies_pii.json_types import JsonObject, JsonValue
-    from meddies_pii.spans import CharSpan
-    from meddies_pii.taxonomy import PiiLabel
+    from anonymous_pii.evaluation.span_metrics import SpanMode
+    from anonymous_pii.json_types import JsonObject, JsonValue
+    from anonymous_pii.spans import CharSpan
+    from anonymous_pii.taxonomy import PiiLabel
 
 
 def _contract(labels: frozenset[PiiLabel]) -> EvaluationContract:
@@ -157,7 +157,7 @@ def test_fixture_validation_visits_each_row_without_a_second_fixture(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """The stream comparator validates every row directly against frozen identity."""
-    from meddies_pii.eval_baseline.baseline import aggregate as aggregate_module
+    from anonymous_pii.eval_baseline.baseline import aggregate as aggregate_module
 
     labels: frozenset[PiiLabel] = frozenset({"email_address", "human_name"})
     contract = _contract(labels)
@@ -187,7 +187,7 @@ def test_each_row_calls_general_metric_helpers_four_times(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Config/language/overall reports merge one shared metric observation."""
-    from meddies_pii.eval_baseline.baseline import aggregate as aggregate_module
+    from anonymous_pii.eval_baseline.baseline import aggregate as aggregate_module
 
     labels: frozenset[PiiLabel] = frozenset({"email_address", "human_name"})
     contract = _contract(labels)

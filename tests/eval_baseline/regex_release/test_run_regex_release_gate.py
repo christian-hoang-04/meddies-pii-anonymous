@@ -9,11 +9,11 @@ from typing import TYPE_CHECKING, Any
 
 import pytest
 
-from meddies_pii.eval_baseline.regex_release.regex_ignore_list import (
+from anonymous_pii.eval_baseline.regex_release.regex_ignore_list import (
     ignore_list_from_rows,
     write_ignore_list_jsonl,
 )
-from meddies_pii.eval_baseline.regex_release.regex_release_contract import ReleaseGateContract
+from anonymous_pii.eval_baseline.regex_release.regex_release_contract import ReleaseGateContract
 
 if TYPE_CHECKING:
     from types import ModuleType

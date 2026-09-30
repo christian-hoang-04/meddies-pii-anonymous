@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from meddies_pii.regex_runtime.rules import REGEX_RULES, regex_candidates
+from anonymous_pii.regex_runtime.rules import REGEX_RULES, regex_candidates
 
 
 def test_every_shape_validated_rule_carries_the_authoritative_tier() -> None:

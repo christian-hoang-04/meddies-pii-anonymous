@@ -7,7 +7,7 @@ import textwrap
 
 import pytest
 
-from meddies_pii.training.bioes.trainers import company_name_audit as audit
+from anonymous_pii.training.bioes.trainers import company_name_audit as audit
 
 
 def _maps() -> tuple[dict[str, int], dict[int, str]]:
@@ -112,7 +112,7 @@ def test_eval_counter_uses_authoritative_record_parser_and_exact_inventory() -> 
 
 def test_rendered_command_and_execution_confirmation_are_fail_closed() -> None:
     command = audit.render_modal_command()
-    assert "MODAL_PROFILE=meddies-pii" in command
+    assert "MODAL_PROFILE=anonymous-pii" in command
     assert audit.COMPANY_NAME_AUDIT_CONFIRMATION in command
     with pytest.raises(RuntimeError, match="confirmation"):
         audit.require_execution("")
@@ -139,13 +139,13 @@ def test_audit_modules_import_without_torch_or_full_run_path() -> None:
                     return original_import(name, *args, **kwargs)
 
                 builtins.__import__ = block_torch
-                import meddies_pii.training.bioes.trainers.company_name_audit
-                import meddies_pii.training.bioes.modal.company_name_audit
+                import anonymous_pii.training.bioes.trainers.company_name_audit
+                import anonymous_pii.training.bioes.modal.company_name_audit
 
                 forbidden = (
                     "torch",
-                    "meddies_pii.training.bioes.trainers.full_run",
-                    "meddies_pii.training.bioes.trainers.base_selection",
+                    "anonymous_pii.training.bioes.trainers.full_run",
+                    "anonymous_pii.training.bioes.trainers.base_selection",
                 )
                 assert not any(
                     module == prefix or module.startswith(prefix + ".")

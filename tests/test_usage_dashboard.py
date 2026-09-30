@@ -28,7 +28,7 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-from meddies_pii.generation.usage import (
+from anonymous_pii.generation.usage import (
     AccountUsage,
     ProviderLimits,
     ProviderRunStats,

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Trim ai4privacy IN PLACE to a 30% vi / 30% en / 40% other language mix.
 
-ai4privacy lives on ``Meddies/meddies-pii-external`` as 12 per-language configs
+ai4privacy lives on ``anonymous-placeholder/anonymous-pii-external`` as 12 per-language configs
 (``ai4privacy_<code>``). Vietnamese is the scarce anchor (~26k rows), so we keep
 ALL of it and randomly delete rows from English and from the 10 "other" languages
 until the whole ai4privacy set is:
@@ -42,7 +42,7 @@ from httpx import HTTPError
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-REPO_ID = "Meddies/meddies-pii-external"
+REPO_ID = "anonymous-placeholder/anonymous-pii-external"
 SPLITS = ("train", "eval")
 SEED = 42
 

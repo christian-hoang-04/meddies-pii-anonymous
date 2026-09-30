@@ -35,31 +35,31 @@ from typing import TYPE_CHECKING
 
 import modal
 
-from meddies_pii.eval_baseline.baseline.datasets import EVAL_DATASETS, EVAL_EXPECTED_ROWS
-from meddies_pii.modal_runtime import (
+from anonymous_pii.eval_baseline.baseline.datasets import EVAL_DATASETS, EVAL_EXPECTED_ROWS
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
 )
 
 if TYPE_CHECKING:
-    from meddies_pii.evaluation.identity import EvaluationContract
+    from anonymous_pii.evaluation.identity import EvaluationContract
 
 
 def _evaluation_contract() -> EvaluationContract:
-    from meddies_pii import __file__ as package_file
-    from meddies_pii.eval_baseline.adapters import gliner2
-    from meddies_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
-    from meddies_pii.evaluation.identity import (
+    from anonymous_pii import __file__ as package_file
+    from anonymous_pii.eval_baseline.adapters import gliner2
+    from anonymous_pii.eval_baseline.baseline.run import resolved_environment_fingerprint
+    from anonymous_pii.evaluation.identity import (
         evaluation_contract,
         manifest_artifact,
         payload_artifact,
     )
-    from meddies_pii.evaluation.runtime_provenance import (
+    from anonymous_pii.evaluation.runtime_provenance import (
         evaluation_runtime_source_artifact,
     )
 
     if package_file is None:
-        msg = "cannot observe the Meddies evaluation runtime source"
+        msg = "cannot observe the Anonymous evaluation runtime source"
         raise RuntimeError(msg)
     runtime_source = evaluation_runtime_source_artifact(Path(package_file).parent, __file__)
     return evaluation_contract(
@@ -75,7 +75,7 @@ def _evaluation_contract() -> EvaluationContract:
     )
 
 
-BASELINE_VOLUME_NAME = "meddies-pii-baseline-eval-gliner2"
+BASELINE_VOLUME_NAME = "anonymous-pii-baseline-eval-gliner2"
 BASELINE_VOLUME_MOUNT = "/baseline"
 H100_GPU = "H100"
 TIMEOUT_SECONDS = 3 * 60 * 60
@@ -104,7 +104,7 @@ the adapter also sets it defensively.
 
 """
 
-app = modal.App("meddies-pii-gliner2-baseline-eval")
+app = modal.App("anonymous-pii-gliner2-baseline-eval")
 
 EXTERNAL_CELL_LIMIT = 2000
 """Same per-config matrix as the openmed run.
@@ -129,9 +129,9 @@ def gliner2_eval_cell(dataset: str, max_rows: int = 0, full: bool = False, force
     ``force`` re-runs past an existing .done (e.g. overwrite a smoke/subset run).
     Resume-safe when the persisted fixture identity matches otherwise.
     """
-    from meddies_pii.eval_baseline.adapters.gliner2 import Gliner2Adapter
-    from meddies_pii.eval_baseline.baseline.datasets import load_eval_cell
-    from meddies_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
+    from anonymous_pii.eval_baseline.adapters.gliner2 import Gliner2Adapter
+    from anonymous_pii.eval_baseline.baseline.datasets import load_eval_cell
+    from anonymous_pii.eval_baseline.baseline.run import ShardSpec, run_shard, shard_result_json
 
     rows = load_eval_cell(
         dataset,
@@ -161,7 +161,7 @@ def inspect_gliner2() -> None:
 
     The preflight makes the wiring verifiable before any H100 cell cold-starts.
     """
-    from meddies_pii.eval_baseline.adapters.gliner2 import (
+    from anonymous_pii.eval_baseline.adapters.gliner2 import (
         GLINER2_LABEL_FOLD,
         GLINER2_SOURCE_LABELS,
         Gliner2Adapter,
@@ -175,8 +175,8 @@ def inspect_gliner2() -> None:
         f"fold_targets={sorted(set(GLINER2_LABEL_FOLD.values()))}",
         flush=True,
     )
-    for native, meddies in sorted(GLINER2_LABEL_FOLD.items()):
-        print(f"GLINER2_FOLD:: {native:<24} -> {meddies}", flush=True)
+    for native, anonymous in sorted(GLINER2_LABEL_FOLD.items()):
+        print(f"GLINER2_FOLD:: {native:<24} -> {anonymous}", flush=True)
 
 
 @app.local_entrypoint()
@@ -192,7 +192,7 @@ def run_gliner2_matrix(max_rows: int = 0, datasets: str = "", full: bool = False
     Pass --datasets "a,b,c" to target specific cells, --full to score the whole
     split (drops the 2k external cap), --force to overwrite an existing .done.
     """
-    from meddies_pii.eval_baseline.baseline.datasets import select_eval_datasets
+    from anonymous_pii.eval_baseline.baseline.datasets import select_eval_datasets
 
     selected = select_eval_datasets(datasets)
     handles = [(dataset, gliner2_eval_cell.spawn(dataset, max_rows, full, force)) for dataset in selected]
@@ -218,12 +218,12 @@ def aggregate_gliner2() -> None:
     Scoring runs through the shared aggregator, prints the per-config, per-language and
     per-label F1 grid, and persists the full nested report to reports/gliner2-aggregate.json.
     """
-    from meddies_pii.eval_baseline.adapters.gliner2 import GLINER2_SUPPORTED_LABELS
-    from meddies_pii.eval_baseline.baseline.aggregate import (
+    from anonymous_pii.eval_baseline.adapters.gliner2 import GLINER2_SUPPORTED_LABELS
+    from anonymous_pii.eval_baseline.baseline.aggregate import (
         aggregate_results,
         format_aggregate_report,
     )
-    from meddies_pii.eval_baseline.baseline.run import (
+    from anonymous_pii.eval_baseline.baseline.run import (
         assert_frozen_fixture,
         expected_matrix_shard_identities,
         read_matrix_results,

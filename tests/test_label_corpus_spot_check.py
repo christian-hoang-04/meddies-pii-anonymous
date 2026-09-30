@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from meddies_pii.generation.label_corpus.audit import markdown_table_cell
+from anonymous_pii.generation.label_corpus.audit import markdown_table_cell
 
 
 def test_markdown_table_cell_escapes_newlines_pipes_and_truncates() -> None:

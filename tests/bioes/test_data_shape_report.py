@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, cast
 
 import pytest
 
-from meddies_pii.training.bioes.reports.data_shape import (
+from anonymous_pii.training.bioes.reports.data_shape import (
     render_data_shape_report_html,
     write_data_shape_report,
 )
@@ -52,7 +52,7 @@ def _rich_stats() -> dict[str, object]:
             "vi|private_url": "not an int",
         },
         "per_source": {
-            "meddies-pii-hf-config": 5,
+            "anonymous-pii-hf-config": 5,
             "train": 3,
             "validation": 2,
             "nvidia/clinical": 4,

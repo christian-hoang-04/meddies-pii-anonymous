@@ -4,14 +4,14 @@ from typing import TYPE_CHECKING, override
 
 # ruff: file-ignore[import-outside-top-level]
 # reason: the import is deferred so a patch lands, or an optional wheel is skipped, before the symbol is bound.
-from meddies_pii.annotations.bioes import TokenizedExample
-from meddies_pii.annotations.tagged_text import ParsedTaggedDocument
-from meddies_pii.training.bioes.data.preparation import PreparedRow
-from meddies_pii.training.bioes.trainers.contamination import (
+from anonymous_pii.annotations.bioes import TokenizedExample
+from anonymous_pii.annotations.tagged_text import ParsedTaggedDocument
+from anonymous_pii.training.bioes.data.preparation import PreparedRow
+from anonymous_pii.training.bioes.trainers.contamination import (
     packed_row_token_range,
     run_packed_attention_contamination_probe,
 )
-from meddies_pii.training.bioes.trainers.packing import (
+from anonymous_pii.training.bioes.trainers.packing import (
     StatefulPacker,
     collate_packed_units,
     pack_prepared_rows,

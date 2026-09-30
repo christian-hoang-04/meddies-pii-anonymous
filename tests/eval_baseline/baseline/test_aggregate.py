@@ -9,21 +9,21 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.eval_baseline.baseline.aggregate import (
+from anonymous_pii.eval_baseline.baseline.aggregate import (
     aggregate_results as _aggregate_results,
 )
-from meddies_pii.eval_baseline.baseline.aggregate import (
+from anonymous_pii.eval_baseline.baseline.aggregate import (
     format_aggregate_report,
 )
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.evaluation.identity import (
     ArtifactIdentity,
     EvaluationContract,
     dataset_shard_identity_from_result_rows,
 )
 
 if TYPE_CHECKING:
-    from meddies_pii.eval_baseline.baseline.aggregate import AggregateReport
-    from meddies_pii.taxonomy import PiiLabel
+    from anonymous_pii.eval_baseline.baseline.aggregate import AggregateReport
+    from anonymous_pii.taxonomy import PiiLabel
 
 _ROWS = {
     "cfg_en": [

@@ -9,8 +9,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from meddies_pii.eval_baseline.adapters import opf_backend
-from meddies_pii.evaluation.runtime_provenance import (
+from anonymous_pii.eval_baseline.adapters import opf_backend
+from anonymous_pii.evaluation.runtime_provenance import (
     evaluation_runtime_source_artifact,
 )
 
@@ -42,7 +42,7 @@ def _install_checkpoint_download(monkeypatch: pytest.MonkeyPatch, calls: list[di
 def test_runtime_source_artifact_hashes_the_executable_package_closure(
     tmp_path: Path,
 ) -> None:
-    package = tmp_path / "meddies_pii"
+    package = tmp_path / "anonymous_pii"
     package.mkdir()
     (package / "adapter.py").write_text("from .shared import decode\n", encoding="utf-8")
     shared = package / "shared.py"
@@ -56,7 +56,7 @@ def test_runtime_source_artifact_hashes_the_executable_package_closure(
     runner.write_text("run_with_new_batching()\n", encoding="utf-8")
     after_runner_change = evaluation_runtime_source_artifact(package, runner)
 
-    assert before.reference == "meddies-pii-evaluation-runtime-source"
+    assert before.reference == "anonymous-pii-evaluation-runtime-source"
     assert before.revision.startswith("sha256:")
     assert before.sha256 != after_dependency_change.sha256
     assert after_dependency_change.sha256 != after_runner_change.sha256
@@ -105,9 +105,9 @@ def test_opf_checkpoint_cache_rejects_arbitrary_existing_contents(
 
 
 def test_runtime_source_tree_excludes_generated_python_cache(tmp_path: Path) -> None:
-    from meddies_pii.evaluation.runtime_provenance import source_tree_artifact
+    from anonymous_pii.evaluation.runtime_provenance import source_tree_artifact
 
-    package = tmp_path / "meddies_pii"
+    package = tmp_path / "anonymous_pii"
     package.mkdir()
     (package / "adapter.py").write_text("def predict(): pass\n", encoding="utf-8")
     before = source_tree_artifact("runtime", package)

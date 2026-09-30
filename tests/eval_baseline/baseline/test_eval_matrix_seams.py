@@ -7,21 +7,21 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.eval_baseline.baseline import datasets
-from meddies_pii.eval_baseline.baseline.aggregate import aggregate_results
-from meddies_pii.eval_baseline.baseline.run import read_matrix_results
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.eval_baseline.baseline import datasets
+from anonymous_pii.eval_baseline.baseline.aggregate import aggregate_results
+from anonymous_pii.eval_baseline.baseline.run import read_matrix_results
+from anonymous_pii.evaluation.identity import (
     ArtifactIdentity,
     DatasetShardIdentity,
     EvaluationContract,
     file_sha256,
 )
-from meddies_pii.jsonl import write_jsonl
+from anonymous_pii.jsonl import write_jsonl
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
-    from meddies_pii.json_types import JsonObject
+    from anonymous_pii.json_types import JsonObject
 
 
 def _expected_identity() -> tuple[EvaluationContract, DatasetShardIdentity]:
@@ -174,8 +174,8 @@ def test_read_matrix_results_defers_jsonl_open_until_aggregate_source_is_used(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Matrix discovery validates the sidecar; the aggregate owns the sole row pass."""
-    from meddies_pii.eval_baseline.baseline import run as run_module
-    from meddies_pii.eval_baseline.baseline.run import write_shard_meta
+    from anonymous_pii.eval_baseline.baseline import run as run_module
+    from anonymous_pii.eval_baseline.baseline.run import write_shard_meta
 
     contract, identity = _expected_identity()
     result_dir = tmp_path / "results" / "openmed" / "v2-eval"

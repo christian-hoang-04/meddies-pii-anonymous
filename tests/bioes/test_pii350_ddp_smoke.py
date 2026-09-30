@@ -11,7 +11,7 @@ from typing import cast
 import pytest
 import torch
 
-from meddies_pii.training.bioes.trainers import pii350_ddp_smoke
+from anonymous_pii.training.bioes.trainers import pii350_ddp_smoke
 
 
 def test_rank_assignment_is_seed_ordered_non_overlapping_and_exhaustive() -> None:
@@ -106,7 +106,7 @@ def test_commands_are_reviewable_and_paid_dispatch_is_explicit() -> None:
     assert "--execute" not in preflight
     assert prewarm == (
         "MODAL_PROFILE=diffusionllm uv run modal run --detach --timestamps -m "
-        "meddies_pii.training.bioes.modal.pii350_ddp_smoke --prewarm-assets"
+        "anonymous_pii.training.bioes.modal.pii350_ddp_smoke --prewarm-assets"
     )
     assert "--execute" not in prewarm
     assert "--confirmation" not in prewarm
@@ -122,7 +122,7 @@ def test_cpu_cli_only_renders_and_never_imports_modal() -> None:
     command = [
         sys.executable,
         "-m",
-        "meddies_pii.training.bioes.trainers.pii350_ddp_smoke",
+        "anonymous_pii.training.bioes.trainers.pii350_ddp_smoke",
         "--render-launch-command",
     ]
     # reason: command is assembled immediately above from sys.executable and fixed module/flag literals; no shell.

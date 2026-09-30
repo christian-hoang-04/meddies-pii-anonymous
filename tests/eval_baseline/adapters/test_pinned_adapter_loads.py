@@ -6,7 +6,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import TYPE_CHECKING
 
-from meddies_pii.eval_baseline.adapters import gliner2, openmed, opf_backend
+from anonymous_pii.eval_baseline.adapters import gliner2, openmed, opf_backend
 
 if TYPE_CHECKING:
     import pytest

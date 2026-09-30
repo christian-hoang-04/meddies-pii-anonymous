@@ -5,12 +5,12 @@ from typing import TYPE_CHECKING
 import pymupdf
 import pytest
 
-from meddies_pii.pdf_redaction.extraction import PdfiumExtractor, PymupdfExtractor
+from anonymous_pii.pdf_redaction.extraction import PdfiumExtractor, PymupdfExtractor
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from meddies_pii.pdf_redaction.contracts import Point
+    from anonymous_pii.pdf_redaction.contracts import Point
 
 
 def _signed_double_area(points: tuple[Point, Point, Point, Point]) -> float:

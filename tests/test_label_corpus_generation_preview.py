@@ -4,7 +4,7 @@ from __future__ import annotations
 # reason: the import is deferred so a patch is in place first, and so collection does not pay for the heavy dependency.
 from typing import TYPE_CHECKING
 
-from meddies_pii.generation.label_corpus.preview import _select_repaired_prefix
+from anonymous_pii.generation.label_corpus.preview import _select_repaired_prefix
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -34,7 +34,7 @@ def test_preview_respects_explicit_repaired_prefix(tmp_path: Path) -> None:
 def test_preview_rejects_non_object_repair_summary(tmp_path: Path) -> None:
     import pytest
 
-    from meddies_pii.generation.label_corpus.preview import _read_json
+    from anonymous_pii.generation.label_corpus.preview import _read_json
 
     summary = tmp_path / "repair_summary.en.json"
     summary.write_text("[]", encoding="utf-8")

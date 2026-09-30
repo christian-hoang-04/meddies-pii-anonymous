@@ -9,8 +9,8 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pytest
 
-import meddies_pii.bioes_inference.detector as inference_module
-from meddies_pii.bioes_inference import (
+import anonymous_pii.bioes_inference.detector as inference_module
+from anonymous_pii.bioes_inference import (
     BioesSpanDetector,
     ExpectedFileIdentity,
     OnnxRuntimeBackend,

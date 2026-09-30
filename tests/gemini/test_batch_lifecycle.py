@@ -8,14 +8,14 @@ from typing import TYPE_CHECKING
 import pytest
 from google.genai import types
 
-from meddies_pii.generation.gemini import inference
+from anonymous_pii.generation.gemini import inference
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from pathlib import Path
 
+    from anonymous_pii.generation.gemini.inference import GeminiClient
     from gemini.conftest import BatchJobFactory, ClientFactory
-    from meddies_pii.generation.gemini.inference import GeminiClient
 
 
 def test_submit_batch_uses_gcs_for_vertex_local_source(

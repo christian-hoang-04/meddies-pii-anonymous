@@ -5,21 +5,21 @@ from __future__ import annotations
 # reason: inputs, so a tolerance would make the test accept a value the code does not produce.
 import pytest
 
-from meddies_pii.bioes_inference import SpanDetection
-from meddies_pii.pdf_redaction.contracts import (
+from anonymous_pii.bioes_inference import SpanDetection
+from anonymous_pii.pdf_redaction.contracts import (
     GeometryPage,
     GeometryToken,
     Point,
     Quad,
 )
-from meddies_pii.pdf_redaction.geometry import (
+from anonymous_pii.pdf_redaction.geometry import (
     SpanMappingError,
     map_detection_to_regions,
     map_detections_to_regions,
     map_span_to_regions,
     rectangle_union_area,
 )
-from meddies_pii.spans import CharSpan
+from anonymous_pii.spans import CharSpan
 
 
 def _quad(x0: float, y0: float, x1: float, y1: float) -> Quad:

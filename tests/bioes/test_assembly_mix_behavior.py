@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from meddies_pii.historical_artifacts import LEGACY_ARTIFACT_TOKEN
-from meddies_pii.training.bioes.assembly.mix import (
+from anonymous_pii.historical_artifacts import LEGACY_ARTIFACT_TOKEN
+from anonymous_pii.training.bioes.assembly.mix import (
     AssemblyGateError,
     assemble_bioes_v2_corpus,
     discover_assembly_source_files,

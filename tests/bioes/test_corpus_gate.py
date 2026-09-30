@@ -14,7 +14,8 @@ and a full small corpus that meets every condition passes.
 
 (e) a full small corpus meeting all -> passed True.
 
-Regression (codex HIGH): is_supported_meddies_language admits aliases like "us"/"jpn" but normalize_language rejects them;
+Regression (codex HIGH): is_supported_anonymous_language admits aliases like
+"us"/"jpn" but normalize_language rejects them;
 without the alias map the row (e.g. Nemotron locale="us") was silently dropped, hiding company_name supply. "us"->en,
 "jpn"->ja: both spans must count toward the floor.
 
@@ -34,9 +35,9 @@ from __future__ import annotations
 import math
 from typing import TYPE_CHECKING, cast
 
-from meddies_pii.languages import LANGUAGE_PROFILES
-from meddies_pii.taxonomy import PII_LABELS
-from meddies_pii.training.bioes.data.corpus_gate import GateReport, evaluate_corpus
+from anonymous_pii.languages import LANGUAGE_PROFILES
+from anonymous_pii.taxonomy import PII_LABELS
+from anonymous_pii.training.bioes.data.corpus_gate import GateReport, evaluate_corpus
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -297,7 +298,7 @@ def test_locale_aliases_resolve_and_count_toward_floors() -> None:
 
 def test_incremental_counts_equal_monolithic() -> None:
     """Counts survive a JSON cache round-trip (per-source caching on the volume)."""
-    from meddies_pii.training.bioes.data.corpus_gate import (
+    from anonymous_pii.training.bioes.data.corpus_gate import (
         CorpusCounts,
         count_corpus,
         evaluate_counts,

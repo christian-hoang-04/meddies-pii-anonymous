@@ -7,18 +7,18 @@ from typing import TYPE_CHECKING, cast
 
 import pytest
 
-from meddies_pii.annotations.bioes import (
+from anonymous_pii.annotations.bioes import (
     ENTITY_LABELS,
     build_bioes_label_space,
     build_label_to_id,
 )
-from meddies_pii.training.bioes.data.source_payloads import (
+from anonymous_pii.training.bioes.data.source_payloads import (
     parse_serialized_collection,
 )
-from meddies_pii.training.bioes.data.tokenizer_security import (
+from anonymous_pii.training.bioes.data.tokenizer_security import (
     validate_remote_code_tokenizer_policy,
 )
-from meddies_pii.training.bioes.eval.selection import (
+from anonymous_pii.training.bioes.eval.selection import (
     select_prepared_rows_for_adversarial_slice,
 )
 
@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 
     from transformers import PreTrainedTokenizerBase
 
-    from meddies_pii.training.bioes.data.tagger import HiddenStateTokenTagger
+    from anonymous_pii.training.bioes.data.tagger import HiddenStateTokenTagger
 
 
 class _BehaviorTokenizer:
@@ -192,9 +192,9 @@ def test_smoke_training_applies_the_prepared_row_limit_before_eval_failure(
 ) -> None:
     import torch
 
-    from meddies_pii.training.bioes.data.artifacts import ProbeArtifacts
-    from meddies_pii.training.bioes.trainers import trainer
-    from meddies_pii.training.bioes.trainers.config import SmokeTrainingConfig
+    from anonymous_pii.training.bioes.data.artifacts import ProbeArtifacts
+    from anonymous_pii.training.bioes.trainers import trainer
+    from anonymous_pii.training.bioes.trainers.config import SmokeTrainingConfig
 
     label_vocab = build_bioes_label_space(ENTITY_LABELS)
     label_to_id = build_label_to_id(label_vocab)

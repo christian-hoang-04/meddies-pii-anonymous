@@ -10,9 +10,9 @@ from typing import TYPE_CHECKING, ClassVar, cast, override
 
 import pytest
 
-from meddies_pii.bioes_inference import SpanDetection
-from meddies_pii.bioes_inference.detector import BioesSpanDetector
-from meddies_pii.pdf_redaction.benchmark.runtime import (
+from anonymous_pii.bioes_inference import SpanDetection
+from anonymous_pii.bioes_inference.detector import BioesSpanDetector
+from anonymous_pii.pdf_redaction.benchmark.runtime import (
     ModelCandidateGateError,
     ModelGate,
     detection_signature,
@@ -25,28 +25,28 @@ from meddies_pii.pdf_redaction.benchmark.runtime import (
     prepare_pages,
     select_ocr_model_files,
 )
-from meddies_pii.pdf_redaction.benchmark.spatial import OracleRegion
-from meddies_pii.pdf_redaction.contracts import (
+from anonymous_pii.pdf_redaction.benchmark.spatial import OracleRegion
+from anonymous_pii.pdf_redaction.contracts import (
     GeometryPage,
     PageRegion,
     Point,
     Quad,
 )
-from meddies_pii.pdf_redaction.document import (
+from anonymous_pii.pdf_redaction.document import (
     DocumentInspection,
     PageInspection,
     RasterArtifact,
 )
-from meddies_pii.pdf_redaction.ocr import RasterPage
-from meddies_pii.pdf_redaction.routing import PageRouteDecision, PageRouteSignals
-from meddies_pii.spans import CharSpan
+from anonymous_pii.pdf_redaction.ocr import RasterPage
+from anonymous_pii.pdf_redaction.routing import PageRouteDecision, PageRouteSignals
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from meddies_pii.bioes_inference.detector import BioesInferenceBackend
-    from meddies_pii.pdf_redaction.document_types import PdfSource
-    from meddies_pii.pdf_redaction.extraction import NativeGeometryPrecision
+    from anonymous_pii.bioes_inference.detector import BioesInferenceBackend
+    from anonymous_pii.pdf_redaction.document_types import PdfSource
+    from anonymous_pii.pdf_redaction.extraction import NativeGeometryPrecision
 
 
 def _quad() -> Quad:
@@ -79,7 +79,7 @@ class _Ocr:
 def test_ocr_measurement_scores_visible_targets_and_preserves_page_order(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from meddies_pii.pdf_redaction.benchmark import runtime
+    from anonymous_pii.pdf_redaction.benchmark import runtime
 
     adapter = _Ocr({0: _page(0, "found"), 5: _page(5, "other")})
     oracle = (

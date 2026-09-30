@@ -142,7 +142,7 @@ def validate_coverage(
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("coverage_json", type=Path)
-    parser.add_argument("--source-root", type=Path, default=REPO_ROOT / "src/meddies_pii")
+    parser.add_argument("--source-root", type=Path, default=REPO_ROOT / "src/anonymous_pii")
     parser.add_argument(
         "--min-statements",
         "--statement-threshold",

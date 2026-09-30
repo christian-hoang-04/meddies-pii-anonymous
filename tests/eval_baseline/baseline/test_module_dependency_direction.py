@@ -6,8 +6,8 @@ import ast
 from pathlib import Path
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
-BASELINE_ROOT = REPOSITORY_ROOT / "src" / "meddies_pii" / "eval_baseline" / "baseline"
-REGEX_RELEASE_MODULE = "meddies_pii.eval_baseline.regex_release"
+BASELINE_ROOT = REPOSITORY_ROOT / "src" / "anonymous_pii" / "eval_baseline" / "baseline"
+REGEX_RELEASE_MODULE = "anonymous_pii.eval_baseline.regex_release"
 
 
 def _imports_module(source_path: Path, module: str) -> bool:

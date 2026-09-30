@@ -12,12 +12,12 @@ stops the model wasting attempts on them.
 
 from __future__ import annotations
 
-from meddies_pii.generation.label_corpus.catalog import SCENARIOS
-from meddies_pii.generation.label_corpus.prompts import (
+from anonymous_pii.generation.label_corpus.catalog import SCENARIOS
+from anonymous_pii.generation.label_corpus.prompts import (
     targeted_system_prompt,
     targeted_user_prompt,
 )
-from meddies_pii.languages import normalize_language
+from anonymous_pii.languages import normalize_language
 
 
 def test_email_exemplar_is_clean_not_spoken_at_dot() -> None:

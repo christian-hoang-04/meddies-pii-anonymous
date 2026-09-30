@@ -29,13 +29,13 @@ from collections.abc import Mapping
 
 from datasets import Dataset, load_dataset
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.jsonl import read_jsonl
-from meddies_pii.processing.label_cleanup import (
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.jsonl import read_jsonl
+from anonymous_pii.processing.label_cleanup import (
     apply_quality_filters,
     clean_bracket_artifacts,
 )
-from meddies_pii.taxonomy import PII_LABEL_SET
+from anonymous_pii.taxonomy import PII_LABEL_SET
 
 
 def parse_gemini_results(path: str) -> dict[str, str]:
@@ -172,7 +172,7 @@ def run_merge(
     config: str,
     predictions_path: str,
     push: bool = False,  # ruff: ignore[boolean-type-hint-positional-argument,boolean-default-value-positional-argument]
-    repo_id: str = "Meddies/meddies-pii",
+    repo_id: str = "anonymous-placeholder/anonymous-pii",
 ) -> Dataset:
     dataset = load_dataset(repo_id, config, split="train")
     gemini = parse_gemini_results(predictions_path)
@@ -216,7 +216,7 @@ def run_merge(
 
 
 def audit(dataset: Dataset, original_dataset: Dataset, _n: int = 30) -> None:
-    from meddies_pii.tags import extract_entities
+    from anonymous_pii.tags import extract_entities
 
     added_total: Counter[str] = Counter()
     removed_total: Counter[str] = Counter()
@@ -252,7 +252,7 @@ def main() -> None:
     parser.add_argument("config", choices=["test", "eval"])
     parser.add_argument("--predictions", required=True)
     parser.add_argument("--push", action="store_true")
-    parser.add_argument("--repo-id", default="Meddies/meddies-pii")
+    parser.add_argument("--repo-id", default="anonymous-placeholder/anonymous-pii")
     args = parser.parse_args()
 
     run_merge(args.config, args.predictions, args.push, args.repo_id)

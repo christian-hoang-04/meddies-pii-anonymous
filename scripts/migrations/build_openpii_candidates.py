@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Build OpenPII general-domain Meddies Labels augmentation candidates."""
+"""Build OpenPII general-domain Anonymous Labels augmentation candidates."""
 
 from __future__ import annotations
 
@@ -16,20 +16,20 @@ from typing import TYPE_CHECKING, Any, Protocol, cast
 from datasets import load_dataset
 from transformers import AutoTokenizer  # ty: ignore[possibly-missing-import]
 
-from meddies_pii.training.bioes.data.augmentation import (
+from anonymous_pii.training.bioes.data.augmentation import (
     info_value,
     load_current_splits,
     text_hash,
     write_json,
     write_jsonl,
 )
-from meddies_pii.training.bioes.data.openpii_candidates import (
+from anonymous_pii.training.bioes.data.openpii_candidates import (
     DEFAULT_OPENPII_DATASET_ID,
     parse_language_quotas,
     select_openpii_candidates_from_rows,
 )
-from meddies_pii.training.bioes.data.splits import normalize_text
-from meddies_pii.training.bioes.data.tokenizer_security import (
+from anonymous_pii.training.bioes.data.splits import normalize_text
+from anonymous_pii.training.bioes.data.tokenizer_security import (
     validate_remote_code_tokenizer_policy,
 )
 
@@ -52,7 +52,7 @@ def parse_args() -> argparse.Namespace:
         action="append",
         help="Language quota in LANG=COUNT form. Defaults to en=4000,de=1500,es=1500,fr=1500,pt=1500.",
     )
-    parser.add_argument("--current-dataset-id", default="Meddies/meddies-pii")
+    parser.add_argument("--current-dataset-id", default="anonymous-placeholder/anonymous-pii")
     parser.add_argument("--current-config-name", default="pii-bioes")
     parser.add_argument("--tokenizer-model-id", default="LiquidAI/LFM2.5-350M-Base")
     parser.add_argument("--tokenizer-revision")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Refresh Meddies/meddies-pii-v2 train configs from the local synthetic corpus.
+"""Refresh anonymous-placeholder/anonymous-pii-v2 train configs from the local synthetic corpus.
 
 For each of the 17 languages: ``train = dedup(union(existing HF config, local
 **/accepted.{code}.jsonl))`` with every held-out row removed. "Held out" is the
@@ -34,18 +34,18 @@ import argparse
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from meddies_pii.generation.label_corpus.generation_runs import SYNTHETIC_ROOT
-from meddies_pii.jsonl import read_jsonl
-from meddies_pii.languages import LANGUAGE_PROFILES, normalize_language
-from meddies_pii.publishing.corpus_split import dedup_rows, drop_held_out, text_hash
-from meddies_pii.publishing.huggingface import push_config
+from anonymous_pii.generation.label_corpus.generation_runs import SYNTHETIC_ROOT
+from anonymous_pii.jsonl import read_jsonl
+from anonymous_pii.languages import LANGUAGE_PROFILES, normalize_language
+from anonymous_pii.publishing.corpus_split import dedup_rows, drop_held_out, text_hash
+from anonymous_pii.publishing.huggingface import push_config
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
 Row = dict[str, Any]
 
-REPO_ID = "Meddies/meddies-pii-v2"
+REPO_ID = "anonymous-placeholder/anonymous-pii-v2"
 EVAL_CONFIG = "eval"
 CHALLENGE_CONFIG = "eval-challenge"
 

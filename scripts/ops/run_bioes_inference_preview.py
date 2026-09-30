@@ -22,18 +22,18 @@ from typing import TYPE_CHECKING, Any, TypedDict, Unpack
 
 import modal
 
-from meddies_pii.modal_runtime import add_source_pythonpath
-from meddies_pii.training.bioes.modal.train import (
+from anonymous_pii.modal_runtime import add_source_pythonpath
+from anonymous_pii.training.bioes.modal.train import (
     ARTIFACT_VOLUME_MOUNT,
     ARTIFACT_VOLUME_NAME,
     DEFAULT_GPU,
     H100_GPU,
     artifact_volume,
 )
-from meddies_pii.training.bioes.modal.train import (
+from anonymous_pii.training.bioes.modal.train import (
     image as train_image,
 )
-from meddies_pii.training.bioes.reports.inference_preview import (
+from anonymous_pii.training.bioes.reports.inference_preview import (
     DEFAULT_INFERENCE_JSON,
     DEFAULT_OUTPUT_DIR,
     DEFAULT_RESULT_JSON,
@@ -43,9 +43,9 @@ from meddies_pii.training.bioes.reports.inference_preview import (
 )
 
 if TYPE_CHECKING:
-    from meddies_pii.spans import CharSpan
+    from anonymous_pii.spans import CharSpan
 
-APP_NAME = "meddies-lfm25-native-bioes-inference-preview"
+APP_NAME = "anonymous-lfm25-native-bioes-inference-preview"
 DATASET_REVISION = "04be20f2c42d3f92b022edefbfb4d343fef78b2c"
 DEFAULT_CHECKPOINT = "/artifacts/bioes/20260604_h100_8192_r128a256_pack_bs128_150step_ckpt10/unsloth"
 
@@ -108,14 +108,14 @@ def _infer_preview_impl(  # ruff: ignore[too-many-arguments]
     eval_config: str,
     eval_dataset_split: str,
 ) -> dict[str, Any]:
-    from meddies_pii.annotations.bioes import ENTITY_LABELS
-    from meddies_pii.eval_baseline.adapters.lfm_bioes import LfmBioesAdapter
-    from meddies_pii.training.bioes.data.preparation import (
+    from anonymous_pii.annotations.bioes import ENTITY_LABELS
+    from anonymous_pii.eval_baseline.adapters.lfm_bioes import LfmBioesAdapter
+    from anonymous_pii.training.bioes.data.preparation import (
         _prepare_rows,
         _select_source_rows,
     )
-    from meddies_pii.training.bioes.eval.harness import new_slice_filter_report
-    from meddies_pii.training.bioes.trainers.trainer import _load_rows
+    from anonymous_pii.training.bioes.eval.harness import new_slice_filter_report
+    from anonymous_pii.training.bioes.trainers.trainer import _load_rows
 
     print(
         f"bioes_preview: build_artifacts start checkpoint={checkpoint} preview_limit={preview_limit}",
@@ -223,7 +223,7 @@ def main(  # ruff: ignore[too-many-arguments,too-many-positional-arguments]
     preview_limit: int = 12,
     scan_multiplier: int = 8,
     max_length: int = 8192,
-    dataset_id: str = "Meddies/meddies-pii",
+    dataset_id: str = "anonymous-placeholder/anonymous-pii",
     dataset_revision: str | None = DATASET_REVISION,
     eval_config: str = "pii-bioes",
     eval_dataset_split: str = "validation",

@@ -7,7 +7,7 @@ corpus or running inference.
 
 Run on Modal CPU:
 
-    MODAL_PROFILE=meddies-run uv run modal run \
+    MODAL_PROFILE=anonymous-run uv run modal run \
       scripts/quality/profile_eval_aggregation.py::profile
 """
 
@@ -34,20 +34,20 @@ from typing import TYPE_CHECKING, overload, override
 
 import modal
 
-from meddies_pii.eval_baseline.baseline.datasets import EVAL_EXPECTED_ROWS
-from meddies_pii.json_types import JsonObject, JsonValue
-from meddies_pii.modal_runtime import (
+from anonymous_pii.eval_baseline.baseline.datasets import EVAL_EXPECTED_ROWS
+from anonymous_pii.json_types import JsonObject, JsonValue
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
 )
-from meddies_pii.runtime_memory import peak_rss_bytes
+from anonymous_pii.runtime_memory import peak_rss_bytes
 
 if TYPE_CHECKING:
-    from meddies_pii.taxonomy import PiiLabel
+    from anonymous_pii.taxonomy import PiiLabel
 
 WRONG_LABEL_OUTCOME = 2
 
-APP_NAME = "meddies-pii-aggregation-profile"
+APP_NAME = "anonymous-pii-aggregation-profile"
 FULL_MATRIX_ROWS = sum(EVAL_EXPECTED_ROWS.values())
 SUPPORTED_LABELS: frozenset[PiiLabel] = frozenset({"email_address", "human_name"})
 
@@ -131,8 +131,8 @@ def _profile_fixture(rows_per_cell: int) -> tuple[dict[str, _GeneratedRows], int
 @app.function(cpu=8.0, memory=16_384, timeout=30 * 60)
 def profile(rows_per_cell: int = 0) -> JsonObject:
     """Return aggregation RSS/time for the fixed matrix shape or a small probe."""
-    from meddies_pii.eval_baseline.baseline.aggregate import aggregate_results
-    from meddies_pii.evaluation.identity import (
+    from anonymous_pii.eval_baseline.baseline.aggregate import aggregate_results
+    from anonymous_pii.evaluation.identity import (
         ArtifactIdentity,
         EvaluationContract,
         canonical_sha256,

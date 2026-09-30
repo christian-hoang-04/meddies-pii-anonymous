@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from meddies_pii.json_types import as_json_object, is_json_value
+from anonymous_pii.json_types import as_json_object, is_json_value
 
 
 def test_accepts_nested_json_value() -> None:

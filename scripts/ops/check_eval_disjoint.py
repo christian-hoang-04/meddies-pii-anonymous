@@ -17,9 +17,9 @@ import hashlib
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from meddies_pii.historical_artifacts import LEGACY_ARTIFACT_TOKEN
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.jsonl import read_jsonl
+from anonymous_pii.historical_artifacts import LEGACY_ARTIFACT_TOKEN
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.jsonl import read_jsonl
 
 if TYPE_CHECKING:
     from collections.abc import Sequence

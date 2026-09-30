@@ -13,12 +13,12 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.evaluation.identity import (
     ArtifactIdentity,
     EvaluationContract,
     canonical_sha256,
 )
-from meddies_pii.json_types import is_str_mapping
+from anonymous_pii.json_types import is_str_mapping
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

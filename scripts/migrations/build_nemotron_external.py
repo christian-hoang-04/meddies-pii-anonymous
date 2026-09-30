@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-"""Build the Nemotron external Meddies Labels dataset (train + eval) locally.
+"""Build the Nemotron external Anonymous Labels dataset (train + eval) locally.
 
-Converts ``nvidia/Nemotron-PII`` into the Meddies Labels span schema via the tested
+Converts ``nvidia/Nemotron-PII`` into the Anonymous Labels span schema via the tested
 ``convert_nemotron_row`` adapter, then assembles the two splits agreed for
-``Meddies/meddies-pii-external`` / config ``nemotron``:
+``anonymous-placeholder/anonymous-pii-external`` / config ``nemotron``:
 
 * ``train`` = nemotron ``train``
 * ``eval``  = nemotron ``test``
@@ -30,23 +30,23 @@ from typing import TYPE_CHECKING
 
 from datasets import load_dataset
 
-from meddies_pii.historical_artifacts import legacy_jsonl_locator
-from meddies_pii.training.bioes.data.augmentation import (
+from anonymous_pii.historical_artifacts import legacy_jsonl_locator
+from anonymous_pii.training.bioes.data.augmentation import (
     text_hash,
     write_json,
     write_jsonl,
     write_parquet,
 )
-from meddies_pii.training.bioes.data.mixed import (
+from anonymous_pii.training.bioes.data.mixed import (
     convert_nemotron_row,
     summarize_records,
 )
-from meddies_pii.training.bioes.data.splits import normalize_text
+from anonymous_pii.training.bioes.data.splits import normalize_text
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    from meddies_pii.training.bioes.data.record_schema import NormalizedRecord
+    from anonymous_pii.training.bioes.data.record_schema import NormalizedRecord
 
 DATASET_ID = "nvidia/Nemotron-PII"
 
@@ -61,7 +61,7 @@ def convert_split(
     max_scan: int | None,
     log_every: int = 50_000,
 ) -> tuple[list[NormalizedRecord], Counter[str]]:
-    """Convert every row of one Nemotron split into Meddies Labels span records."""
+    """Convert every row of one Nemotron split into Anonymous Labels span records."""
     records: list[NormalizedRecord] = []
     dropped: Counter[str] = Counter()
     rows = load_dataset(DATASET_ID, split=split)
@@ -132,7 +132,7 @@ def main() -> None:
     dropped = drop_train + drop_test
     summary = {
         "dataset_id": DATASET_ID,
-        "repo_target": "Meddies/meddies-pii-external",
+        "repo_target": "anonymous-placeholder/anonymous-pii-external",
         "config": "nemotron",
         "train_source": "nemotron train",
         "eval_source": "nemotron test",

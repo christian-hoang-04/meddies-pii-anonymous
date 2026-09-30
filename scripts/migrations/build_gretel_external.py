@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-"""Build the gretel external Meddies Labels dataset (train + eval) locally.
+"""Build the gretel external Anonymous Labels dataset (train + eval) locally.
 
-Converts ``gretelai/gretel-pii-masking-en-v1`` into the Meddies Labels span schema via
+Converts ``gretelai/gretel-pii-masking-en-v1`` into the Anonymous Labels span schema via
 the tested ``convert_gretel_row`` adapter, then assembles the two splits agreed
-for ``Meddies/meddies-pii-external`` / config ``gretel``:
+for ``anonymous-placeholder/anonymous-pii-external`` / config ``gretel``:
 
 * ``train`` = gretel ``train`` + ``validation`` (merged)
 * ``eval``  = gretel ``test``
@@ -28,24 +28,24 @@ from typing import TYPE_CHECKING
 
 from datasets import load_dataset
 
-from meddies_pii.historical_artifacts import legacy_jsonl_locator
-from meddies_pii.training.bioes.data.augmentation import (
+from anonymous_pii.historical_artifacts import legacy_jsonl_locator
+from anonymous_pii.training.bioes.data.augmentation import (
     text_hash,
     write_json,
     write_jsonl,
     write_parquet,
 )
-from meddies_pii.training.bioes.data.mixed import convert_gretel_row, summarize_records
-from meddies_pii.training.bioes.data.splits import normalize_text
+from anonymous_pii.training.bioes.data.mixed import convert_gretel_row, summarize_records
+from anonymous_pii.training.bioes.data.splits import normalize_text
 
 if TYPE_CHECKING:
-    from meddies_pii.training.bioes.data.record_schema import NormalizedRecord
+    from anonymous_pii.training.bioes.data.record_schema import NormalizedRecord
 
 DATASET_ID = "gretelai/gretel-pii-masking-en-v1"
 
 
 def convert_split(split: str, *, max_scan: int | None) -> tuple[list[NormalizedRecord], Counter[str]]:
-    """Convert every row of one gretel split into Meddies Labels span records."""
+    """Convert every row of one gretel split into Anonymous Labels span records."""
     records: list[NormalizedRecord] = []
     dropped: Counter[str] = Counter()
     rows = load_dataset(DATASET_ID, split=split, streaming=True)
@@ -114,7 +114,7 @@ def main() -> None:
     dropped = drop_train + drop_validation + drop_test
     summary = {
         "dataset_id": DATASET_ID,
-        "repo_target": "Meddies/meddies-pii-external",
+        "repo_target": "anonymous-placeholder/anonymous-pii-external",
         "config": "gretel",
         "train_source": "gretel train + validation (merged)",
         "eval_source": "gretel test",

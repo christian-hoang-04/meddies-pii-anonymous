@@ -7,9 +7,9 @@ from typing import TYPE_CHECKING, Protocol
 import pytest
 from PIL import Image
 
-import meddies_pii.pdf_redaction.document_pdfium as document_module
-import meddies_pii.pdf_redaction.document_pdfium_support as support_module
-from meddies_pii.pdf_redaction.document import (
+import anonymous_pii.pdf_redaction.document_pdfium as document_module
+import anonymous_pii.pdf_redaction.document_pdfium_support as support_module
+from anonymous_pii.pdf_redaction.document import (
     DocumentAdapterError,
     PdfiumDocumentAdapter,
 )

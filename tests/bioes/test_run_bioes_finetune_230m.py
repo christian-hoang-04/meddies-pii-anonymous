@@ -36,7 +36,7 @@ def test_default_recipe_binds_every_settled_issue_78_value(
 
     monkeypatch.setattr(runner, "SmokeTrainingConfig", capture_config)
 
-    assert runner.ISSUE_78_URL == "https://example.invalid/anonymous/meddies-pii/issues/78"
+    assert runner.ISSUE_78_URL == "https://example.invalid/anonymous/anonymous-pii/issues/78"
     runner.build_config(runner.parse_args([]))
 
     assert (
@@ -44,10 +44,10 @@ def test_default_recipe_binds_every_settled_issue_78_value(
         >= {
             "backend": "unsloth",
             "model_id": "LiquidAI/LFM2.5-230M-Base",
-            "dataset_id": "Meddies/meddies-pii-mixed",
+            "dataset_id": "anonymous-placeholder/anonymous-pii-mixed",
             "train_config": "default",
             "dataset_split": "train",
-            "eval_dataset_id": "Meddies/meddies-pii-v2",
+            "eval_dataset_id": "anonymous-placeholder/anonymous-pii-v2",
             "eval_config": "eval",
             "eval_dataset_split": "train",
             "max_length": 8192,

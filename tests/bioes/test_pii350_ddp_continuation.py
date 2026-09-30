@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any, cast
 import pytest
 import torch
 
-from meddies_pii.training.bioes.trainers import pii350_ddp_continuation as continuation
+from anonymous_pii.training.bioes.trainers import pii350_ddp_continuation as continuation
 
 if TYPE_CHECKING:
     from collections.abc import MutableMapping
@@ -51,12 +51,12 @@ def test_step60_resume_assigns_four_windows_and_commits_step61_cursor7808() -> N
 
 
 def test_trajectory_digest_survives_profile_change_but_execution_digest_does_not() -> None:
-    first = continuation.render_segment_contract("meddiesresearch")
+    first = continuation.render_segment_contract("anonymousresearch")
     second = continuation.render_segment_contract("private-profile-d")
     assert continuation.WAVE_ORDER == (
-        "meddiesresearch",
+        "anonymousresearch",
         "private-profile-d",
-        "meddies-ocr",
+        "anonymous-ocr",
     )
     assert second["execution"]["timeout_seconds"] == 10_800
     assert second["execution"]["all_in_ceiling_usd"] == 30.0
@@ -75,7 +75,7 @@ def test_trajectory_digest_survives_profile_change_but_execution_digest_does_not
 
 
 def test_schema_v2_records_explicit_single_to_two_rank_transition_for_wave_one() -> None:
-    contract = continuation.render_segment_contract("meddiesresearch")
+    contract = continuation.render_segment_contract("anonymousresearch")
     metadata = continuation.checkpoint_metadata_v2(
         contract,
         parent_checkpoint_digest="source-step60",
@@ -94,7 +94,7 @@ def test_schema_v2_records_explicit_single_to_two_rank_transition_for_wave_one()
 
 
 def test_two_rank_checkpoint_can_transition_to_four_without_reusing_rng_streams() -> None:
-    wave_one = continuation.render_segment_contract("meddiesresearch")
+    wave_one = continuation.render_segment_contract("anonymousresearch")
     rank_rng_states = [{"rank": rank, "cpu_rng": "00", "cuda_rng": "00"} for rank in range(2)]
     metadata = continuation.checkpoint_metadata_v2(
         wave_one,
@@ -105,7 +105,7 @@ def test_two_rank_checkpoint_can_transition_to_four_without_reusing_rng_streams(
         rank_rng_states=rank_rng_states,
         execution_world_size=2,
         source_world_size=1,
-        wave_profile="meddiesresearch",
+        wave_profile="anonymousresearch",
     )
     assert metadata["world_size"] == 2
     assert metadata["rng_transition"]["kind"] == "single_rank_to_two_rank_v1"
@@ -179,14 +179,14 @@ def test_budget_and_whole_checkpoint_evaluation_scheduler_are_deterministic() ->
     queue = continuation.assign_evaluation_checkpoints(["step-100", "step-150", "step-200", "step-250"])
     assert queue == [
         ("step-100", "diffusionllm"),
-        ("step-150", "meddies-pii"),
+        ("step-150", "anonymous-pii"),
         ("step-200", "private-profile-c"),
-        ("step-250", "meddies-run"),
+        ("step-250", "anonymous-run"),
     ]
 
 
 def test_launch_digest_binds_parent_identity_and_terminal_checkpoint_never_overwrites_cadence() -> None:
-    contract = continuation.render_segment_contract("meddiesresearch")
+    contract = continuation.render_segment_contract("anonymousresearch")
     source = {
         "checkpoint_digest": "parent-100",
         "optimizer_step": 100,
@@ -221,9 +221,9 @@ def test_preflight_digest_is_independent_of_future_stage_two_source_root() -> No
 
 
 def test_three_stage_rendered_commands_require_explicit_preflight_and_parent_receipts() -> None:
-    preflight = continuation.render_preflight_command("meddiesresearch")
-    source = continuation.render_cpu_receipt_command("meddiesresearch", "/artifacts/step60")
-    train = continuation.render_train_command("meddiesresearch")
+    preflight = continuation.render_preflight_command("anonymousresearch")
+    source = continuation.render_cpu_receipt_command("anonymousresearch", "/artifacts/step60")
+    train = continuation.render_train_command("anonymousresearch")
     assert "--preflight" in preflight
     assert "--source-root '/artifacts/step60'" in source
     assert "--source-receipt-json" in train
@@ -234,7 +234,7 @@ def test_three_stage_rendered_commands_require_explicit_preflight_and_parent_rec
 
 
 def test_default_source_receipt_command_is_paste_ready_for_the_frozen_step60_parent() -> None:
-    command = continuation.render_cpu_receipt_command("meddiesresearch")
+    command = continuation.render_cpu_receipt_command("anonymousresearch")
     assert "<SOURCE_CHECKPOINT_ROOT>" not in command
     assert "/artifacts/full-runs/pii350/2e679221fd7c4ec6925e13f27cf96769/checkpoints/step-00000060" in command
 
@@ -259,7 +259,7 @@ def test_exact_terminal_partial_covers_all_remaining_units_once_in_four_equal_sl
 
 
 def test_only_the_terminal_partial_metadata_may_break_step_times_128() -> None:
-    contract = continuation.render_segment_contract("meddies-ocr")
+    contract = continuation.render_segment_contract("anonymous-ocr")
     rng = [{"rank": rank, "cpu_rng": "00", "cuda_rng": "00"} for rank in range(4)]
     metadata = continuation.checkpoint_metadata_v2(
         contract,
@@ -268,7 +268,7 @@ def test_only_the_terminal_partial_metadata_may_break_step_times_128() -> None:
         cursor=120_036,
         lifecycle_state="terminal",
         rank_rng_states=rng,
-        wave_profile="meddies-ocr",
+        wave_profile="anonymous-ocr",
         wave_cumulative_all_in_cost_usd=70.0,
     )
     assert metadata["epoch_complete"] is True
@@ -284,13 +284,13 @@ def test_only_the_terminal_partial_metadata_may_break_step_times_128() -> None:
 
 
 def test_wave_order_and_epoch_terminal_refuse_invalid_next_launches() -> None:
-    assert continuation.validate_wave_source("meddiesresearch", {"wave_profile": None}) == 0.0
-    assert continuation.validate_wave_source("private-profile-d", {"wave_profile": "meddiesresearch"}) == 0.0
-    assert continuation.validate_wave_source("meddies-ocr", {"wave_profile": "private-profile-d"}) == 0.0
+    assert continuation.validate_wave_source("anonymousresearch", {"wave_profile": None}) == 0.0
+    assert continuation.validate_wave_source("private-profile-d", {"wave_profile": "anonymousresearch"}) == 0.0
+    assert continuation.validate_wave_source("anonymous-ocr", {"wave_profile": "private-profile-d"}) == 0.0
     with pytest.raises(RuntimeError, match="prior wave"):
-        continuation.validate_wave_source("meddies-ocr", {"wave_profile": "meddiesresearch"})
+        continuation.validate_wave_source("anonymous-ocr", {"wave_profile": "anonymousresearch"})
     with pytest.raises(RuntimeError, match="epoch-terminal"):
-        continuation.validate_wave_source("meddies-ocr", {"epoch_complete": True, "wave_profile": "meddies-ocr"})
+        continuation.validate_wave_source("anonymous-ocr", {"epoch_complete": True, "wave_profile": "anonymous-ocr"})
 
 
 def test_auxiliary_reserve_is_applied_once_for_new_wave_and_not_again_on_resume() -> None:
@@ -299,19 +299,19 @@ def test_auxiliary_reserve_is_applied_once_for_new_wave_and_not_again_on_resume(
         "wave_cumulative_all_in_cost_usd": 30.0,
     }
     resumed_ocr = {
-        "wave_profile": "meddies-ocr",
+        "wave_profile": "anonymous-ocr",
         "wave_cumulative_all_in_cost_usd": 12.5,
     }
-    assert continuation.effective_wave_carried_cost("meddies-ocr", new_ocr) == 1.2
-    assert continuation.effective_wave_carried_cost("meddies-ocr", resumed_ocr) == 12.5
-    contract = continuation.render_segment_contract("meddies-ocr")
+    assert continuation.effective_wave_carried_cost("anonymous-ocr", new_ocr) == 1.2
+    assert continuation.effective_wave_carried_cost("anonymous-ocr", resumed_ocr) == 12.5
+    contract = continuation.render_segment_contract("anonymous-ocr")
     reserve = contract["execution"]["auxiliary_billing_reserve"]
     assert reserve["usd"] == 1.2
     assert reserve["max_cpu_calls"] == 12
 
 
 def test_gpu_budget_uses_full_ceiling_minus_effective_auxiliary_carry() -> None:
-    effective_carry = continuation.effective_wave_carried_cost("meddies-ocr", {"wave_profile": "private-profile-d"})
+    effective_carry = continuation.effective_wave_carried_cost("anonymous-ocr", {"wave_profile": "private-profile-d"})
     assert not continuation.budget_allows_next_step(
         elapsed_seconds=69.0,
         predicted_step_seconds=1.0,
@@ -322,19 +322,19 @@ def test_gpu_budget_uses_full_ceiling_minus_effective_auxiliary_carry() -> None:
 
 
 def test_static_slice_denominations_admit_hangs_without_exceeding_wave_ceiling() -> None:
-    assert continuation.select_slice_timeout_seconds("meddiesresearch", carried_cost_usd=0.0) == 7_900
+    assert continuation.select_slice_timeout_seconds("anonymousresearch", carried_cost_usd=0.0) == 7_900
     assert continuation.select_slice_timeout_seconds("private-profile-d", carried_cost_usd=0.4) == 10_800
-    assert continuation.select_slice_timeout_seconds("meddies-ocr", carried_cost_usd=1.2) == 10_800
-    assert continuation.select_slice_timeout_seconds("meddies-ocr", carried_cost_usd=60.0) == 4_000
+    assert continuation.select_slice_timeout_seconds("anonymous-ocr", carried_cost_usd=1.2) == 10_800
+    assert continuation.select_slice_timeout_seconds("anonymous-ocr", carried_cost_usd=60.0) == 4_000
     with pytest.raises(RuntimeError, match="no approved"):
-        continuation.select_slice_timeout_seconds("meddiesresearch", carried_cost_usd=3.0)
+        continuation.select_slice_timeout_seconds("anonymousresearch", carried_cost_usd=3.0)
 
 
 def test_wave_one_admission_uses_live_balance_without_double_counting_history() -> None:
-    carried = continuation.effective_wave_carried_cost("meddiesresearch", {"wave_profile": None})
+    carried = continuation.effective_wave_carried_cost("anonymousresearch", {"wave_profile": None})
     assert pytest.approx(2.16724464) == continuation.WAVE_ONE_FAILED_CONTAINER_CARRY_USD
     assert carried == 0.0
-    contract = continuation.render_segment_contract("meddiesresearch")
+    contract = continuation.render_segment_contract("anonymousresearch")
     rate = contract["execution"]["all_in_rate_usd_per_second"]
     assert rate == pytest.approx(0.00136048)
     assert contract["execution"]["all_in_ceiling_usd"] == 11.0
@@ -344,14 +344,14 @@ def test_wave_one_admission_uses_live_balance_without_double_counting_history() 
     total = carried + 7_900 * rate
     assert total == pytest.approx(10.747792)
     assert 11.0 - total == pytest.approx(0.252208)
-    continuation.require_slice_admission("meddiesresearch", carried_cost_usd=carried, slice_timeout_seconds=7_900)
+    continuation.require_slice_admission("anonymousresearch", carried_cost_usd=carried, slice_timeout_seconds=7_900)
     with pytest.raises(RuntimeError, match="largest approved"):
-        continuation.require_slice_admission("meddiesresearch", carried_cost_usd=carried, slice_timeout_seconds=8_000)
+        continuation.require_slice_admission("anonymousresearch", carried_cost_usd=carried, slice_timeout_seconds=8_000)
     with pytest.raises(RuntimeError, match="largest approved"):
-        continuation.require_slice_admission("meddiesresearch", carried_cost_usd=carried, slice_timeout_seconds=8_300)
-    assert continuation.select_slice_timeout_seconds("meddiesresearch", carried_cost_usd=carried) == 7_900
+        continuation.require_slice_admission("anonymousresearch", carried_cost_usd=carried, slice_timeout_seconds=8_300)
+    assert continuation.select_slice_timeout_seconds("anonymousresearch", carried_cost_usd=carried) == 7_900
     with pytest.raises(RuntimeError, match="no approved"):
-        continuation.select_slice_timeout_seconds("meddiesresearch", carried_cost_usd=carried + 0.3)
+        continuation.select_slice_timeout_seconds("anonymousresearch", carried_cost_usd=carried + 0.3)
 
 
 # reason: Checkpoint, evaluation, and comparison digests plus metrics are independent cadence-receipt axes.
@@ -495,7 +495,7 @@ def test_recomputed_digests_cannot_turn_real_early_stop_into_continue() -> None:
 
 
 def test_rendered_timeout_is_the_profile_static_cap_not_the_legacy_10800_default() -> None:
-    contract = continuation.render_segment_contract("meddiesresearch")
+    contract = continuation.render_segment_contract("anonymousresearch")
     assert contract["execution"]["timeout_seconds"] == 7_900
 
 

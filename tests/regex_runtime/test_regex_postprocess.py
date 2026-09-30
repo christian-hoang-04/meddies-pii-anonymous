@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from meddies_pii.regex_runtime.postprocess import merge_tiered_candidates
-from meddies_pii.regex_runtime.rules import RegexCandidate, RegexTier
-from meddies_pii.spans import CharSpan
+from anonymous_pii.regex_runtime.postprocess import merge_tiered_candidates
+from anonymous_pii.regex_runtime.rules import RegexCandidate, RegexTier
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
-    from meddies_pii.taxonomy import PiiLabel
+    from anonymous_pii.taxonomy import PiiLabel
 
 _TEXT = "Email: alpha@example.invalid"
 

@@ -3,7 +3,8 @@
 ORGANISATION/BANKNAME/HOSPITALNAME -> company_name, ACCOUNTNUM/POLICYNUM/ MACADDRESS -> id_number, USERNAME/DOCTORNAME ->
 human_name.
 
-Adjacent TITLE+GIVENNAME+SURNAME merge into ONE human_name span (matching meddies-pii-v2's "Dr. Jane Doe = one span"); TIME
+Adjacent TITLE+GIVENNAME+SURNAME merge into ONE human_name span (matching
+anonymous-pii-v2's "Dr. Jane Doe = one span"); TIME
 still -> date.
 
 A TITLE with no adjacent given/surname is NOT a name → dropped, not tagged.
@@ -30,7 +31,7 @@ A near-duplicate differing only by internal whitespace / case must dedupe to one
 leaks into training (the raw-sha1 gap). normalize_text strips + lowercases + collapses whitespace.
 
 English-only corpus: every gretel row is 'en', which passes the gate; a non-17-language row would be dropped by
-is_supported_meddies_language.
+is_supported_anonymous_language.
 
 A gretel-shaped row routed through the build dispatch must produce PII-label spans — proving convert_gretel_row is actually
 wired into convert_external (ADR 0008 §1: gretel source dispatch).
@@ -48,13 +49,13 @@ import json
 from collections import Counter
 from typing import TYPE_CHECKING
 
-from meddies_pii.annotations.span_records import parse_labeled_record
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.training.bioes.data.mixed import (
+from anonymous_pii.annotations.span_records import parse_labeled_record
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.training.bioes.data.mixed import (
     convert_ai4privacy_row,
     convert_gretel_row,
     convert_nemotron_row,
-    is_supported_meddies_language,
+    is_supported_anonymous_language,
     language_bucket,
     map_external_label_to_pii_label,
     summarize_records,
@@ -359,11 +360,11 @@ def test_language_bucket_treats_vietnamese_translated_source_as_vi() -> None:
     assert language_bucket(language="UNKNOWN", source="vietnamese-translated") == "vi"
 
 
-def test_supported_meddies_language_rejects_non_target_external_language() -> None:
-    assert is_supported_meddies_language("fr")
-    assert is_supported_meddies_language("us")
-    assert not is_supported_meddies_language("bg")
-    assert not is_supported_meddies_language("nl")
+def test_supported_anonymous_language_rejects_non_target_external_language() -> None:
+    assert is_supported_anonymous_language("fr")
+    assert is_supported_anonymous_language("us")
+    assert not is_supported_anonymous_language("bg")
+    assert not is_supported_anonymous_language("nl")
 
 
 def test_convert_gretel_row_reads_label_from_types_and_value_from_entity() -> None:
@@ -530,7 +531,7 @@ def test_convert_gretel_row_returns_none_when_no_pii_spans_survive() -> None:
 
 
 def test_dedupe_collapses_whitespace_and_case_variants() -> None:
-    from meddies_pii.training.bioes.data.mixed_build import _dedupe_records_by_text
+    from anonymous_pii.training.bioes.data.mixed_build import _dedupe_records_by_text
 
     rows: list[dict[str, object]] = [
         {"text": "Bệnh viện Chợ Rẫy"},
@@ -544,12 +545,12 @@ def test_dedupe_collapses_whitespace_and_case_variants() -> None:
 
 
 def test_gretel_rows_route_through_language_gate() -> None:
-    assert is_supported_meddies_language("en")
-    assert not is_supported_meddies_language("sw")
+    assert is_supported_anonymous_language("en")
+    assert not is_supported_anonymous_language("sw")
 
 
 def test_gretel_dispatch_yields_pii_label_spans() -> None:
-    from meddies_pii.training.bioes.data.mixed_sources import (
+    from anonymous_pii.training.bioes.data.mixed_sources import (
         EXTERNAL_DATASETS,
         convert_external,
     )
@@ -582,7 +583,7 @@ def test_gretel_dispatch_yields_pii_label_spans() -> None:
 def test_local_external_rows_dispatch_converter_by_filename_stem(
     tmp_path: Path,
 ) -> None:
-    from meddies_pii.training.bioes.data.mixed_sources import load_local_external_rows
+    from anonymous_pii.training.bioes.data.mixed_sources import load_local_external_rows
 
     external_dir = tmp_path / "external"
     external_dir.mkdir()

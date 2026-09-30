@@ -9,7 +9,7 @@ Two entry points (run smoke first, it's the risky adapter+classifier load):
     MODAL_PROFILE=openmedical uv run modal run scripts/ops/run_baseline_eval.py::smoke
     MODAL_PROFILE=openmedical uv run modal run scripts/ops/run_baseline_eval.py::full
 
-The checkpoint lives on Modal Volume ``meddies-pii-bioes-artifacts`` (profile
+The checkpoint lives on Modal Volume ``anonymous-pii-bioes-artifacts`` (profile
 openmedical) under ``CHECKPOINT_DIR``; eval sets under ``run1/``. Results are
 PRINTED (``SMOKE_OK::`` / ``BASELINE_RESULT::``), never returned — the Modal
 large-result blob path is broken and a single log line truncates ~64KB.
@@ -42,15 +42,15 @@ from typing import TYPE_CHECKING, Any
 
 import modal
 
-from meddies_pii.modal_runtime import (
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
 )
 
 if TYPE_CHECKING:
-    from meddies_pii.training.bioes.data.artifacts import ProbeArtifacts
+    from anonymous_pii.training.bioes.data.artifacts import ProbeArtifacts
 
-ARTIFACT_VOLUME_NAME = "meddies-pii-bioes-artifacts"
+ARTIFACT_VOLUME_NAME = "anonymous-pii-bioes-artifacts"
 ARTIFACT_VOLUME_MOUNT = "/artifacts"
 CHECKPOINT_DIR = "bioes/20260604_h100_8192_r128a256_pack_bs128_150step_ckpt10/unsloth"
 EVAL_FILES = {
@@ -84,7 +84,7 @@ image = add_source_pythonpath(
 )
 
 artifact_volume = modal.Volume.from_name(ARTIFACT_VOLUME_NAME)
-app = modal.App("meddies-bioes-run1-baseline-eval", image=image)
+app = modal.App("anonymous-bioes-run1-baseline-eval", image=image)
 
 
 def _seed_everything(seed: int) -> None:
@@ -113,7 +113,7 @@ def _build_loaded_artifacts() -> tuple[ProbeArtifacts, dict[str, Any]]:
 
     import torch
 
-    from meddies_pii.training.bioes.data.artifacts import (
+    from anonymous_pii.training.bioes.data.artifacts import (
         build_native_checkpoint_artifacts,
     )
 
@@ -273,7 +273,7 @@ def _records_to_audit_rows(records: list[dict[str, Any]]) -> list[dict[str, Any]
 
 def _prepare_eval_rows(records: list[dict[str, Any]], artifacts: ProbeArtifacts) -> tuple[list[Any], dict[str, str]]:
     """Prepare rows via the existing select+prepare path; return rows + uid→lang."""
-    from meddies_pii.training.bioes.data.preparation import (
+    from anonymous_pii.training.bioes.data.preparation import (
         _prepare_rows,
         _select_source_rows,
     )
@@ -325,11 +325,11 @@ def smoke() -> None:  # ruff: ignore[too-many-locals]
     _seed_everything(SEED)
     import torch
 
-    from meddies_pii.annotations.bioes import (
+    from anonymous_pii.annotations.bioes import (
         decode_bioes_from_offsets,
         viterbi_decode_logits,
     )
-    from meddies_pii.training.bioes.trainers.batching import _collate
+    from anonymous_pii.training.bioes.trainers.batching import _collate
 
     artifacts, load_report = _build_loaded_artifacts()
     print(f"LOAD_REPORT::{json.dumps(load_report, ensure_ascii=False)}", flush=True)
@@ -372,12 +372,12 @@ def smoke() -> None:  # ruff: ignore[too-many-locals]
 
 def _evaluate_group(artifacts: ProbeArtifacts, rows: list[Any]) -> dict[str, Any]:
     """Run _evaluate + per-label F1 for a row group; return a compact summary."""
-    from meddies_pii.evaluation.span_metrics import (
+    from anonymous_pii.evaluation.span_metrics import (
         SpanMetricBlock,
         containment_span_prf_by_label,
         exact_span_prf_by_label,
     )
-    from meddies_pii.training.bioes.trainers.evaluation import _evaluate
+    from anonymous_pii.training.bioes.trainers.evaluation import _evaluate
 
     metrics = _evaluate(artifacts, rows)
 
@@ -386,11 +386,11 @@ def _evaluate_group(artifacts: ProbeArtifacts, rows: list[Any]) -> dict[str, Any
     for index, row in enumerate(rows):
         import torch
 
-        from meddies_pii.annotations.bioes import (
+        from anonymous_pii.annotations.bioes import (
             decode_bioes_from_offsets,
             viterbi_decode_logits,
         )
-        from meddies_pii.training.bioes.trainers.batching import _collate
+        from anonymous_pii.training.bioes.trainers.batching import _collate
 
         device = str(next(artifacts.tagger.parameters()).device)
         with torch.no_grad():

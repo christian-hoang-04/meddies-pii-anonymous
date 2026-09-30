@@ -4,21 +4,21 @@ from __future__ import annotations
 # reason: the import is deferred so a patch is in place first, and so collection does not pay for the heavy dependency.
 from typing import TYPE_CHECKING
 
-from meddies_pii.generation.label_corpus.catalog import SCENARIOS
-from meddies_pii.generation.label_corpus.repair import (
+from anonymous_pii.generation.label_corpus.catalog import SCENARIOS
+from anonymous_pii.generation.label_corpus.repair import (
     repair_inline_tag_format,
     repair_rejected_artifacts,
     split_rejected_records,
 )
-from meddies_pii.generation.label_corpus.synthetic import language_paths
-from meddies_pii.generation.label_corpus.validate import validate_tagged_document
-from meddies_pii.historical_artifacts import LEGACY_REPAIRED_REJECTS_DATASET_ID
-from meddies_pii.jsonl import read_jsonl, write_jsonl
+from anonymous_pii.generation.label_corpus.synthetic import language_paths
+from anonymous_pii.generation.label_corpus.validate import validate_tagged_document
+from anonymous_pii.historical_artifacts import LEGACY_REPAIRED_REJECTS_DATASET_ID
+from anonymous_pii.jsonl import read_jsonl, write_jsonl
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from meddies_pii.generation.label_corpus.catalog import Scenario
+    from anonymous_pii.generation.label_corpus.catalog import Scenario
 
 
 def _scenario(name: str) -> Scenario:
@@ -75,7 +75,7 @@ def test_repair_inline_tag_format_wraps_value_after_field_prefix_not_prefix_itse
 
 
 def test_repair_rejected_records_returns_repaired_candidates_and_keeps_api_errors() -> None:
-    from meddies_pii.generation.label_corpus.repair import repair_rejected_records
+    from anonymous_pii.generation.label_corpus.repair import repair_rejected_records
 
     rejected_rows: list[dict[str, object]] = [
         {"errors": ["api_error"], "error": "429 Too Many Requests"},

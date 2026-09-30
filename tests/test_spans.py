@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from meddies_pii.spans import CharSpan, char_span_from_value, char_span_to_dict
+from anonymous_pii.spans import CharSpan, char_span_from_value, char_span_to_dict
 
 
 def test_char_span_round_trips_through_persisted_json_value() -> None:

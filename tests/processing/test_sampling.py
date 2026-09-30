@@ -4,15 +4,15 @@ import logging
 import random
 from typing import TYPE_CHECKING
 
-from meddies_pii.jsonl import read_jsonl, write_jsonl
-from meddies_pii.processing.sampling import sample_and_check
+from anonymous_pii.jsonl import read_jsonl, write_jsonl
+from anonymous_pii.processing.sampling import sample_and_check
 
 if TYPE_CHECKING:
     from pathlib import Path
 
     import pytest
 
-    from meddies_pii.json_types import JsonObject
+    from anonymous_pii.json_types import JsonObject
 
 
 def _read_records(path: Path) -> list[JsonObject]:
@@ -22,7 +22,7 @@ def _read_records(path: Path) -> list[JsonObject]:
 def test_sample_and_check_logs_missing_file_without_writing(caplog: pytest.LogCaptureFixture, tmp_path: Path) -> None:
     missing_path = tmp_path / "missing.jsonl"
 
-    with caplog.at_level(logging.INFO, logger="meddies_pii.processing.sampling"):
+    with caplog.at_level(logging.INFO, logger="anonymous_pii.processing.sampling"):
         sample_and_check(str(missing_path))
 
     assert "File not found" in caplog.text
@@ -36,7 +36,7 @@ def test_sample_and_check_reports_error_only_input_without_writing(
     input_path = tmp_path / "errors.jsonl"
     write_jsonl(input_path, [{"error": "provider rejected row"}])
 
-    with caplog.at_level(logging.INFO, logger="meddies_pii.processing.sampling"):
+    with caplog.at_level(logging.INFO, logger="anonymous_pii.processing.sampling"):
         sample_and_check(str(input_path), sample_size=10)
 
     assert 'Found 1 lines with "error"' in caplog.text

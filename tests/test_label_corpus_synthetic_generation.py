@@ -29,49 +29,49 @@ from typing import TYPE_CHECKING, ClassVar, cast
 import httpx
 import pytest
 
-from meddies_pii.exceptions import DailyBudgetExceeded
-from meddies_pii.generation.label_corpus.catalog import (
+from anonymous_pii.exceptions import DailyBudgetExceeded
+from anonymous_pii.generation.label_corpus.catalog import (
     SCENARIOS,
     generation_profile_for_domain,
     required_labels_for_mode,
     scenario_pool_for_profile,
 )
-from meddies_pii.generation.label_corpus.generation_runs import (
+from anonymous_pii.generation.label_corpus.generation_runs import (
     WEAK_LABEL_FREE_PROVIDERS,
     build_budget,
     run_eval_gold,
     run_weak_labels,
 )
-from meddies_pii.generation.label_corpus.prompts import (
+from anonymous_pii.generation.label_corpus.prompts import (
     targeted_system_prompt,
     targeted_user_prompt,
 )
-from meddies_pii.generation.label_corpus.runner import (
+from anonymous_pii.generation.label_corpus.runner import (
     SyntheticGenerationRequest,
     run_synthetic_generation,
 )
-from meddies_pii.generation.label_corpus.synthetic import (
+from anonymous_pii.generation.label_corpus.synthetic import (
     LabelCorpusGenerator,
     _existing_text_hashes,
 )
-from meddies_pii.generation.label_corpus.validate import (
+from anonymous_pii.generation.label_corpus.validate import (
     accepted_record,
     validate_tagged_document,
 )
-from meddies_pii.historical_artifacts import (
+from anonymous_pii.historical_artifacts import (
     LEGACY_LABEL_POLICY,
     LEGACY_SYNTHETIC_DATASET_IDS,
 )
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.languages import normalize_language
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.languages import normalize_language
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
     from pathlib import Path
 
-    from meddies_pii.generation.label_corpus.catalog import Scenario
-    from meddies_pii.generation.label_corpus.runner import ClientFactory
-    from meddies_pii.generation.openai_compatible.client import OpenAICompatibleClient
+    from anonymous_pii.generation.label_corpus.catalog import Scenario
+    from anonymous_pii.generation.label_corpus.runner import ClientFactory
+    from anonymous_pii.generation.openai_compatible.client import OpenAICompatibleClient
 
 
 def _mapping_field(payload: Mapping[str, object], key: str) -> Mapping[str, object]:

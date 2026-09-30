@@ -74,7 +74,7 @@ def test_security_workflow_owns_dependency_audit_and_high_high_bandit_gate() -> 
     assert "uv sync --frozen --only-group security" in _step(workflow, "Install security dependencies")
     bandit_step = _step(workflow, "Run Bandit")
     assert bandit_step.strip() == (
-        "run: uv run --no-sync bandit -r src/meddies_pii scripts --severity-level high --confidence-level high"
+        "run: uv run --no-sync bandit -r src/anonymous_pii scripts --severity-level high --confidence-level high"
     )
     assert "uv audit --locked" not in quality_workflow
     for bypass in ("--exit-zero", "# nosec", "--skip", "--exclude", "baseline"):

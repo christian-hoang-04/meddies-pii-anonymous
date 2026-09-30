@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-"""Convert the GRPO Gemini-batch hard-examples into Meddies Labels training JSONL.
+"""Convert the GRPO Gemini-batch hard-examples into Anonymous Labels training JSONL.
 
 Joins the batch INPUT (`gemini_batch.jsonl`, source doc in the prompt) with the
 batch OUTPUT (`gemini_results.jsonl`, label -> [values]) on `key`. Core
 span-reconstruction logic lives in
-`meddies_pii.training.bioes.data.grpo_convert` (pure + tested); this is the I/O.
+`anonymous_pii.training.bioes.data.grpo_convert` (pure + tested); this is the I/O.
 """
 
 from __future__ import annotations
@@ -16,8 +16,8 @@ import json
 from pathlib import Path
 from typing import cast
 
-from meddies_pii.historical_artifacts import LEGACY_ARTIFACT_TOKEN
-from meddies_pii.training.bioes.data.grpo_convert import to_record
+from anonymous_pii.historical_artifacts import LEGACY_ARTIFACT_TOKEN
+from anonymous_pii.training.bioes.data.grpo_convert import to_record
 
 REPO = Path(__file__).resolve().parents[2]
 
@@ -54,7 +54,7 @@ def _parse_batch(path: Path) -> dict[str, str]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Convert GRPO Gemini batch hard-examples to Meddies Labels.")
+    parser = argparse.ArgumentParser(description="Convert GRPO Gemini batch hard-examples to Anonymous Labels.")
     parser.add_argument("--batch", type=Path, default=REPO / "data/hard-examples/gemini_batch.jsonl")
     parser.add_argument("--results", type=Path, default=REPO / "data/hard-examples/gemini_results.jsonl")
     parser.add_argument(

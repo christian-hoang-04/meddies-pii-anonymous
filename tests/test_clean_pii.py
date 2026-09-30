@@ -1,6 +1,6 @@
 # ruff: file-ignore[print]
 # reason: diagnostic output for a module that also runs standalone under `__main__`.
-from meddies_pii.tags import strip_code_blocks, strip_pii_tags
+from anonymous_pii.tags import strip_code_blocks, strip_pii_tags
 
 
 def test_strip_code_blocks() -> None:

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-"""Draw a token-length distribution diagram for a Meddies dataset as a self-contained HTML.
+"""Draw a token-length distribution diagram for a Anonymous dataset as a self-contained HTML.
 
 Reads the pre-computed ``token_count_lfm25`` column (no re-tokenizing, no GPU), so it is
-fast and reusable: point it at full ``meddies-pii-mixed`` now, or at any ABLATION SUBSET
+fast and reusable: point it at full ``anonymous-pii-mixed`` now, or at any ABLATION SUBSET
 later (subsets keep the column) to confirm what a data drop removed length-wise.
 
 Renders, in one theme-aware HTML file (inline SVG, no external libraries):
@@ -281,7 +281,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument(
         "--dataset",
-        default="Meddies/meddies-pii-mixed",
+        default="anonymous-placeholder/anonymous-pii-mixed",
         help="HF repo id (optionally repo:config) or a local saved-dataset path.",
     )
     p.add_argument(

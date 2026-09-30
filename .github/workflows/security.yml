@@ -40,4 +40,4 @@ jobs:
         run: uv audit --locked
 
       - name: Run Bandit
-        run: uv run --no-sync bandit -r src/meddies_pii scripts --severity-level high --confidence-level high
+        run: uv run --no-sync bandit -r src/anonymous_pii scripts --severity-level high --confidence-level high

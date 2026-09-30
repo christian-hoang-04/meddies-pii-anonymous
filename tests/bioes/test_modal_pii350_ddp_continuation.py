@@ -14,11 +14,11 @@ from typing import Protocol, runtime_checkable
 
 import pytest
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.training.bioes.modal import (
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.training.bioes.modal import (
     pii350_ddp_continuation as modal_continuation,
 )
-from meddies_pii.training.bioes.trainers import pii350_ddp_continuation as continuation
+from anonymous_pii.training.bioes.trainers import pii350_ddp_continuation as continuation
 
 
 @runtime_checkable
@@ -39,7 +39,7 @@ def _receipt_field(receipt: dict[str, object], key: str) -> dict[str, object]:
 
 
 def test_modal_contract_uses_exact_two_a100_for_wave_one_and_detached_gated_commands() -> None:
-    contract = continuation.render_segment_contract("meddiesresearch")
+    contract = continuation.render_segment_contract("anonymousresearch")
     assert modal_continuation.TRAIN_OPTIONS == {
         "gpu": "A100-40GB:2",
         "cpu": 4.0,
@@ -54,21 +54,21 @@ def test_modal_contract_uses_exact_two_a100_for_wave_one_and_detached_gated_comm
         "timeout": 10_800,
         "max_containers": 1,
     }
-    assert modal_continuation.train_options("meddies-ocr") == {
+    assert modal_continuation.train_options("anonymous-ocr") == {
         "gpu": "A100-40GB:4",
         "cpu": 8.0,
         "memory": 128 * 1024,
         "timeout": 10_800,
         "max_containers": 1,
     }
-    assert "--execute" not in continuation.render_cpu_receipt_command("meddiesresearch")
-    train_command = continuation.render_train_command("meddiesresearch")
+    assert "--execute" not in continuation.render_cpu_receipt_command("anonymousresearch")
+    train_command = continuation.render_train_command("anonymousresearch")
     assert "--detach" in train_command
-    assert "--profile meddiesresearch" in train_command
+    assert "--profile anonymousresearch" in train_command
     assert contract["execution_contract_digest"] in train_command
-    assert "--confirmation LAUNCH_PII350_DDP2_CONTINUATION" in (continuation.render_train_command("meddiesresearch"))
+    assert "--confirmation LAUNCH_PII350_DDP2_CONTINUATION" in (continuation.render_train_command("anonymousresearch"))
     assert "--primary-action HA_AUTHORIZE_PII350_R128A256_B128_LR4E4_DDP2_CONTINUATION" in (
-        continuation.render_train_command("meddiesresearch")
+        continuation.render_train_command("anonymousresearch")
     )
 
 
@@ -119,14 +119,14 @@ def test_modal_image_branches_finish_with_local_source_after_every_build_step() 
 
 
 def test_remote_authorization_fails_closed_on_cross_topology_tokens() -> None:
-    wave_one = continuation.render_segment_contract("meddiesresearch")
+    wave_one = continuation.render_segment_contract("anonymousresearch")
     wave_two = continuation.render_segment_contract("private-profile-d")
     ddp2 = wave_one["manual_launch"]
     ddp4 = wave_two["manual_launch"]
 
     with pytest.raises(RuntimeError, match="exact profile topology authorization"):
         modal_continuation._train_segment_impl(
-            "meddiesresearch",
+            "anonymousresearch",
             wave_one["execution_contract_digest"],
             execute=True,
             confirmation=ddp4["confirmation"],
@@ -134,7 +134,7 @@ def test_remote_authorization_fails_closed_on_cross_topology_tokens() -> None:
         )
     with pytest.raises(RuntimeError, match="source checkpoint receipt"):
         modal_continuation._train_segment_impl(
-            "meddiesresearch",
+            "anonymousresearch",
             wave_one["execution_contract_digest"],
             execute=True,
             confirmation=ddp2["confirmation"],
@@ -317,10 +317,10 @@ def _cpu_receipt_for_upload(  # ruff: ignore[too-many-arguments]
     step: int,
     cursor: int,
     checkpoint_digest: str = "a" * 64,
-    profile: str = "meddiesresearch",
+    profile: str = "anonymousresearch",
     world_size: int = 2,
     resolved_root: str | None = None,
-    resolved_artifact_root: str = "/__modal/volumes/meddies-pii-bioes-artifacts",
+    resolved_artifact_root: str = "/__modal/volumes/anonymous-pii-bioes-artifacts",
 ) -> dict[str, object]:
     manifest = {
         "schema_version": 1,
@@ -380,10 +380,10 @@ def test_cpu_receipt_binds_requested_artifact_root_to_resolved_modal_root(
     monkeypatch.setattr(
         modal_continuation,
         "_resolved_artifact_root",
-        lambda: "/__modal/volumes/meddies-pii-bioes-artifacts",
+        lambda: "/__modal/volumes/anonymous-pii-bioes-artifacts",
     )
 
-    receipt = modal_continuation.cpu_receipt.local("meddiesresearch", checkpoint_root)
+    receipt = modal_continuation.cpu_receipt.local("anonymousresearch", checkpoint_root)
 
     assert receipt["requested_source_root"] == checkpoint_root
     assert receipt["source_checkpoint_receipt"]["source_root"].startswith("/__modal/volumes/")
@@ -433,7 +433,7 @@ def test_persisted_manifest_rejects_world_size_outside_profile_contract(
     (tmp_path / "manifest.json").write_text(json.dumps(persisted), encoding="utf-8")
 
     with pytest.raises(RuntimeError, match="world size does not match"):
-        modal_continuation._validated_manifest_for_upload(tmp_path, profile="meddiesresearch")
+        modal_continuation._validated_manifest_for_upload(tmp_path, profile="anonymousresearch")
 
 
 @pytest.mark.parametrize("mutation_timing", ["before", "during"])
@@ -467,7 +467,7 @@ def test_upload_manifest_last_rejects_mutation_before_manifest_commit(tmp_path: 
         modal_continuation.upload_manifest_last(
             HubApi(),
             root=tmp_path,
-            repo_id="Meddies/private",
+            repo_id="anonymous-placeholder/private",
             remote_prefix="trajectories/x/checkpoints/step-00000100",
             manifest=validated,
         )
@@ -495,7 +495,7 @@ def test_upload_manifest_last_commits_the_validated_manifest_exactly(
     uploaded = modal_continuation.upload_manifest_last(
         HubApi(),
         root=tmp_path,
-        repo_id="Meddies/private",
+        repo_id="anonymous-placeholder/private",
         remote_prefix="trajectories/x/checkpoints/step-00000100",
         manifest=validated,
     )
@@ -549,10 +549,10 @@ def test_upload_main_passes_valid_persisted_manifest_receipt_to_remote(  # ruff:
         cursor=cursor,
         checkpoint_digest=checkpoint_digest,
     )
-    monkeypatch.setenv("MODAL_PROFILE", "meddiesresearch")
+    monkeypatch.setenv("MODAL_PROFILE", "anonymousresearch")
     monkeypatch.setattr(modal_continuation, "upload_checkpoint", Remote())
     modal_continuation.main(
-        profile="meddiesresearch",
+        profile="anonymousresearch",
         upload=True,
         checkpoint_root=checkpoint_root,
         remote_prefix=f"trajectories/x/checkpoints/{Path(checkpoint_root).name}",
@@ -673,11 +673,11 @@ def test_upload_main_rejects_invalid_source_receipt_locally(
             msg = "invalid receipt must not dispatch to Modal"
             raise AssertionError(msg)
 
-    monkeypatch.setenv("MODAL_PROFILE", "meddiesresearch")
+    monkeypatch.setenv("MODAL_PROFILE", "anonymousresearch")
     monkeypatch.setattr(modal_continuation, "upload_checkpoint", Remote())
     with pytest.raises(RuntimeError, match=error):
         modal_continuation.main(
-            profile="meddiesresearch",
+            profile="anonymousresearch",
             upload=True,
             checkpoint_root="/artifacts/checkpoints/step-00000100",
             remote_prefix="trajectories/x/checkpoints/step-00000100",
@@ -698,10 +698,10 @@ def test_upload_main_passes_exact_legacy_step60_receipt_to_remote(
 
     checkpoint_root = "/artifacts/checkpoints/step-00000060"
     receipt = _cpu_receipt_for_upload(checkpoint_root=checkpoint_root, step=60, cursor=7_680, world_size=1)
-    monkeypatch.setenv("MODAL_PROFILE", "meddiesresearch")
+    monkeypatch.setenv("MODAL_PROFILE", "anonymousresearch")
     monkeypatch.setattr(modal_continuation, "upload_checkpoint", Remote())
     modal_continuation.main(
-        profile="meddiesresearch",
+        profile="anonymousresearch",
         upload=True,
         checkpoint_root=checkpoint_root,
         remote_prefix="trajectories/x/checkpoints/step-00000060",
@@ -711,7 +711,7 @@ def test_upload_main_passes_exact_legacy_step60_receipt_to_remote(
     assert "queued" in capsys.readouterr().out
     with pytest.raises(RuntimeError, match="prior CPU source receipt"):
         modal_continuation.main(
-            profile="meddiesresearch",
+            profile="anonymousresearch",
             upload=True,
             checkpoint_root=checkpoint_root,
             remote_prefix="prefix",
@@ -741,7 +741,7 @@ def test_cpu_receipt_cost_composer_has_reconciliation_fields() -> None:
 def test_continuation_preflight_builds_missing_asset_receipt_in_its_own_cpu_call(
     tmp_path: Path,
 ) -> None:
-    contract = continuation.render_segment_contract("meddiesresearch")
+    contract = continuation.render_segment_contract("anonymousresearch")
     baseline = contract["trajectory"]["baseline_full_run_contract"]
     receipt_path = tmp_path / "verification-receipt.json"
     calls: list[str] = []
@@ -782,7 +782,7 @@ def test_continuation_preflight_builds_missing_asset_receipt_in_its_own_cpu_call
 def test_continuation_preflight_reuses_existing_valid_asset_receipt(
     tmp_path: Path,
 ) -> None:
-    contract = continuation.render_segment_contract("meddiesresearch")
+    contract = continuation.render_segment_contract("anonymousresearch")
     baseline = contract["trajectory"]["baseline_full_run_contract"]
     receipt_path = tmp_path / "verification-receipt.json"
     receipt_path.write_text("valid", encoding="utf-8")
@@ -810,7 +810,7 @@ def test_continuation_preflight_reuses_existing_valid_asset_receipt(
 def test_continuation_preflight_refuses_corrupt_existing_asset_receipt(
     tmp_path: Path,
 ) -> None:
-    contract = continuation.render_segment_contract("meddiesresearch")
+    contract = continuation.render_segment_contract("anonymousresearch")
     baseline = contract["trajectory"]["baseline_full_run_contract"]
     receipt_path = tmp_path / "verification-receipt.json"
     receipt_path.write_text("corrupt", encoding="utf-8")
@@ -832,7 +832,7 @@ def test_continuation_preflight_refuses_corrupt_existing_asset_receipt(
 
 def test_rendered_transport_commands_are_explicit_and_immutable() -> None:
     upload = continuation.render_upload_command(
-        "meddiesresearch",
+        "anonymousresearch",
         "/artifacts/checkpoints/terminal-step-00000100",
         "stage1/step100",
         '{"source_checkpoint_receipt":{"hash_verified":true}}',
@@ -948,7 +948,7 @@ def test_train_segment_claim_blocks_a_transparent_modal_retry_before_torchrun(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
-    from meddies_pii.training.bioes.modal import full_run as modal_full_run
+    from anonymous_pii.training.bioes.modal import full_run as modal_full_run
 
     class Volume:
         def reload(self) -> None:  # ruff: ignore[no-self-use]
@@ -965,7 +965,7 @@ def test_train_segment_claim_blocks_a_transparent_modal_retry_before_torchrun(
         "optimizer_step": 60,
         "packed_cursor": 7_680,
         "world_size": 1,
-        "wave_profile": "meddiesresearch",
+        "wave_profile": "anonymousresearch",
         "wave_cumulative_all_in_cost_usd": 0.0,
         "source_root": str(tmp_path / "step60"),
     }

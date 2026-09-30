@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.training.bioes.reports import training_data_breakdown
-from meddies_pii.training.bioes.reports.training_data_breakdown import (
+from anonymous_pii.training.bioes.reports import training_data_breakdown
+from anonymous_pii.training.bioes.reports.training_data_breakdown import (
     TrainingDataSourceConfig,
 )
 

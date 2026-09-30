@@ -11,14 +11,14 @@ from typing import TYPE_CHECKING
 import pytest
 import torch
 
-from meddies_pii.training.bioes.trainers import trainer
-from meddies_pii.training.bioes.trainers.config import SmokeTrainingConfig
+from anonymous_pii.training.bioes.trainers import trainer
+from anonymous_pii.training.bioes.trainers.config import SmokeTrainingConfig
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from pathlib import Path
 
-    from meddies_pii.training.bioes.data.preparation import PreparedRow
+    from anonymous_pii.training.bioes.data.preparation import PreparedRow
 
 
 class _BoundaryModel(torch.nn.Module):
@@ -38,7 +38,7 @@ def test_prepare_training_units_runs_packing_probe_with_faked_model_boundary(
     monkeypatch: pytest.MonkeyPatch,
     prepared_row_factory: Callable[[str], PreparedRow],
 ) -> None:
-    from meddies_pii.training.bioes.trainers import packing_runtime
+    from anonymous_pii.training.bioes.trainers import packing_runtime
 
     rows = [prepared_row_factory("prefix"), prepared_row_factory("target")]
     packed = [SimpleNamespace(name="packed")]
@@ -75,7 +75,7 @@ def test_prepare_training_units_rejects_empty_packing(
     monkeypatch: pytest.MonkeyPatch,
     prepared_row_factory: Callable[[str], PreparedRow],
 ) -> None:
-    from meddies_pii.training.bioes.trainers import packing_runtime
+    from anonymous_pii.training.bioes.trainers import packing_runtime
 
     row = prepared_row_factory("only-row")
     monkeypatch.setattr(packing_runtime, "pack_prepared_rows", lambda *_args, **_kwargs: [])
@@ -94,7 +94,7 @@ def test_prepare_training_units_rejects_empty_packing(
 def test_prepare_training_units_returns_rows_without_packing(
     prepared_row_factory: Callable[[str], PreparedRow],
 ) -> None:
-    from meddies_pii.training.bioes.trainers import packing_runtime
+    from anonymous_pii.training.bioes.trainers import packing_runtime
 
     rows = [prepared_row_factory("plain")]
     prepared = packing_runtime.prepare_training_units(
@@ -114,7 +114,7 @@ def test_prepare_training_units_rejects_failed_attention_probe(
     monkeypatch: pytest.MonkeyPatch,
     prepared_row_factory: Callable[[str], PreparedRow],
 ) -> None:
-    from meddies_pii.training.bioes.trainers import packing_runtime
+    from anonymous_pii.training.bioes.trainers import packing_runtime
 
     rows = [prepared_row_factory("prefix"), prepared_row_factory("target")]
     packed = [SimpleNamespace()]
@@ -141,7 +141,7 @@ def test_prepare_training_units_requires_two_rows_for_attention_probe(
     monkeypatch: pytest.MonkeyPatch,
     prepared_row_factory: Callable[[str], PreparedRow],
 ) -> None:
-    from meddies_pii.training.bioes.trainers import packing_runtime
+    from anonymous_pii.training.bioes.trainers import packing_runtime
 
     row = prepared_row_factory("only-row")
     monkeypatch.setattr(
@@ -166,7 +166,7 @@ def test_run_smoke_training_loads_faked_hugging_face_rows_at_public_boundary(
     monkeypatch: pytest.MonkeyPatch,
     install_smoke_training_fakes: Callable[..., tuple[list[int], Callable[[float], dict[str, object]]]],
 ) -> None:
-    from meddies_pii.training.bioes.trainers import data_loading
+    from anonymous_pii.training.bioes.trainers import data_loading
 
     install_smoke_training_fakes()
     dataset_calls = []
@@ -214,7 +214,7 @@ def test_run_smoke_training_reads_local_rows_through_public_lifecycle(
     tmp_path: Path,
     install_smoke_training_fakes: Callable[..., tuple[list[int], Callable[[float], dict[str, object]]]],
 ) -> None:
-    from meddies_pii.training.bioes.trainers import data_loading
+    from anonymous_pii.training.bioes.trainers import data_loading
 
     install_smoke_training_fakes()
     local_jsonl = tmp_path / "fixture.jsonl"

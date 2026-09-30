@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from meddies_pii.pdf_redaction.benchmark.registry import (
+from anonymous_pii.pdf_redaction.benchmark.registry import (
     REQUIRED_CANDIDATES,
     CandidateOutcome,
     OutcomeStatus,

@@ -12,15 +12,15 @@ import pytest
 from PIL import Image
 from pypdf import PdfWriter
 
-import meddies_pii.pdf_redaction.writer_raster as raster_module
-from meddies_pii.pdf_redaction import writer_common
-from meddies_pii.pdf_redaction.contracts import PageRegion, Point, Quad
-from meddies_pii.pdf_redaction.errors import (
+import anonymous_pii.pdf_redaction.writer_raster as raster_module
+from anonymous_pii.pdf_redaction import writer_common
+from anonymous_pii.pdf_redaction.contracts import PageRegion, Point, Quad
+from anonymous_pii.pdf_redaction.errors import (
     InputDocumentError,
     OutputPathError,
     RedactionApplyError,
 )
-from meddies_pii.pdf_redaction.writers import (
+from anonymous_pii.pdf_redaction.writers import (
     PyMuPdfRedactionWriter,
     RasterRebuildWriter,
 )
@@ -112,7 +112,7 @@ def test_writer_rejects_regions_outside_document_geometry(
 
     assert raised.value.code == code
     assert not output.exists()
-    assert not tuple(tmp_path.glob(".meddies-pdf-*.working"))
+    assert not tuple(tmp_path.glob(".anonymous-pdf-*.working"))
 
 
 def test_writer_rejects_corrupted_nonfinite_region_at_runtime(tmp_path: Path) -> None:
@@ -225,7 +225,7 @@ def test_writer_reports_private_staging_creation_failure(
         parents: bool = False,
         exist_ok: bool = False,
     ) -> None:
-        if path.name.startswith(".meddies-pdf-"):
+        if path.name.startswith(".anonymous-pdf-"):
             msg = "synthetic denial"
             raise PermissionError(msg)
         real_mkdir(path, mode, parents=parents, exist_ok=exist_ok)
@@ -290,7 +290,7 @@ def test_writer_rejects_source_that_changes_type_after_validation(
         PyMuPdfRedactionWriter().write(source, (_region(),), tmp_path / "output.pdf")
 
     assert raised.value.code == "source_not_regular"
-    assert not tuple(tmp_path.glob(".meddies-pdf-*.working"))
+    assert not tuple(tmp_path.glob(".anonymous-pdf-*.working"))
 
 
 @pytest.mark.parametrize("change", ["truncated", "grown"])
@@ -320,7 +320,7 @@ def test_writer_rejects_source_identity_change_during_snapshot(
         PyMuPdfRedactionWriter().write(source, (_region(),), tmp_path / "output.pdf")
 
     assert raised.value.code == "source_identity_changed"
-    assert not tuple(tmp_path.glob(".meddies-pdf-*.working"))
+    assert not tuple(tmp_path.glob(".anonymous-pdf-*.working"))
 
 
 def test_writer_rejects_private_snapshot_write_without_progress(
@@ -357,7 +357,7 @@ def test_writer_preserves_racing_destination_and_cleans_private_stage(
 
     assert raised.value.code == "output_exists"
     assert destination.read_bytes() == b"other-process"
-    assert not tuple(tmp_path.glob(".meddies-pdf-*.working"))
+    assert not tuple(tmp_path.glob(".anonymous-pdf-*.working"))
 
 
 def test_writer_surfaces_private_stage_cleanup_failure(
@@ -372,7 +372,7 @@ def test_writer_surfaces_private_stage_cleanup_failure(
 
     def fail_private_workspace_removal(path: Path) -> None:
         nonlocal blocked_workspace
-        if path.name.startswith(".meddies-pdf-"):
+        if path.name.startswith(".anonymous-pdf-"):
             blocked_workspace = path
             msg = "synthetic denial"
             raise PermissionError(msg)

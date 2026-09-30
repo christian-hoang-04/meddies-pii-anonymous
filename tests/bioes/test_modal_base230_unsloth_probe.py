@@ -22,8 +22,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from meddies_pii.training.bioes.modal import base230_unsloth_probe as modal_probe
-from meddies_pii.training.bioes.trainers import base230_unsloth_probe as probe
+from anonymous_pii.training.bioes.modal import base230_unsloth_probe as modal_probe
+from anonymous_pii.training.bioes.trainers import base230_unsloth_probe as probe
 
 
 def _spec(batch: int = 224) -> modal_probe.ChildSpec:

@@ -9,7 +9,7 @@ Offsets must index the cleaned raw text exactly even when a stray marker was rem
 
 from __future__ import annotations
 
-from meddies_pii.annotations.tagged_text import parse_tagged_text
+from anonymous_pii.annotations.tagged_text import parse_tagged_text
 
 
 def test_parses_valid_inline_tag() -> None:

@@ -2,21 +2,21 @@
 
 from __future__ import annotations
 
-from meddies_pii import taxonomy
-from meddies_pii.annotations.bioes import (
+from anonymous_pii import taxonomy
+from anonymous_pii.annotations.bioes import (
     TokenizedExample,
     build_bioes_label_space,
     decode_bioes_from_offsets,
 )
-from meddies_pii.annotations.source_mapping import map_native_label_to_pii_label
-from meddies_pii.constants import (
+from anonymous_pii.annotations.source_mapping import map_native_label_to_pii_label
+from anonymous_pii.constants import (
     LABEL_MAP,
     PII_LABEL_SET,
     VALID_LABELS,
     VALID_LABELS_BRACKETED,
 )
-from meddies_pii.generation import prompts, text_formats
-from meddies_pii.spans import CharSpan
+from anonymous_pii.generation import prompts, text_formats
+from anonymous_pii.spans import CharSpan
 
 
 def test_constants_facade_reexports_domain_owners() -> None:

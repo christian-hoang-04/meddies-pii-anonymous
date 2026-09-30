@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Split API-error rejects and repair conservative Meddies Labels tag-format rejects."""
+"""Split API-error rejects and repair conservative Anonymous Labels tag-format rejects."""
 
 from __future__ import annotations
 
@@ -10,8 +10,8 @@ import json
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from meddies_pii.generation.label_corpus.repair import repair_rejected_artifacts
-from meddies_pii.generation.label_corpus.synthetic import (
+from anonymous_pii.generation.label_corpus.repair import repair_rejected_artifacts
+from anonymous_pii.generation.label_corpus.synthetic import (
     DEFAULT_TARGETED_GENERATION_DIR,
 )
 

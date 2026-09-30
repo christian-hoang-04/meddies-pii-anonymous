@@ -10,8 +10,8 @@ import pymupdf
 import pytest
 from PIL import Image
 
-from meddies_pii.pdf_redaction.benchmark.corpus import generate_challenge_corpus
-from meddies_pii.pdf_redaction.document import (
+from anonymous_pii.pdf_redaction.benchmark.corpus import generate_challenge_corpus
+from anonymous_pii.pdf_redaction.document import (
     DEFAULT_MEANINGFUL_RASTER_AREA_RATIO,
     DocumentAdapterError,
     PdfiumDocumentAdapter,

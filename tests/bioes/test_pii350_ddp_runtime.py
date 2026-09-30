@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING
 import pytest
 import torch
 
-from meddies_pii.training.bioes.trainers import full_run_runtime
-from meddies_pii.training.bioes.trainers import pii350_ddp_runtime as runtime
+from anonymous_pii.training.bioes.trainers import full_run_runtime
+from anonymous_pii.training.bioes.trainers import pii350_ddp_runtime as runtime
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -183,7 +183,7 @@ def test_epoch_terminal_state_skips_resume_planning_so_checkpoint_logic_can_run(
         parent_checkpoint_digest="terminal",
         source_world_size=4,
     )
-    from meddies_pii.training.bioes.modal import (
+    from anonymous_pii.training.bioes.modal import (
         pii350_ddp_continuation as modal_continuation,
     )
 

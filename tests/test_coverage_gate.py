@@ -31,7 +31,7 @@ def _load_gate() -> ModuleType:
 
 def _source_tree(tmp_path: Path) -> Path:
     """Training deliberately has no __init__.py: coverage must still inventory it."""
-    source_root = tmp_path / "src/meddies_pii"
+    source_root = tmp_path / "src/anonymous_pii"
     (source_root / "regular").mkdir(parents=True)
     (source_root / "training/namespace_child").mkdir(parents=True)
     (source_root / "regular/__init__.py").write_text("")
@@ -96,7 +96,7 @@ def test_rejects_missing_namespace_package_file(tmp_path: Path) -> None:
 
     errors = gate.validate_coverage(report, source_root=source_root)
 
-    assert errors == ["coverage report omitted 1 active source file: src/meddies_pii/training/namespace_child/module.py"]
+    assert errors == ["coverage report omitted 1 active source file: src/anonymous_pii/training/namespace_child/module.py"]
 
 
 def test_rejects_statement_coverage_below_threshold(tmp_path: Path) -> None:

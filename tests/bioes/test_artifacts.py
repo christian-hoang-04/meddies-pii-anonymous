@@ -16,7 +16,7 @@ import torch
 import transformers
 from torch import nn
 
-from meddies_pii.training.bioes.data import artifacts
+from anonymous_pii.training.bioes.data import artifacts
 
 
 def test_disable_unsloth_statistics_timeout_sets_remote_import_guard(
@@ -64,8 +64,8 @@ def test_artifact_module_imports_without_optional_torch_runtime() -> None:
 
         builtins.__import__ = import_without_torch
 
-        from meddies_pii.training.bioes.data.artifacts import _require_torch
-        from meddies_pii.training.bioes.data.tagger import HiddenStateTokenTagger
+        from anonymous_pii.training.bioes.data.artifacts import _require_torch
+        from anonymous_pii.training.bioes.data.tagger import HiddenStateTokenTagger
 
         for operation in (
             _require_torch,

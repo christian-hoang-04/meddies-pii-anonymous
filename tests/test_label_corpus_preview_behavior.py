@@ -3,8 +3,8 @@ from __future__ import annotations
 import sys
 from typing import TYPE_CHECKING
 
-from meddies_pii.generation.label_corpus import preview
-from meddies_pii.jsonl import write_jsonl
+from anonymous_pii.generation.label_corpus import preview
+from anonymous_pii.jsonl import write_jsonl
 
 if TYPE_CHECKING:
     from pathlib import Path

@@ -5,15 +5,15 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.bioes_inference.file_identity import file_sha256
-from meddies_pii.pdf_redaction.verification_scans import _output_digest
+from anonymous_pii.bioes_inference.file_identity import file_sha256
+from anonymous_pii.pdf_redaction.verification_scans import _output_digest
 
 if TYPE_CHECKING:
     from pathlib import Path
 
 
 def test_file_sha256_hashes_file_bytes(tmp_path: Path) -> None:
-    payload = b"meddies-pdf-identity" * 257
+    payload = b"anonymous-pdf-identity" * 257
     path = tmp_path / "artifact.bin"
     path.write_bytes(payload)
 
@@ -39,7 +39,7 @@ def test_verification_treats_an_unreadable_output_as_missing(
         raise PermissionError(msg)
 
     monkeypatch.setattr(
-        "meddies_pii.pdf_redaction.verification_scans.file_sha256",
+        "anonymous_pii.pdf_redaction.verification_scans.file_sha256",
         unreadable,
     )
 

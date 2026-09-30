@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from meddies_pii.file_locks import exclusive_file_lock
-from meddies_pii.runtime_memory import current_rss_bytes, peak_rss_bytes
+from anonymous_pii.file_locks import exclusive_file_lock
+from anonymous_pii.runtime_memory import current_rss_bytes, peak_rss_bytes
 
 if TYPE_CHECKING:
     from pathlib import Path

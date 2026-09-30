@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import pytest
 
-from meddies_pii.generation.label_corpus.validate import (
+from anonymous_pii.generation.label_corpus.validate import (
     _marker_re_for,
     _min_raw_length_for,
 )
-from meddies_pii.languages import LANGUAGE_PROFILES, SUPPORTED_LANGUAGES, normalize_language
+from anonymous_pii.languages import LANGUAGE_PROFILES, SUPPORTED_LANGUAGES, normalize_language
 
 
 def test_language_profiles_cover_every_supported_language() -> None:

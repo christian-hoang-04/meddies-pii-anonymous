@@ -1,4 +1,4 @@
-"""Audit the internal `Meddies/meddies-pii` corpus on Modal (Run 1, Wave 2).
+"""Audit the internal `anonymous-placeholder/anonymous-pii` corpus on Modal (Run 1, Wave 2).
 
 Two entrypoints, run in order:
 
@@ -35,8 +35,8 @@ from typing import TYPE_CHECKING, TypedDict
 
 import modal
 
-from meddies_pii.json_types import as_object_list, is_str_mapping
-from meddies_pii.modal_runtime import (
+from anonymous_pii.json_types import as_object_list, is_str_mapping
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
 )
@@ -44,7 +44,7 @@ from meddies_pii.modal_runtime import (
 if TYPE_CHECKING:
     from collections.abc import Iterable, Mapping
 
-REPO = "Meddies/meddies-pii"
+REPO = "anonymous-placeholder/anonymous-pii"
 
 
 class AuditRecord(TypedDict):
@@ -61,7 +61,7 @@ image = add_source_pythonpath(
     .pip_install("datasets==4.5.0", "huggingface_hub==1.19.0")
     .add_local_dir("src", remote_path=MODAL_SOURCE_ROOT),
 )
-app = modal.App("meddies-pii-internal-audit", image=image)
+app = modal.App("anonymous-pii-internal-audit", image=image)
 _SECRET = modal.Secret.from_name("huggingface-secret")
 
 
@@ -133,7 +133,7 @@ def _records_from_lang_rows(cfg: str, rows: Iterable[Mapping[str, object]]) -> l
     Offsets are best-effort (value-locate in clean text); the high-severity suspicious-gold
     detector keys on span TEXT, so the contamination rate is robust to offset approximation.
     """
-    from meddies_pii.tags import find_tags, strip_pii_tags
+    from anonymous_pii.tags import find_tags, strip_pii_tags
 
     records: list[AuditRecord] = []
     for i, row in enumerate(rows):
@@ -197,7 +197,7 @@ def audit_config(cfg: str, sample: int, kind: str) -> None:
 
     from datasets import load_dataset
 
-    from meddies_pii.training.bioes.eval.audit import audit_records, summarize_issues
+    from anonymous_pii.training.bioes.eval.audit import audit_records, summarize_issues
 
     ds = load_dataset(REPO, cfg, split="train", streaming=True)
     buffered: list[dict[str, object]] = []
@@ -239,7 +239,7 @@ def dump_examples(cfg: str, sample: int, kind: str, per_reason: int = 8) -> None
 
     from datasets import load_dataset
 
-    from meddies_pii.training.bioes.eval.audit import audit_records
+    from anonymous_pii.training.bioes.eval.audit import audit_records
 
     ds = load_dataset(REPO, cfg, split="train", streaming=True)
     buffered = [dict(row) for i, row in enumerate(ds) if i < sample]

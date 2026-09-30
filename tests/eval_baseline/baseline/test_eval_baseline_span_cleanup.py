@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from meddies_pii.eval_baseline.baseline.span_cleanup import clean_spans
-from meddies_pii.spans import CharSpan
+from anonymous_pii.eval_baseline.baseline.span_cleanup import clean_spans
+from anonymous_pii.spans import CharSpan
 
 
 def _span(text: str, start: int, end: int, label: str) -> CharSpan:

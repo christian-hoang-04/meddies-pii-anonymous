@@ -14,12 +14,12 @@ aliases fold.
 
 from __future__ import annotations
 
-from meddies_pii.generation.label_corpus.catalog import (
+from anonymous_pii.generation.label_corpus.catalog import (
     CODE_LOG_TEXT_FORMATS,
     GENERAL_TEXT_FORMATS,
     TEXT_FORMATS,
 )
-from meddies_pii.generation.text_formats import (
+from anonymous_pii.generation.text_formats import (
     CANONICAL_TEXT_FORMATS,
     TEXT_FORMAT_ALIASES,
     canonical_text_format,

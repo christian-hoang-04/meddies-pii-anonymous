@@ -20,8 +20,8 @@ from torch.multiprocessing.spawn import spawn as torch_spawn
 from torch.nn.parallel import DistributedDataParallel
 from torch.utils.checkpoint import checkpoint
 
-from meddies_pii.training.bioes.modal import pii350_ddp_smoke as modal_smoke
-from meddies_pii.training.bioes.trainers import pii350_ddp_smoke
+from anonymous_pii.training.bioes.modal import pii350_ddp_smoke as modal_smoke
+from anonymous_pii.training.bioes.trainers import pii350_ddp_smoke
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

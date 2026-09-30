@@ -12,17 +12,17 @@ from dataclasses import asdict, replace
 
 import pytest
 
-import meddies_pii.bioes_inference.detector as inference
-from meddies_pii.eval_baseline.baseline.datasets import V2_DATASET_REVISION, V2_REPO_ID
-from meddies_pii.eval_baseline.baseline.views import MODEL_CORE_VIEW
-from meddies_pii.eval_baseline.regex_release.regex_bootstrap import PairedDocumentCounts
-from meddies_pii.eval_baseline.regex_release.regex_ignore_list import ignore_list_from_rows
-from meddies_pii.eval_baseline.regex_release.regex_release_contract import ReleaseGateContract
-from meddies_pii.eval_baseline.regex_release.regex_release_gate import (
+import anonymous_pii.bioes_inference.detector as inference
+from anonymous_pii.eval_baseline.baseline.datasets import V2_DATASET_REVISION, V2_REPO_ID
+from anonymous_pii.eval_baseline.baseline.views import MODEL_CORE_VIEW
+from anonymous_pii.eval_baseline.regex_release.regex_bootstrap import PairedDocumentCounts
+from anonymous_pii.eval_baseline.regex_release.regex_ignore_list import ignore_list_from_rows
+from anonymous_pii.eval_baseline.regex_release.regex_release_contract import ReleaseGateContract
+from anonymous_pii.eval_baseline.regex_release.regex_release_gate import (
     ChildRegexEvidence,
     LabelMetricCounts,
 )
-from meddies_pii.eval_baseline.regex_release.regex_release_runtime import (
+from anonymous_pii.eval_baseline.regex_release.regex_release_runtime import (
     BASE_CPU_RATE_USD_PER_SECOND,
     _build_adapter,
     _child_evidence_sha256,
@@ -33,8 +33,8 @@ from meddies_pii.eval_baseline.regex_release.regex_release_runtime import (
     evaluation_contracts,
     execute_child,
 )
-from meddies_pii.eval_baseline.regex_release.regex_report import RegexCorpusManifest
-from meddies_pii.evaluation.identity import canonical_sha256, payload_artifact
+from anonymous_pii.eval_baseline.regex_release.regex_report import RegexCorpusManifest
+from anonymous_pii.evaluation.identity import canonical_sha256, payload_artifact
 
 
 def _child_with_ignored_false_positives() -> ChildRegexEvidence:
@@ -249,7 +249,7 @@ def test_execute_child_refuses_before_inference_on_ignore_list_digest_mismatch(
         },
     ])
     assert wrong_list.sha256 != contract.ignore_list_sha256
-    monkeypatch.setattr("meddies_pii.eval_baseline.baseline.datasets.load_v2_eval_rows", _refuse_if_called)
+    monkeypatch.setattr("anonymous_pii.eval_baseline.baseline.datasets.load_v2_eval_rows", _refuse_if_called)
 
     with pytest.raises(ValueError, match="ignore-list digest does not match contract"):
         execute_child(contract, "eval", volume=_StubVolume(), ignore_list=wrong_list)
@@ -262,7 +262,7 @@ def test_execute_child_refuses_before_inference_when_ignore_list_missing(
         source_commit="9431725cc96d7014a5433c13fbf3c7e257a5a7bf",
         ignore_list_sha256="a" * 64,
     )
-    monkeypatch.setattr("meddies_pii.eval_baseline.baseline.datasets.load_v2_eval_rows", _refuse_if_called)
+    monkeypatch.setattr("anonymous_pii.eval_baseline.baseline.datasets.load_v2_eval_rows", _refuse_if_called)
 
     with pytest.raises(ValueError, match="ignore-list digest does not match contract"):
         execute_child(contract, "eval", volume=_StubVolume(), ignore_list=None)

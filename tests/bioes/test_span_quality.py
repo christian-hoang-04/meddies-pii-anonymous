@@ -34,7 +34,7 @@ stripping the marker still leaves a JSON block -> still bad.
 
 from __future__ import annotations
 
-from meddies_pii.training.bioes.data.span_quality import clean_spans, is_bad_span
+from anonymous_pii.training.bioes.data.span_quality import clean_spans, is_bad_span
 
 
 def test_drops_leading_json_brace() -> None:

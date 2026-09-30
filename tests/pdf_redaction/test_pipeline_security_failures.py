@@ -5,36 +5,36 @@ from typing import TYPE_CHECKING, override
 
 import pytest
 
-from meddies_pii.bioes_inference import SpanDetection
-from meddies_pii.pdf_redaction.contracts import (
+from anonymous_pii.bioes_inference import SpanDetection
+from anonymous_pii.pdf_redaction.contracts import (
     GeometryPage,
     GeometryToken,
     PageRegion,
     Point,
     Quad,
 )
-from meddies_pii.pdf_redaction.errors import (
+from anonymous_pii.pdf_redaction.errors import (
     InputDocumentError,
     OutputPathError,
     RedactionApplyError,
 )
-from meddies_pii.pdf_redaction.pipeline import (
+from anonymous_pii.pdf_redaction.pipeline import (
     PdfRedactionPipeline,
     PipelineVerificationError,
     PreparedDocument,
 )
-from meddies_pii.pdf_redaction.verification import (
+from anonymous_pii.pdf_redaction.verification import (
     VerificationFinding,
     VerificationReport,
 )
-from meddies_pii.pdf_redaction.writers import RedactionWriteResult
-from meddies_pii.spans import CharSpan
+from anonymous_pii.pdf_redaction.writers import RedactionWriteResult
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
     from pathlib import Path
 
-    from meddies_pii.pdf_redaction.pipeline import RedactionWriter
+    from anonymous_pii.pdf_redaction.pipeline import RedactionWriter
 
 
 def _quad() -> Quad:
@@ -212,7 +212,7 @@ def test_apply_rejects_writer_staging_escape_and_cleans_private_workspace(
 
     assert raised.value.code == "writer_output_path_mismatch"
     assert not destination.exists()
-    assert not tuple(tmp_path.glob(".meddies-pdf-*"))
+    assert not tuple(tmp_path.glob(".anonymous-pdf-*"))
 
 
 def test_apply_rejects_writer_source_identity_mismatch_and_cleans_workspace(
@@ -229,7 +229,7 @@ def test_apply_rejects_writer_source_identity_mismatch_and_cleans_workspace(
 
     assert raised.value.code == "writer_source_identity_mismatch"
     assert not destination.exists()
-    assert not tuple(tmp_path.glob(".meddies-pdf-*"))
+    assert not tuple(tmp_path.glob(".anonymous-pdf-*"))
 
 
 @pytest.mark.parametrize(

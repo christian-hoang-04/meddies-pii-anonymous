@@ -42,7 +42,7 @@ from typing import cast
 
 import modal
 
-from meddies_pii.eval_baseline.regex_release.regex_ignore_list import (
+from anonymous_pii.eval_baseline.regex_release.regex_ignore_list import (
     RegexIgnoreList,
     ignore_list_from_audit_proposal,
     load_ignore_list_jsonl,
@@ -50,7 +50,7 @@ from meddies_pii.eval_baseline.regex_release.regex_ignore_list import (
     write_ignore_list_jsonl,
     write_ignore_list_provenance,
 )
-from meddies_pii.eval_baseline.regex_release.regex_release_contract import (
+from anonymous_pii.eval_baseline.regex_release.regex_release_contract import (
     ReleaseGateContract,
     render_launch_commands,
     require_approval_receipt,
@@ -59,25 +59,25 @@ from meddies_pii.eval_baseline.regex_release.regex_release_contract import (
     write_hydration_receipt,
     write_terminal_receipt,
 )
-from meddies_pii.eval_baseline.regex_release.regex_release_gate import (
+from anonymous_pii.eval_baseline.regex_release.regex_release_gate import (
     BudgetProjectionError,
     ChildRegexEvidence,
     aggregate_exposed_children,
 )
-from meddies_pii.eval_baseline.regex_release.regex_release_runtime import (
+from anonymous_pii.eval_baseline.regex_release.regex_release_runtime import (
     child_from_payload,
     child_to_payload,
     evaluation_contracts,
     execute_child,
 )
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.modal_runtime import (
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
     use_pinned_debian_snapshot,
 )
 
-APP_NAME = "meddies-pii-regex-release-gate"
+APP_NAME = "anonymous-pii-regex-release-gate"
 GATE_CPU_CORES = 32
 GATE_MEMORY_MIB = 64 * 1024
 GATE_TIMEOUT_SECONDS = 3 * 60 * 60
@@ -100,7 +100,7 @@ GATE_RUNTIME_ENV = {
 
 IGNORE_LIST_ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
 
-output_volume = modal.Volume.from_name("meddies-pii-regex-release-gate", create_if_missing=True)
+output_volume = modal.Volume.from_name("anonymous-pii-regex-release-gate", create_if_missing=True)
 cache_volume = modal.Volume.from_name("hf-cache", create_if_missing=True)
 hf_secret = modal.Secret.from_name("huggingface-secret")
 
@@ -168,13 +168,13 @@ def _hydrate(
     contract_sha256: str,
     ignore_list_sha256: str | None = None,
 ) -> dict[str, object]:
-    from meddies_pii.bioes_inference.artifacts import (
+    from anonymous_pii.bioes_inference.artifacts import (
         PUBLIC_Q8_ARTIFACT_SPEC,
         hydrate_artifact,
     )
-    from meddies_pii.eval_baseline.baseline.datasets import load_v2_eval_rows
-    from meddies_pii.eval_baseline.baseline.views import MODEL_CORE_VIEW
-    from meddies_pii.evaluation.identity import dataset_shard_identity
+    from anonymous_pii.eval_baseline.baseline.datasets import load_v2_eval_rows
+    from anonymous_pii.eval_baseline.baseline.views import MODEL_CORE_VIEW
+    from anonymous_pii.evaluation.identity import dataset_shard_identity
 
     contract = _checked_contract(source_commit, contract_sha256, ignore_list_sha256)
     _require_approval(contract)

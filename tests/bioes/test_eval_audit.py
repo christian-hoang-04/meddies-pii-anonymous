@@ -30,7 +30,7 @@ from __future__ import annotations
 
 import pytest
 
-from meddies_pii.training.bioes.eval.audit import (
+from anonymous_pii.training.bioes.eval.audit import (
     audit_record,
     audit_records,
     summarize_issues,

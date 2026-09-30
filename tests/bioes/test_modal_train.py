@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from meddies_pii.training.bioes.modal.train import (
+from anonymous_pii.training.bioes.modal.train import (
     FULL_TRAINING_TIMEOUT_SECONDS,
     _artifact_payload,
 )
@@ -15,12 +15,12 @@ def test_artifact_payload_records_durable_volume_metadata() -> None:
         modal_url=None,
         modal_profile="openmedical",
         artifact_root="/artifacts/bioes/run",
-        artifact_volume="meddies-pii-bioes-artifacts",
+        artifact_volume="anonymous-pii-bioes-artifacts",
         artifact_persisted=True,
     )
 
     assert payload["provenance"]["artifact_root"] == "/artifacts/bioes/run"
-    assert payload["provenance"]["artifact_volume"] == "meddies-pii-bioes-artifacts"
+    assert payload["provenance"]["artifact_volume"] == "anonymous-pii-bioes-artifacts"
     assert payload["provenance"]["artifact_persisted"] is True
 
 

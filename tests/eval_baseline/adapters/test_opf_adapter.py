@@ -4,32 +4,32 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import TYPE_CHECKING
 
-from meddies_pii.eval_baseline.adapters.opf import (
+from anonymous_pii.eval_baseline.adapters.opf import (
     OPF_LABEL_FOLD,
     OPF_SUPPORTED_LABELS,
     OpfAdapter,
     map_opf_label,
     spans_from_native_spans,
 )
-from meddies_pii.eval_baseline.adapters.opf_backend import (
+from anonymous_pii.eval_baseline.adapters.opf_backend import (
     NativePredictorDoc,
     detected_span_to_char_span,
 )
-from meddies_pii.eval_baseline.adapters.opf_windowing import (
+from anonymous_pii.eval_baseline.adapters.opf_windowing import (
     TokenizedOpfDoc,
     pack_token_windows,
     reassemble_window_values,
 )
-from meddies_pii.spans import CharSpan
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from meddies_pii.taxonomy import PiiLabel
+    from anonymous_pii.taxonomy import PiiLabel
 
 
 def test_adapter_runtime_has_no_benchmark_dependency() -> None:
-    adapter_dir = Path(__file__).parents[3] / "src/meddies_pii/eval_baseline/adapters"
+    adapter_dir = Path(__file__).parents[3] / "src/anonymous_pii/eval_baseline/adapters"
 
     for module_path in adapter_dir.glob("opf*.py"):
         assert "opf_benchmark" not in module_path.read_text(encoding="utf-8")
@@ -48,16 +48,16 @@ def test_opf_label_fold_maps_all_native_labels_to_pii_label() -> None:
     }
 
     assert dict(OPF_LABEL_FOLD) == expected
-    for native, meddies in expected.items():
-        assert map_opf_label(native) == meddies
-        assert map_opf_label(f"B-{native}") == meddies
+    for native, anonymous in expected.items():
+        assert map_opf_label(native) == anonymous
+        assert map_opf_label(f"B-{native}") == anonymous
 
     assert map_opf_label("company_name") is None
     assert map_opf_label("diagnosis") is None
     assert map_opf_label("O") is None
 
 
-def test_supported_labels_are_exactly_the_meddies8_without_company_name() -> None:
+def test_supported_labels_are_exactly_the_anonymous8_without_company_name() -> None:
     assert frozenset(OPF_LABEL_FOLD.values()) == OPF_SUPPORTED_LABELS
     assert len(OPF_SUPPORTED_LABELS) == 8
     assert "company_name" not in OPF_SUPPORTED_LABELS

@@ -12,16 +12,16 @@ from pypdf import PdfReader, PdfWriter
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen.canvas import Canvas
 
-import meddies_pii.pdf_redaction.writer_overlay as writer_overlay_module
-import meddies_pii.pdf_redaction.writer_pymupdf as writer_pymupdf_module
-import meddies_pii.pdf_redaction.writer_raster as writer_raster_module
-from meddies_pii.pdf_redaction.contracts import PageRegion, Point, Quad
-from meddies_pii.pdf_redaction.errors import (
+import anonymous_pii.pdf_redaction.writer_overlay as writer_overlay_module
+import anonymous_pii.pdf_redaction.writer_pymupdf as writer_pymupdf_module
+import anonymous_pii.pdf_redaction.writer_raster as writer_raster_module
+from anonymous_pii.pdf_redaction.contracts import PageRegion, Point, Quad
+from anonymous_pii.pdf_redaction.errors import (
     InputDocumentError,
     OutputPathError,
     RedactionApplyError,
 )
-from meddies_pii.pdf_redaction.writers import (
+from anonymous_pii.pdf_redaction.writers import (
     PyMuPdfRedactionWriter,
     RasterRebuildWriter,
     UnsafeOverlayWriter,
@@ -30,7 +30,7 @@ from meddies_pii.pdf_redaction.writers import (
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from meddies_pii.pdf_redaction.pipeline import RedactionWriter
+    from anonymous_pii.pdf_redaction.pipeline import RedactionWriter
 
 CANARY = "SYNTHETIC-CANARY-42"
 
@@ -156,7 +156,7 @@ def test_raster_writer_never_promotes_output_before_identity_is_known(
     real_sha256 = writer_raster_module.file_sha256
 
     def fail_temporary_identity(path: Path) -> str:
-        if path.parent.name.startswith(".meddies-pdf-"):
+        if path.parent.name.startswith(".anonymous-pdf-"):
             msg = "synthetic identity failure"
             raise OSError(msg)
         return real_sha256(path)
@@ -172,7 +172,7 @@ def test_raster_writer_never_promotes_output_before_identity_is_known(
 
     assert error.value.code == "raster_rebuild_failed"
     assert not output.exists()
-    assert not tuple(tmp_path.glob(".meddies-pdf-*.working"))
+    assert not tuple(tmp_path.glob(".anonymous-pdf-*.working"))
 
 
 def test_raster_product_writer_has_no_unredacted_reference_capability(
@@ -229,7 +229,7 @@ def test_writer_working_files_stay_inside_owner_only_directories(
         writer.write(source, (region,), tmp_path / f"redacted-{index}.pdf")
 
     assert observed_parent_modes == [0o700] * 3
-    assert not tuple(tmp_path.glob(".meddies-pdf-*.working"))
+    assert not tuple(tmp_path.glob(".anonymous-pdf-*.working"))
 
 
 def test_public_writer_consumes_and_reports_one_source_generation(

@@ -13,7 +13,7 @@ A "URL Credentials" row whose credential is NOT inside a URL → secret.
 
 from __future__ import annotations
 
-from meddies_pii.training.bioes.data.creddata import (
+from anonymous_pii.training.bioes.data.creddata import (
     CredMetaRow,
     convert_creddata_file,
     creddata_category_to_pii_label,

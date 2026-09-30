@@ -37,7 +37,7 @@ def test_project_dependency_groups_preserve_runtime_capability_boundaries() -> N
     assert {"packaging", "typing-extensions"} <= runtime
     assert "typer" not in runtime
     assert training == {"onnx", "onnxruntime", "peft", "torch", "transformers"}
-    assert "meddies-pii[pdf-redaction,training]" in development
+    assert "anonymous-pii[pdf-redaction,training]" in development
     assert training.isdisjoint({Requirement(specifier).name for specifier in development})
 
 
@@ -70,7 +70,7 @@ class FakeBuildImage:
 
 
 def test_source_pythonpath_configures_a_modal_compatible_image() -> None:
-    from meddies_pii.modal_runtime import (
+    from anonymous_pii.modal_runtime import (
         MODAL_PYTHONPATH,
         add_source_pythonpath,
     )
@@ -84,7 +84,7 @@ def test_source_pythonpath_configures_a_modal_compatible_image() -> None:
 
 
 def test_debian_snapshot_setup_commands_preserve_the_pinned_image_contract() -> None:
-    from meddies_pii.modal_runtime import use_pinned_debian_snapshot
+    from anonymous_pii.modal_runtime import use_pinned_debian_snapshot
 
     image = FakeBuildImage()
 
@@ -110,7 +110,7 @@ def test_debian_snapshot_setup_commands_preserve_the_pinned_image_contract() -> 
 
 def test_debian_snapshot_sources_have_one_runtime_owner() -> None:
     active_python = (
-        *(ROOT / "src/meddies_pii").rglob("*.py"),
+        *(ROOT / "src/anonymous_pii").rglob("*.py"),
         *(path for path in (ROOT / "scripts").rglob("*.py") if not path.is_relative_to(ROOT / "scripts/archive")),
     )
     owners = {
@@ -124,11 +124,11 @@ def test_debian_snapshot_sources_have_one_runtime_owner() -> None:
         )
     }
 
-    assert owners == {Path("src/meddies_pii/modal_runtime.py")}
+    assert owners == {Path("src/anonymous_pii/modal_runtime.py")}
 
 
 def test_every_active_modal_image_is_in_the_machine_readable_inventory() -> None:
-    from meddies_pii.modal_runtime import (
+    from anonymous_pii.modal_runtime import (
         DEBIAN_SNAPSHOT_SOURCES as RUNTIME_SNAPSHOT_SOURCES,
     )
 
@@ -150,7 +150,7 @@ def test_every_active_modal_image_is_in_the_machine_readable_inventory() -> None
     lfm25_image = next(image for image in images if image.path == "scripts/ops/run_lfm25_pii_baseline.py")
     assert lfm25_image.apt_requirements == ("gcc=4:12.2.0-3",)
     assert lfm25_image.base_references == (PYTHON_BASE_IMAGE,)
-    assert "use_pinned_debian_snapshot" in imported_names(ROOT / lfm25_image.path, "meddies_pii.modal_runtime")
+    assert "use_pinned_debian_snapshot" in imported_names(ROOT / lfm25_image.path, "anonymous_pii.modal_runtime")
     assert all(any(url in source for source in RUNTIME_SNAPSHOT_SOURCES) for url in EXPECTED_DEBIAN_SNAPSHOT_URLS)
 
     apt_image_paths = {image.path for image in images if image.apt_requirements}
@@ -162,7 +162,7 @@ def test_every_active_modal_image_is_in_the_machine_readable_inventory() -> None
         "scripts/ops/run_pii350_checkpoint_benchmark.py",
     }
     for relative_path in apt_image_paths:
-        assert "use_pinned_debian_snapshot" in imported_names(ROOT / relative_path, "meddies_pii.modal_runtime")
+        assert "use_pinned_debian_snapshot" in imported_names(ROOT / relative_path, "anonymous_pii.modal_runtime")
 
     inventory.assert_fully_pinned(
         tuple(

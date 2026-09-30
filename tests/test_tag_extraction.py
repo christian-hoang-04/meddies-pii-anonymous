@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-from meddies_pii.tags import extract_entities
+from anonymous_pii.tags import extract_entities
 
 
 def test_extract_entities_basic() -> None:

@@ -10,12 +10,12 @@ from typing import TYPE_CHECKING, NoReturn, cast
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from meddies_pii.training.bioes.data.artifacts import PretrainedFactory
+    from anonymous_pii.training.bioes.data.artifacts import PretrainedFactory
 
 import pytest
 
-from meddies_pii.training.bioes.modal import full_run
-from meddies_pii.training.bioes.trainers import full_run as contract
+from anonymous_pii.training.bioes.modal import full_run
+from anonymous_pii.training.bioes.trainers import full_run as contract
 
 
 def _artifact() -> dict[str, object]:
@@ -28,7 +28,7 @@ def _artifact() -> dict[str, object]:
 
 def _inventory() -> dict[str, object]:
     return {
-        "id": "Meddies/meddies-pii-v2",
+        "id": "anonymous-placeholder/anonymous-pii-v2",
         "revision": "28aaef5dffd36aabead650c74658a6f814eb4db0",
         "config": "eval",
         "split": "train",
@@ -211,7 +211,7 @@ def test_m230_comparison_uses_primary_asset_receipt_and_exact_profile(
             return {"args": args}
 
     expected_profile = {
-        "base230": "meddies-pii",
+        "base230": "anonymous-pii",
         "encoder230": "private-profile-b",
     }[candidate]
     monkeypatch.setenv("MODAL_PROFILE", expected_profile)
@@ -418,7 +418,7 @@ def test_cpu_prewarm_downloads_only_pinned_pii350_assets_with_twelve_workers(
         "eval_rows": 1700,
         "offline_verified": True,
     }
-    assert calls[0]["repo_id"] == "Meddies/meddies-pii-mixed"
+    assert calls[0]["repo_id"] == "anonymous-placeholder/anonymous-pii-mixed"
     assert calls[0]["revision"] == "11fd43ec9ebb187e1d0f94fe77bcf1090a2a18ee"
     assert calls[0]["allow_patterns"] == [
         "packed/manifest.json",
@@ -663,17 +663,17 @@ def test_masked_lm_cpu_loading_evidence_requires_complete_canonical_wrapper(
 def test_pii350_milestone_remote_and_profile_gates_reject_swapped_profile_or_token(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    decision = contract.render_pii350_milestone_run_contract("meddies-pii")
+    decision = contract.render_pii350_milestone_run_contract("anonymous-pii")
     with pytest.raises(RuntimeError, match="primary action"):
         full_run._remote_pii350_milestone_contract(
-            profile="meddies-pii",
+            profile="anonymous-pii",
             contract=decision,
             source_run_evidence=contract.PII350_B192_COMPLETE_EVIDENCE,
             primary_action="HA_AUTHORIZE_PII350_R128A256_B160_MILESTONE7680_FULL_BUDGET",
             eval_inventory=_inventory(),
         )
     assert full_run._remote_pii350_milestone_contract(
-        profile="meddies-pii",
+        profile="anonymous-pii",
         contract=decision,
         source_run_evidence=contract.PII350_B192_COMPLETE_EVIDENCE,
         primary_action=decision["manual_launch"]["requires_primary_action"],
@@ -686,10 +686,10 @@ def test_pii350_milestone_remote_and_profile_gates_reject_swapped_profile_or_tok
             return {"args": args}
 
     monkeypatch.setenv("MODAL_PROFILE", "anhthunguyenump")
-    with pytest.raises(RuntimeError, match="MODAL_PROFILE=meddies-pii"):
+    with pytest.raises(RuntimeError, match="MODAL_PROFILE=anonymous-pii"):
         full_run._local_pii350_milestone_call(
             _Endpoint(),
-            "meddies-pii",
+            "anonymous-pii",
             decision,
             contract.PII350_B192_COMPLETE_EVIDENCE,
             decision["manual_launch"]["requires_primary_action"],
@@ -702,11 +702,11 @@ def test_pii350_milestone_remote_and_profile_gates_reject_swapped_profile_or_tok
 @pytest.mark.parametrize(
     ("arm", "profile"),
     [
-        ("lr1e-4", "hocdatacamp-hoangthu"),
-        ("lr2e-4", "hocdatacamp-hoangthu"),
-        ("lr3e-4", "hocdatacamp-hoangthu"),
-        ("lr4e-4", "meddiesresearch"),
-        ("wsd3e-4", "meddiesresearch"),
+        ("lr1e-4", "anonymous-profile"),
+        ("lr2e-4", "anonymous-profile"),
+        ("lr3e-4", "anonymous-profile"),
+        ("lr4e-4", "anonymousresearch"),
+        ("wsd3e-4", "anonymousresearch"),
     ],
 )
 def test_pii350_scout_remote_and_profile_gates_bind_the_exact_arm(

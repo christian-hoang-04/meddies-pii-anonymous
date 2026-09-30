@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from meddies_pii.pdf_redaction.contracts import (
+from anonymous_pii.pdf_redaction.contracts import (
     GeometryPage,
     GeometryToken,
     PageRegion,

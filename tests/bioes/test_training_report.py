@@ -3,8 +3,8 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-from meddies_pii.spans import CharSpan
-from meddies_pii.training.bioes.report import (
+from anonymous_pii.spans import CharSpan
+from anonymous_pii.training.bioes.report import (
     TrainingReportOptions,
     build_training_report,
     highlight_spans,
@@ -150,7 +150,7 @@ def test_build_training_report_renders_stack_real_examples_and_modal(tmp_path: P
                 "backend": "hf",
                 "config": {
                     "model_id": "LiquidAI/LFM2.5-350M-Base",
-                    "dataset_id": "Meddies/meddies-pii",
+                    "dataset_id": "anonymous-placeholder/anonymous-pii",
                     "max_length": 512,
                 },
                 "steps": 3,

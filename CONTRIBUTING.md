@@ -1,14 +1,14 @@
-# Contributing to Meddies PII
+# Contributing to Anonymous PII
 
-Meddies PII should be easy to run without credentials. Start with the offline CLI before touching provider-backed generation or training jobs.
+Anonymous PII should be easy to run without credentials. Start with the offline CLI before touching provider-backed generation or training jobs.
 
 ## Setup
 
 ```bash
-git clone https://example.invalid/anonymous/meddies-pii.git
-cd meddies-pii
+git clone https://example.invalid/anonymous/anonymous-pii.git
+cd anonymous-pii
 uv sync
-uv run meddies-pii demo
+uv run anonymous-pii demo
 ```
 
 ## Development loop
@@ -16,17 +16,17 @@ uv run meddies-pii demo
 ```bash
 uv run pytest
 uv run ruff check --config ruff-strict.toml .
-uv run meddies-pii labels
-uv run meddies-pii validate examples/sample.inline.jsonl
+uv run anonymous-pii labels
+uv run anonymous-pii validate examples/sample.inline.jsonl
 ```
 
 Use test-first changes for behavior. Add the smallest failing test that proves the bug or feature, implement the package logic, then keep CLI/scripts as thin adapters.
 
-The source type gate is `uv run mypy src/meddies_pii` plus `uv run basedpyright src/meddies_pii`. Strict MyPy checks every module under `src/meddies_pii` with no MyPy exclusions. BasedPyright runs in standard mode across the same source and excludes only `.venv`.
+The source type gate is `uv run mypy src/anonymous_pii` plus `uv run basedpyright src/anonymous_pii`. Strict MyPy checks every module under `src/anonymous_pii` with no MyPy exclusions. BasedPyright runs in standard mode across the same source and excludes only `.venv`.
 
 ## Public vocabulary
 
-Use **Meddies Labels** in public docs. Use `PiiLabel`, `PII_LABELS`, and `PII_LABEL_SET` in code. The current labels are:
+Use **Anonymous Labels** in public docs. Use `PiiLabel`, `PII_LABELS`, and `PII_LABEL_SET` in code. The current labels are:
 
 ```text
 address, company_name, date, email_address, human_name, id_number, phone_number, private_url, secret
@@ -37,9 +37,9 @@ Earlier internal versions had 7 labels; do not describe that old set as current.
 ## Architecture expectations
 
 - Read the [architecture guide](docs/ARCHITECTURE.md) before choosing a module or adding an advanced workflow.
-- Public contributor workflows go through `uv run meddies-pii ...`.
+- Public contributor workflows go through `uv run anonymous-pii ...`.
 - `scripts/` is for maintainer adapters, not reusable implementation.
-- Reusable behavior belongs under `src/meddies_pii/...` with tests.
+- Reusable behavior belongs under `src/anonymous_pii/...` with tests.
 - Offline commands must not read provider credentials or call network services.
 - Provider, HuggingFace, Gemini, and Modal workflows must make data movement explicit.
 
@@ -58,8 +58,8 @@ Report suspected vulnerabilities through the private process in [SECURITY.md](SE
 uv run ruff check --config ruff-strict.toml .
 uvx --from lintmax-py==0.0.7 lintmax-py check .
 uv run pytest
-uv run mypy src/meddies_pii
-uv run basedpyright src/meddies_pii
+uv run mypy src/anonymous_pii
+uv run basedpyright src/anonymous_pii
 ```
 
 5. Explain any data/privacy implications in the PR body.

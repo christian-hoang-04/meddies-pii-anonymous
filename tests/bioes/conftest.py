@@ -10,20 +10,20 @@ from typing import TYPE_CHECKING, cast, override
 import pytest
 import torch
 
-from meddies_pii.annotations.bioes.encoding import TokenizedExample
-from meddies_pii.annotations.tagged_text import ParsedTaggedDocument
-from meddies_pii.training.bioes.data.artifacts import ProbeArtifacts
-from meddies_pii.training.bioes.data.preparation import PreparationStats, PreparedRow
-from meddies_pii.training.bioes.trainers import trainer
-from meddies_pii.training.bioes.trainers.checkpointing import LoadedTrainingCheckpoint
-from meddies_pii.training.bioes.trainers.packing_runtime import PreparedTrainingUnits
+from anonymous_pii.annotations.bioes.encoding import TokenizedExample
+from anonymous_pii.annotations.tagged_text import ParsedTaggedDocument
+from anonymous_pii.training.bioes.data.artifacts import ProbeArtifacts
+from anonymous_pii.training.bioes.data.preparation import PreparationStats, PreparedRow
+from anonymous_pii.training.bioes.trainers import trainer
+from anonymous_pii.training.bioes.trainers.checkpointing import LoadedTrainingCheckpoint
+from anonymous_pii.training.bioes.trainers.packing_runtime import PreparedTrainingUnits
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
     from transformers import PreTrainedTokenizerBase
 
-    from meddies_pii.training.bioes.data.tagger import HiddenStateTokenTagger
+    from anonymous_pii.training.bioes.data.tagger import HiddenStateTokenTagger
 
 _SMOKE_ROW_RAW = "patient"
 

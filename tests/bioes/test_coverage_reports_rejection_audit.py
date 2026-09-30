@@ -6,11 +6,11 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.training.bioes.eval.rejection_policy import (
+from anonymous_pii.training.bioes.eval.rejection_policy import (
     RejectionVerdict,
     classify_rejection_reason,
 )
-from meddies_pii.training.bioes.reports import rejection_audit
+from anonymous_pii.training.bioes.reports import rejection_audit
 
 if TYPE_CHECKING:
     from pathlib import Path

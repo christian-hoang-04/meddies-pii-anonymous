@@ -8,39 +8,39 @@ from typing import TYPE_CHECKING, Any
 
 import pytest
 
-from meddies_pii.eval_baseline.adapters.openmed import (
+from anonymous_pii.eval_baseline.adapters.openmed import (
     OPENMED_SUPPORTED_LABELS,
     map_openmed_label,
     spans_from_pipeline_entities,
 )
-from meddies_pii.eval_baseline.baseline.datasets import EvalRow
-from meddies_pii.eval_baseline.baseline.run import (
+from anonymous_pii.eval_baseline.baseline.datasets import EvalRow
+from anonymous_pii.eval_baseline.baseline.run import (
     ShardSpec,
     filter_gold_to_supported,
     read_matrix_results,
     run_shard,
     score_reports,
 )
-from meddies_pii.eval_baseline.baseline.subset import (
+from anonymous_pii.eval_baseline.baseline.subset import (
     StratifiedSubsetSpec,
     build_external_stratified_subset,
     build_pinned_subset,
     build_smoke_subset,
 )
-from meddies_pii.evaluation.identity import (
+from anonymous_pii.evaluation.identity import (
     ArtifactIdentity,
     EvaluationContract,
     dataset_shard_identity,
     file_sha256,
 )
-from meddies_pii.jsonl import read_jsonl, write_jsonl
-from meddies_pii.spans import CharSpan
-from meddies_pii.taxonomy import PII_LABEL_SET
+from anonymous_pii.jsonl import read_jsonl, write_jsonl
+from anonymous_pii.spans import CharSpan
+from anonymous_pii.taxonomy import PII_LABEL_SET
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from meddies_pii.eval_baseline.baseline.run import MatrixResults
+    from anonymous_pii.eval_baseline.baseline.run import MatrixResults
 
 
 def _evaluation_contract() -> EvaluationContract:
@@ -99,7 +99,7 @@ def _read_completed_v2_matrix(
     )
 
 
-def test_openmed_label_map_reuses_meddies_taxonomy_and_keeps_url_private_url() -> None:
+def test_openmed_label_map_reuses_anonymous_taxonomy_and_keeps_url_private_url() -> None:
     assert map_openmed_label("B-FIRST_NAME") == "human_name"
     assert map_openmed_label("I-date_time") == "date"
     assert map_openmed_label("url") == "private_url"

@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from meddies_pii.bioes_inference.artifacts import (
+from anonymous_pii.bioes_inference.artifacts import (
     PUBLIC_Q8_ARTIFACT_SPEC,
     ArtifactHydrationError,
     PinnedArtifactSpec,
@@ -38,7 +38,7 @@ def _small_spec() -> tuple[PinnedArtifactSpec, dict[str, bytes]]:
     return (
         PinnedArtifactSpec(
             artifact_id="synthetic_q8",
-            repo_id="Meddies/synthetic-public",
+            repo_id="anonymous-placeholder/synthetic-public",
             revision="1" * 40,
             files=files,
         ),
@@ -50,7 +50,7 @@ def test_public_q8_spec_pins_model_and_minimum_tokenizer_files() -> None:
     spec = PUBLIC_Q8_ARTIFACT_SPEC
     files = {file.relative_path: file for file in spec.files}
 
-    assert spec.repo_id == "Meddies/meddies-pii-v2-onnx"
+    assert spec.repo_id == "anonymous-placeholder/anonymous-pii-v2-onnx"
     assert spec.revision == "47b041b16ec3ecdf75871d42e38951f7f6d65a31"
     assert set(files) == {
         "onnx/model.q8.onnx",
@@ -194,7 +194,7 @@ def test_specs_reject_mutable_revisions_and_path_traversal() -> None:
     with pytest.raises(ValueError, match="40-character lowercase commit"):
         PinnedArtifactSpec(
             artifact_id="mutable",
-            repo_id="Meddies/model",
+            repo_id="anonymous-placeholder/model",
             revision="main",
             files=(file,),
         )
@@ -238,7 +238,7 @@ def test_default_detector_factory_uses_verified_artifact_and_openvino_runtime(
         return SimpleNamespace(model_path=model, tokenizer_root=tmp_path)
 
     monkeypatch.setattr(
-        "meddies_pii.bioes_inference.artifacts.hydrate_artifact",
+        "anonymous_pii.bioes_inference.artifacts.hydrate_artifact",
         fake_hydrate,
     )
 

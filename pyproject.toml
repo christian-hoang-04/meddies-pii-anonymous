@@ -1,5 +1,5 @@
 [project]
-name = "meddies-pii"
+name = "anonymous-pii"
 version = "0.1.0"
 description = "Clinical PII data tooling for offline validation, synthetic generation, and BIOES evaluation."
 readme = "README.md"
@@ -37,14 +37,14 @@ training = [
 ]
 
 [project.scripts]
-meddies-pii = "meddies_pii.cli:main"
+anonymous-pii = "anonymous_pii.cli:main"
 
 [dependency-groups]
 dev = [
   "basedpyright>=1.39.9",
   "faker>=40.36.0",
   "hypothesis>=6.150.3",
-  "meddies-pii[pdf-redaction,training]",
+  "anonymous-pii[pdf-redaction,training]",
   "mypy>=2.3.0",
   "onnx-ir==0.2.1",
   "pandas-stubs>=3.0.3.260530",

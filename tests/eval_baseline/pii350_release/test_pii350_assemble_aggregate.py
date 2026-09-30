@@ -13,9 +13,9 @@ from typing import TYPE_CHECKING, Any
 
 import pytest
 
-from meddies_pii.eval_baseline.baseline.datasets import EVAL_DATASETS, EVAL_EXPECTED_ROWS
-from meddies_pii.evaluation.identity import canonical_sha256
-from meddies_pii.taxonomy import PII_LABEL_SET
+from anonymous_pii.eval_baseline.baseline.datasets import EVAL_DATASETS, EVAL_EXPECTED_ROWS
+from anonymous_pii.evaluation.identity import canonical_sha256
+from anonymous_pii.taxonomy import PII_LABEL_SET
 
 if TYPE_CHECKING:
     from types import ModuleType
@@ -395,7 +395,7 @@ def test_assembly_refuses_a_summary_from_another_checkpoint() -> None:
 def test_summary_loader_refuses_a_tampered_digest(tmp_path: Path) -> None:
     assembler = _assembler()
     first, _second = _split_summaries()
-    tampered = {**first, "profile": "meddies-run"}
+    tampered = {**first, "profile": "anonymous-run"}
     path = _write(tmp_path, "tampered.json", tampered)
 
     with pytest.raises(SystemExit, match="digest does not match"):

@@ -16,7 +16,7 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING, Any
 
-from meddies_pii.eval_baseline.adapters.gliner2 import (
+from anonymous_pii.eval_baseline.adapters.gliner2 import (
     GLINER2_LABEL_FOLD,
     GLINER2_SOURCE_LABELS,
     GLINER2_SUPPORTED_LABELS,
@@ -29,7 +29,7 @@ from meddies_pii.eval_baseline.adapters.gliner2 import (
     stitch_doc_spans,
     subword_window_ranges,
 )
-from meddies_pii.spans import CharSpan
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     import pytest

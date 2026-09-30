@@ -14,11 +14,11 @@ from pypdf.generic import (
     RectangleObject,
 )
 
-from meddies_pii.pdf_redaction.benchmark.corpus import (
+from anonymous_pii.pdf_redaction.benchmark.corpus import (
     CorpusFixture,
     generate_challenge_corpus,
 )
-from meddies_pii.pdf_redaction.risk import classify_pdf_risk
+from anonymous_pii.pdf_redaction.risk import classify_pdf_risk
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

@@ -14,12 +14,12 @@ from unittest.mock import MagicMock
 import pytest
 
 if TYPE_CHECKING:
-    from meddies_pii.generation.label_corpus.runner import SyntheticGenerationRequest
-    from meddies_pii.generation.openai_compatible.client import OpenAICompatibleClient
+    from anonymous_pii.generation.label_corpus.runner import SyntheticGenerationRequest
+    from anonymous_pii.generation.openai_compatible.client import OpenAICompatibleClient
 
 
 def test_pii_labels_is_public_constant() -> None:
-    from meddies_pii.constants import PII_LABELS
+    from anonymous_pii.constants import PII_LABELS
 
     assert PII_LABELS == (
         "address",
@@ -35,15 +35,15 @@ def test_pii_labels_is_public_constant() -> None:
 
 
 def test_labels_command_prints_current_labels(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
-    from meddies_pii.cli import main
-    from meddies_pii.constants import PII_LABELS
+    from anonymous_pii.cli import main
+    from anonymous_pii.constants import PII_LABELS
 
-    monkeypatch.setattr(sys, "argv", ["meddies-pii", "labels"])
+    monkeypatch.setattr(sys, "argv", ["anonymous-pii", "labels"])
 
     main()
 
     output = capsys.readouterr().out
-    assert "Meddies Labels (9)" in output
+    assert "Anonymous Labels (9)" in output
     for label in PII_LABELS:
         assert f"- {label}" in output
 
@@ -52,7 +52,7 @@ def test_validate_command_accepts_bundled_inline_sample(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    from meddies_pii.cli import main
+    from anonymous_pii.cli import main
 
     sample_path = Path("examples/sample.inline.jsonl")
     assert sample_path.exists()
@@ -60,7 +60,7 @@ def test_validate_command_accepts_bundled_inline_sample(
     monkeypatch.setattr(
         sys,
         "argv",
-        ["meddies-pii", "validate", str(sample_path)],
+        ["anonymous-pii", "validate", str(sample_path)],
     )
 
     main()
@@ -76,13 +76,13 @@ def test_demo_command_writes_local_output(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    from meddies_pii.cli import main
+    from anonymous_pii.cli import main
 
     output_dir = tmp_path / "demo-output"
     monkeypatch.setattr(
         sys,
         "argv",
-        ["meddies-pii", "demo", "--output-dir", str(output_dir)],
+        ["anonymous-pii", "demo", "--output-dir", str(output_dir)],
     )
 
     main()
@@ -99,7 +99,7 @@ def test_validate_command_rejects_unknown_label(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    from meddies_pii.cli import main
+    from anonymous_pii.cli import main
 
     sample_path = tmp_path / "bad.inline.jsonl"
     sample_path.write_text(
@@ -109,7 +109,7 @@ def test_validate_command_rejects_unknown_label(
     monkeypatch.setattr(
         sys,
         "argv",
-        ["meddies-pii", "validate", str(sample_path)],
+        ["anonymous-pii", "validate", str(sample_path)],
     )
 
     with pytest.raises(SystemExit) as exc:
@@ -123,9 +123,9 @@ def _assert_operation_failure(
     monkeypatch: pytest.MonkeyPatch,
     argv: list[str],
 ) -> SystemExit:
-    from meddies_pii.cli import main
+    from anonymous_pii.cli import main
 
-    monkeypatch.setattr(sys, "argv", ["meddies-pii", *argv])
+    monkeypatch.setattr(sys, "argv", ["anonymous-pii", *argv])
     with pytest.raises(SystemExit) as raised:
         main()
     assert raised.value.code == 1
@@ -160,8 +160,8 @@ def test_generate_missing_provider_configuration_exits_nonzero(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii.exceptions import ConfigurationError
-    from meddies_pii.generation.label_corpus import runner
+    from anonymous_pii.exceptions import ConfigurationError
+    from anonymous_pii.generation.label_corpus import runner
 
     # reason: this stands in for `runner.run_synthetic_generation`, which `cli.py` drives through `asyncio.run` and
     # reason: `generation_runs.py:130` awaits, so dropping `async` would hand both a value that cannot be awaited.
@@ -187,9 +187,9 @@ def test_generate_aggregates_per_language_failures_before_exiting(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii import cli
-    from meddies_pii.exceptions import MeddiesException
-    from meddies_pii.generation.label_corpus import runner
+    from anonymous_pii import cli
+    from anonymous_pii.exceptions import AnonymousException
+    from anonymous_pii.generation.label_corpus import runner
 
     attempted_languages: list[str] = []
 
@@ -200,7 +200,7 @@ def test_generate_aggregates_per_language_failures_before_exiting(
         attempted_languages.append(language)
         if language == "Vietnamese":
             msg = "provider refused Vietnamese"
-            raise MeddiesException(msg)
+            raise AnonymousException(msg)
         return {"accepted_count": 1}
 
     output_dir = tmp_path / "synthetic"
@@ -224,9 +224,9 @@ def test_generate_partial_failure_retains_successful_language_artifacts(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii import cli
-    from meddies_pii.exceptions import MeddiesException
-    from meddies_pii.generation.label_corpus import runner
+    from anonymous_pii import cli
+    from anonymous_pii.exceptions import AnonymousException
+    from anonymous_pii.generation.label_corpus import runner
 
     output_dir = tmp_path / "synthetic"
     output_dir.mkdir()
@@ -244,7 +244,7 @@ def test_generate_partial_failure_retains_successful_language_artifacts(
             return {"accepted_count": 1}
         Path(request.output_dir, "accepted.en.jsonl").write_text('{"partial": true}\n', encoding="utf-8")  # ruff: ignore[blocking-path-method-in-async-function]
         msg = "provider refused English"
-        raise MeddiesException(msg)
+        raise AnonymousException(msg)
 
     monkeypatch.setattr(cli, "SUPPORTED_LANGUAGES", ("Vietnamese", "English"))
     monkeypatch.setattr(runner, "run_synthetic_generation", write_then_fail)
@@ -318,7 +318,7 @@ def test_inference_provider_operation_failure_exits_nonzero(  # ruff: ignore[too
     operation: str,
     message: str,
 ) -> None:
-    from meddies_pii import cli
+    from anonymous_pii import cli
 
     client = MagicMock()
     if operation == "list":
@@ -345,7 +345,7 @@ def test_inference_download_refuses_missing_merge_input(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii import cli
+    from anonymous_pii import cli
 
     client = MagicMock()
     client.batches.get.return_value.state.name = "JOB_STATE_SUCCEEDED"
@@ -379,7 +379,7 @@ def test_inference_download_all_error_rows_exits_nonzero_without_artifact(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii import cli
+    from anonymous_pii import cli
 
     client = MagicMock()
     client.batches.get.return_value.state.name = "JOB_STATE_SUCCEEDED"
@@ -403,7 +403,7 @@ def test_inference_monitor_failed_job_exits_nonzero(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii import cli
+    from anonymous_pii import cli
 
     client = MagicMock()
     client.batches.get.return_value.state.name = "JOB_STATE_FAILED"
@@ -426,7 +426,7 @@ def test_inference_missing_provider_configuration_exits_nonzero(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii import cli
+    from anonymous_pii import cli
 
     monkeypatch.setattr(
         cli,
@@ -441,8 +441,8 @@ def test_inference_missing_provider_configuration_exits_nonzero(
 
 
 def test_correct_command_passes_validated_request_to_correction(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    from meddies_pii.generation import correction
-    from meddies_pii.generation.correction import CorrectionRequest
+    from anonymous_pii.generation import correction
+    from anonymous_pii.generation.correction import CorrectionRequest
 
     received: list[CorrectionRequest] = []
 
@@ -457,10 +457,10 @@ def test_correct_command_passes_validated_request_to_correction(tmp_path: Path, 
         sys,
         "argv",
         [
-            "meddies-pii",
+            "anonymous-pii",
             "correct",
             "--repo",
-            "Meddies/custom",
+            "anonymous-placeholder/custom",
             "--limit",
             "3",
             "--output",
@@ -468,11 +468,11 @@ def test_correct_command_passes_validated_request_to_correction(tmp_path: Path, 
         ],
     )
 
-    from meddies_pii.cli import main
+    from anonymous_pii.cli import main
 
     main()
 
-    assert received == [CorrectionRequest(repo="Meddies/custom", limit=3, output=str(output_path))]
+    assert received == [CorrectionRequest(repo="anonymous-placeholder/custom", limit=3, output=str(output_path))]
 
 
 def test_correct_command_rejects_nonpositive_limit(
@@ -497,7 +497,7 @@ def test_correction_failure_exits_nonzero_without_output(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii.generation import correction
+    from anonymous_pii.generation import correction
 
     # reason: this stands in for `correction.correct_hf_data`, which `cli.py:225` drives through `asyncio.run`, so
     # reason: dropping `async` would hand it a value that cannot be awaited.
@@ -538,7 +538,7 @@ def test_correction_all_row_failures_persists_diagnostics_then_exits_nonzero(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii.generation import correction
+    from anonymous_pii.generation import correction
 
     output_path = tmp_path / "corrected.jsonl"
     outcome = SimpleNamespace(
@@ -562,8 +562,8 @@ def test_correction_mixed_row_results_succeeds_with_failure_diagnostics(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    from meddies_pii import cli
-    from meddies_pii.generation import correction
+    from anonymous_pii import cli
+    from anonymous_pii.generation import correction
 
     output_path = tmp_path / "corrected.jsonl"
     outcome = SimpleNamespace(
@@ -575,7 +575,7 @@ def test_correction_mixed_row_results_succeeds_with_failure_diagnostics(
     )
     monkeypatch.setattr(correction, "DataCorrector", lambda: _FakeCorrector(outcome))
     caplog.set_level(logging.INFO)
-    monkeypatch.setattr(sys, "argv", ["meddies-pii", "correct", "--output", str(output_path)])
+    monkeypatch.setattr(sys, "argv", ["anonymous-pii", "correct", "--output", str(output_path)])
 
     cli.main()
 
@@ -586,7 +586,7 @@ def test_correction_mixed_row_results_succeeds_with_failure_diagnostics(
 def test_correction_outcome_retains_mixed_row_failure_diagnostics(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from meddies_pii.generation.correction import DataCorrector
+    from anonymous_pii.generation.correction import DataCorrector
 
     class FakeClient:
         def __init__(self) -> None:
@@ -623,7 +623,7 @@ def test_correction_outcome_retains_mixed_row_failure_diagnostics(
 def test_successful_inference_operation_keeps_zero_exit(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from meddies_pii import cli
+    from anonymous_pii import cli
 
     called = False
 
@@ -633,7 +633,7 @@ def test_successful_inference_operation_keeps_zero_exit(
 
     monkeypatch.setattr(cli, "get_client", lambda **_kwargs: object())
     monkeypatch.setattr(cli, "list_jobs", list_success)
-    monkeypatch.setattr(sys, "argv", ["meddies-pii", "inference", "list"])
+    monkeypatch.setattr(sys, "argv", ["anonymous-pii", "inference", "list"])
 
     cli.main()
 

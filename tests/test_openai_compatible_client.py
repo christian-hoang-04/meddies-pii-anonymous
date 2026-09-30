@@ -42,19 +42,19 @@ import httpx
 import pytest
 import respx
 
-from meddies_pii.exceptions import ConfigurationError, DailyBudgetExceeded
-from meddies_pii.generation.account_ledger import AccountLedger, AccountLimits
-from meddies_pii.generation.openai_compatible.client import (
+from anonymous_pii.exceptions import ConfigurationError, DailyBudgetExceeded
+from anonymous_pii.generation.account_ledger import AccountLedger, AccountLimits
+from anonymous_pii.generation.openai_compatible.client import (
     OpenAICompatibleClient,
     _is_hard_daily_cap,
     _parse_retry_after,
 )
-from meddies_pii.generation.openai_compatible.providers import (
+from anonymous_pii.generation.openai_compatible.providers import (
     get_provider_spec,
     resolve_provider_base_urls,
     resolve_provider_model,
 )
-from meddies_pii.generation.openai_compatible.quota import (
+from anonymous_pii.generation.openai_compatible.quota import (
     AsyncRateLimiter,
     DailyTokenBudget,
     billable_tokens,
@@ -87,7 +87,7 @@ def _no_jitter(monkeypatch: pytest.MonkeyPatch) -> None:
     The jitter is timing-only and changes no wire behavior.
     """
     monkeypatch.setattr(
-        "meddies_pii.generation.openai_compatible.client._REQUEST_JITTER_RANGE",
+        "anonymous_pii.generation.openai_compatible.client._REQUEST_JITTER_RANGE",
         (0.0, 0.0),
     )
 

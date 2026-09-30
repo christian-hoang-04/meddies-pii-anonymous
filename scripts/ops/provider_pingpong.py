@@ -23,19 +23,19 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from meddies_pii.generation.label_corpus.runner import (
+from anonymous_pii.generation.label_corpus.runner import (
     SyntheticGenerationRequest,
     configured_base_urls,
     preflight_keys,
     provider_keys,
     run_synthetic_generation,
 )
-from meddies_pii.generation.openai_compatible.providers import (
+from anonymous_pii.generation.openai_compatible.providers import (
     get_provider_spec,
     resolve_provider_model,
 )
-from meddies_pii.jsonl import read_jsonl
-from meddies_pii.languages import normalize_language
+from anonymous_pii.jsonl import read_jsonl
+from anonymous_pii.languages import normalize_language
 
 DEFAULT_PROVIDERS = (
     "groq",

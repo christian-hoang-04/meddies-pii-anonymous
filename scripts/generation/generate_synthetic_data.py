@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""17-language Meddies Labels generation adapters (daily weak-label + eval-gold run)."""
+"""17-language Anonymous Labels generation adapters (daily weak-label + eval-gold run)."""
 
 from __future__ import annotations
 
@@ -16,10 +16,10 @@ from dotenv import load_dotenv
 # reason: loads this script through `importlib` and reads `module.DEFAULT_LANGUAGE_KEYS` to prove the
 # reason: script and the build agree on the language set; a plain import here reads as unused and gets
 # reason: stripped, and the test fails on a missing attribute.
-from meddies_pii.generation.label_corpus.generation_runs import (
+from anonymous_pii.generation.label_corpus.generation_runs import (
     DEFAULT_LANGUAGE_KEYS as DEFAULT_LANGUAGE_KEYS,  # ruff: ignore[useless-import-alias]
 )
-from meddies_pii.generation.label_corpus.generation_runs import (
+from anonymous_pii.generation.label_corpus.generation_runs import (
     WEAK_LABEL_FREE_PROVIDERS,
     resolve_languages,
     run_eval_gold,
@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Local Run-2a Meddies Labels generation (no Modal).")
+    parser = argparse.ArgumentParser(description="Local Run-2a Anonymous Labels generation (no Modal).")
     sub = parser.add_subparsers(dest="command", required=True)
 
     eval_gold = sub.add_parser("eval-gold", help="Component A eval gold (openai gpt-5.4-mini).")

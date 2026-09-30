@@ -97,7 +97,7 @@ def _snapshot_references(tree: ast.Module) -> tuple[str, ...]:
 
 
 def _active_modal_paths(root: Path) -> Iterable[Path]:
-    for base in (root / "scripts" / "ops", root / "src" / "meddies_pii" / "training"):
+    for base in (root / "scripts" / "ops", root / "src" / "anonymous_pii" / "training"):
         yield from sorted(base.rglob("*.py"))
 
 

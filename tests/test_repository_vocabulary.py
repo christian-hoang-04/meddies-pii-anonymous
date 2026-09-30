@@ -8,9 +8,9 @@ import subprocess  # ruff: ignore[suspicious-subprocess-import]
 from pathlib import Path
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-HISTORICAL_JARGON = re.compile(r"meddies(?:[-_ ]?" + "9)", re.IGNORECASE)
+HISTORICAL_JARGON = re.compile(r"anonymous(?:[-_ ]?" + "9)", re.IGNORECASE)
 APPROVED_HISTORICAL_JARGON_PATHS = frozenset({
-    "src/meddies_pii/historical_artifacts.py",
+    "src/anonymous_pii/historical_artifacts.py",
     "tests/test_historical_artifacts.py",
     "tests/test_repository_vocabulary.py",
 })

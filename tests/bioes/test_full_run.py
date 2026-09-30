@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.training.bioes.trainers import full_run
+from anonymous_pii.training.bioes.trainers import full_run
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -89,7 +89,7 @@ def test_fixed_full_population_pins_optimizer_and_final_eval() -> None:
         ],
     }
     assert contract["packed_dataset"] == {
-        "id": "Meddies/meddies-pii-mixed",
+        "id": "anonymous-placeholder/anonymous-pii-mixed",
         "revision": "11fd43ec9ebb187e1d0f94fe77bcf1090a2a18ee",
         "config": "packed",
         "manifest_sha256": "7cadda8e81ef4b2a1111f37a8b508492158a983e90f54fecafdc24764f792969",
@@ -431,7 +431,7 @@ def test_preflight_command_renders_the_cpu_receipt_prerequisite(candidate: str, 
     command = full_run.render_full_run_preflight_command(candidate)
     assert command == (
         f"MODAL_PROFILE={profile} uv run modal run --detach --timestamps -m "
-        "meddies_pii.training.bioes.modal.full_run "
+        "anonymous_pii.training.bioes.modal.full_run "
         f"--candidate {candidate} --preflight-assets"
     )
     assert "--execute" not in command
@@ -459,7 +459,7 @@ def test_pure_renderer_never_imports_modal_or_dispatches() -> None:
         [
             sys.executable,
             "-m",
-            "meddies_pii.training.bioes.trainers.full_run",
+            "anonymous_pii.training.bioes.trainers.full_run",
             "--render-config",
             "encoder350",
         ],
@@ -474,7 +474,7 @@ def test_pure_renderer_never_imports_modal_or_dispatches() -> None:
             sys.executable,
             "-c",
             (
-                "import sys; import meddies_pii.training.bioes.trainers.full_run; assert 'modal' not in "
+                "import sys; import anonymous_pii.training.bioes.trainers.full_run; assert 'modal' not in "
                 "sys.modules; print('pure')"
             ),
         ],
@@ -487,7 +487,7 @@ def test_pure_renderer_never_imports_modal_or_dispatches() -> None:
         [
             sys.executable,
             "-m",
-            "meddies_pii.training.bioes.trainers.full_run",
+            "anonymous_pii.training.bioes.trainers.full_run",
             "--render-preflight-command",
             "encoder350",
         ],
@@ -501,7 +501,7 @@ def test_pure_renderer_never_imports_modal_or_dispatches() -> None:
         [
             sys.executable,
             "-m",
-            "meddies_pii.training.bioes.trainers.full_run",
+            "anonymous_pii.training.bioes.trainers.full_run",
             "--render-base230-oom-fallback-command",
         ],
         check=True,
@@ -680,7 +680,7 @@ def test_pii350_capacity_run_uses_authorized_batch256_and_r128a256() -> None:
             "base230",
             320,
             "HA_AUTHORIZE_BASE230_B320_R64A128_FULL_BUDGET",
-            "meddies-pii",
+            "anonymous-pii",
             "b6c936c2bc48816f570f6185094c0c87b08c10fd080a571b1e2b63ddc1e3c1b4",
         ),
         (
@@ -812,7 +812,7 @@ def test_full_run_hard_timeout_is_exact_and_records_gpu_and_all_in_costs() -> No
 def test_base230_resets_gate_seed_immediately_before_head_construction() -> None:
     import inspect
 
-    from meddies_pii.training.bioes.trainers import full_run_runtime
+    from anonymous_pii.training.bioes.trainers import full_run_runtime
 
     source = inspect.getsource(full_run_runtime._unsloth_tagger)
     assert source.index("torch.manual_seed(GATE_SEED)") < source.index("HiddenStateTokenTagger(")
@@ -821,7 +821,7 @@ def test_base230_resets_gate_seed_immediately_before_head_construction() -> None
 def test_full_runtime_uses_unsloth_fastmodel_for_encoders_and_native_packing() -> None:
     import inspect
 
-    from meddies_pii.training.bioes.trainers import full_run_runtime
+    from anonymous_pii.training.bioes.trainers import full_run_runtime
 
     source = inspect.getsource(full_run_runtime)
     assert "from transformers import AutoModelForMaskedLM" in source
@@ -838,7 +838,7 @@ def test_full_runtime_uses_unsloth_fastmodel_for_encoders_and_native_packing() -
 def test_encoder_runtime_loads_unsloth_before_transformers_and_peft() -> None:
     import inspect
 
-    from meddies_pii.training.bioes.trainers import full_run_runtime
+    from anonymous_pii.training.bioes.trainers import full_run_runtime
 
     source = inspect.getsource(full_run_runtime._unsloth_encoder_tagger)
     unsloth_load = 'fast_model = import_module("unsloth").FastModel'
@@ -856,10 +856,10 @@ def test_every_unsloth_import_site_patches_before_transformers_and_peft() -> Non
     import ast
     from pathlib import Path
 
-    import meddies_pii
+    import anonymous_pii
 
-    assert meddies_pii.__file__ is not None
-    package_root = Path(meddies_pii.__file__).parent
+    assert anonymous_pii.__file__ is not None
+    package_root = Path(anonymous_pii.__file__).parent
     patched = ("transformers", "peft")
     checked = 0
     for path in sorted(package_root.rglob("*.py")):
@@ -957,7 +957,7 @@ def test_resume_cursor_is_bounded_by_packed_units_not_raw_source_rows() -> None:
 def test_full_runtime_uses_segment_isolation_and_keeps_the_final_partial_batch() -> None:
     import inspect
 
-    from meddies_pii.training.bioes.trainers import full_run_runtime
+    from anonymous_pii.training.bioes.trainers import full_run_runtime
 
     source = inspect.getsource(full_run_runtime)
     assert "packed_segment_isolation=True" in source
@@ -968,7 +968,7 @@ def test_full_runtime_uses_segment_isolation_and_keeps_the_final_partial_batch()
 def test_classifier_digest_is_deterministic_and_seed_sensitive() -> None:
     import torch
 
-    from meddies_pii.training.bioes.trainers.full_run_runtime import _classifier_digest
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import _classifier_digest
 
     torch.manual_seed(3407)
     first = torch.nn.Linear(4, 37, dtype=torch.bfloat16)
@@ -982,7 +982,7 @@ def test_classifier_digest_is_deterministic_and_seed_sensitive() -> None:
 
 
 def test_first_packed_batch_order_attestation_hashes_source_identities_only() -> None:
-    from meddies_pii.training.bioes.trainers.full_run_runtime import (
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import (
         _packed_order_attestation,
     )
 
@@ -1001,7 +1001,7 @@ def test_first_packed_batch_order_attestation_hashes_source_identities_only() ->
 
 
 def test_physical_batches_preserve_the_final_36_packed_units() -> None:
-    from meddies_pii.training.bioes.trainers.full_run_runtime import _physical_batches
+    from anonymous_pii.training.bioes.trainers.full_run_runtime import _physical_batches
 
     rows = iter({"row_uids": [str(index)]} for index in range(276))
 
@@ -1011,7 +1011,7 @@ def test_physical_batches_preserve_the_final_36_packed_units() -> None:
 def test_final_eval_uses_inference_only_eval_rows_without_training_preparation_filter() -> None:
     import inspect
 
-    from meddies_pii.training.bioes.trainers import full_run_runtime
+    from anonymous_pii.training.bioes.trainers import full_run_runtime
 
     source = inspect.getsource(full_run_runtime._final_evaluate)
     assert "_prepare_rows" not in source
@@ -1068,7 +1068,7 @@ def test_encoder350_unsloth_step1_evidence_is_recorded_without_mutating_full_con
     ("profile", "batch_size", "milestone_step", "action"),
     [
         (
-            "meddies-pii",
+            "anonymous-pii",
             192,
             40,
             "HA_AUTHORIZE_PII350_R128A256_B192_MILESTONE7680_FULL_BUDGET",
@@ -1130,7 +1130,7 @@ def test_pii350_milestone_decision_contracts_are_exact_and_continue_after_equal_
         "execution_id": full_run.PII350_B192_COMPLETE_EVIDENCE["execution_id"],
         "status": "completed_ok_deadline_reached",
     }
-    if profile == "meddies-pii":
+    if profile == "anonymous-pii":
         assert qualification["status"] == "accepted_live"
         assert qualification["transfer_basis"] is None
     else:
@@ -1143,7 +1143,7 @@ def test_pii350_milestone_decision_contracts_are_exact_and_continue_after_equal_
 
 
 def test_pii350_milestone_run_gate_rejects_wrong_profile_budget_batch_cursor_and_action() -> None:
-    decision = full_run.render_pii350_milestone_run_contract("meddies-pii")
+    decision = full_run.render_pii350_milestone_run_contract("anonymous-pii")
     action = decision["manual_launch"]["requires_primary_action"]
     evidence = full_run.PII350_B192_COMPLETE_EVIDENCE
     with pytest.raises(ValueError, match="profile"):
@@ -1151,7 +1151,7 @@ def test_pii350_milestone_run_gate_rejects_wrong_profile_budget_batch_cursor_and
     with pytest.raises(RuntimeError, match="primary action"):
         full_run.require_pii350_milestone_run_execute(
             decision,
-            profile="meddies-pii",
+            profile="anonymous-pii",
             source_run_evidence=evidence,
             primary_action="HA_AUTHORIZE_PII350_R128A256_B160_MILESTONE7680_FULL_BUDGET",
         )
@@ -1163,7 +1163,7 @@ def test_pii350_milestone_run_gate_rejects_wrong_profile_budget_batch_cursor_and
         (("training", "milestone", "evaluate"), False, "exact rendered contract"),
         (("training", "optimizer_step_cap"), 40, "exact rendered contract"),
     ):
-        changed = full_run.render_pii350_milestone_run_contract("meddies-pii")
+        changed = full_run.render_pii350_milestone_run_contract("anonymous-pii")
         target = changed
         for key in path[:-1]:
             target = target[key]
@@ -1171,17 +1171,17 @@ def test_pii350_milestone_run_gate_rejects_wrong_profile_budget_batch_cursor_and
         with pytest.raises(RuntimeError, match=message):
             full_run.require_pii350_milestone_run_execute(
                 changed,
-                profile="meddies-pii",
+                profile="anonymous-pii",
                 source_run_evidence=evidence,
                 primary_action=action,
             )
 
 
 def test_pii350_milestone_commands_render_cpu_preflight_and_explicit_h100_launch_only() -> None:
-    preflight = full_run.render_pii350_milestone_run_preflight_command("meddies-pii")
+    preflight = full_run.render_pii350_milestone_run_preflight_command("anonymous-pii")
     launch = full_run.render_pii350_milestone_run_command("anhthunguyenump")
-    assert preflight.startswith("MODAL_PROFILE=meddies-pii ")
-    assert "--pii350-milestone-run meddies-pii --preflight-assets" in preflight
+    assert preflight.startswith("MODAL_PROFILE=anonymous-pii ")
+    assert "--pii350-milestone-run anonymous-pii --preflight-assets" in preflight
     assert "--execute" not in preflight
     assert launch.startswith("MODAL_PROFILE=anhthunguyenump ")
     assert "--pii350-milestone-run anhthunguyenump --execute" in launch
@@ -1190,9 +1190,9 @@ def test_pii350_milestone_commands_render_cpu_preflight_and_explicit_h100_launch
         [
             sys.executable,
             "-m",
-            "meddies_pii.training.bioes.trainers.full_run",
+            "anonymous_pii.training.bioes.trainers.full_run",
             "--render-pii350-milestone-run-preflight-command",
-            "meddies-pii",
+            "anonymous-pii",
         ],
         check=True,
         capture_output=True,
@@ -1207,21 +1207,21 @@ def test_pii350_milestone_commands_render_cpu_preflight_and_explicit_h100_launch
         (
             "lr1e-4",
             1e-4,
-            "hocdatacamp-hoangthu",
+            "anonymous-profile",
             "HA_AUTHORIZE_PII350_R128A256_B128_LR1E4_SCOUT",
             "8bfbbc035d4f9762617f0b8c3d6e9996d443f3a3f53b836b4108ffbfb091afed",
         ),
         (
             "lr2e-4",
             2e-4,
-            "hocdatacamp-hoangthu",
+            "anonymous-profile",
             "HA_AUTHORIZE_PII350_R128A256_B128_LR2E4_SCOUT",
             "adea0c34b2bfc007f09455c8f68239ef9478c975d7afc06bb807f4053dc45128",
         ),
         (
             "lr3e-4",
             3e-4,
-            "hocdatacamp-hoangthu",
+            "anonymous-profile",
             "HA_AUTHORIZE_PII350_R128A256_B128_LR3E4_SCOUT",
             "ba280317b4c9bceee7de56501b02434a20c123b3cafb781f9c24fb673832346a",
         ),
@@ -1273,10 +1273,10 @@ def test_pii350_scout_contracts_are_exact_batch128_anchors(
 @pytest.mark.parametrize(
     ("arm", "profile"),
     [
-        ("lr1e-4", "hocdatacamp-hoangthu"),
-        ("lr2e-4", "hocdatacamp-hoangthu"),
-        ("lr3e-4", "hocdatacamp-hoangthu"),
-        ("lr4e-4", "meddiesresearch"),
+        ("lr1e-4", "anonymous-profile"),
+        ("lr2e-4", "anonymous-profile"),
+        ("lr3e-4", "anonymous-profile"),
+        ("lr4e-4", "anonymousresearch"),
     ],
 )
 def test_pii350_scout_commands_bind_each_arm_to_its_own_cpu_receipt_and_h100_launch(arm: str, profile: str) -> None:
@@ -1287,7 +1287,7 @@ def test_pii350_scout_commands_bind_each_arm_to_its_own_cpu_receipt_and_h100_lau
     assert preflight == (
         f"MODAL_PROFILE={profile} "
         "uv run modal run --detach --timestamps -m "
-        "meddies_pii.training.bioes.modal.full_run "
+        "anonymous_pii.training.bioes.modal.full_run "
         f"--candidate pii350 --pii350-scout-run {arm} --preflight-assets"
     )
     assert "--execute" not in preflight
@@ -1303,7 +1303,7 @@ def test_pii350_scout_commands_bind_each_arm_to_its_own_cpu_receipt_and_h100_lau
         [
             sys.executable,
             "-m",
-            "meddies_pii.training.bioes.trainers.full_run",
+            "anonymous_pii.training.bioes.trainers.full_run",
             "--render-pii350-scout-preflight-command",
             arm,
         ],
@@ -1315,7 +1315,7 @@ def test_pii350_scout_commands_bind_each_arm_to_its_own_cpu_receipt_and_h100_lau
         [
             sys.executable,
             "-m",
-            "meddies_pii.training.bioes.trainers.full_run",
+            "anonymous_pii.training.bioes.trainers.full_run",
             "--render-pii350-scout-command",
             arm,
         ],
@@ -1351,14 +1351,14 @@ def test_pii350_lr4e4_scout_is_the_exact_constant_60_step_terminal_contract() ->
     assert scout["training"]["milestone"] is None
     assert scout["evaluation"]["timing"] == "final_only"
     assert scout["evaluation"]["expected_rows"] == 1700
-    assert scout["manual_launch"]["modal_profile"] == "meddiesresearch"
+    assert scout["manual_launch"]["modal_profile"] == "anonymousresearch"
     assert scout["manual_launch"]["requires_primary_action"] == ("HA_AUTHORIZE_PII350_R128A256_B128_LR4E4_60STEP_SCOUT")
 
     preflight = full_run.render_pii350_scout_preflight_command("lr4e-4")
     launch = full_run.render_pii350_scout_command("lr4e-4")
-    assert preflight.startswith("MODAL_PROFILE=meddiesresearch ")
+    assert preflight.startswith("MODAL_PROFILE=anonymousresearch ")
     assert "--pii350-scout-run lr4e-4 --preflight-assets" in preflight
-    assert launch.startswith("MODAL_PROFILE=meddiesresearch ")
+    assert launch.startswith("MODAL_PROFILE=anonymousresearch ")
     assert "--pii350-scout-run lr4e-4 --execute" in launch
     assert "HA_AUTHORIZE_PII350_R128A256_B128_LR4E4_60STEP_SCOUT" in launch
 
@@ -1379,7 +1379,7 @@ def test_pii350_wsd3e4_scout_is_an_exact_fresh_60_step_schedule_contract() -> No
         "automatic_launch": False,
         "required_source_run_evidence": full_run.PII350_B192_COMPLETE_EVIDENCE,
         "requires_primary_action": "HA_AUTHORIZE_PII350_R128A256_B128_WSD3E4_SCOUT",
-        "modal_profile": "meddiesresearch",
+        "modal_profile": "anonymousresearch",
         "oom_policy": {"automatic_fallback": False},
     }
     expected_schedule = {
@@ -1404,9 +1404,9 @@ def test_pii350_wsd3e4_scout_is_an_exact_fresh_60_step_schedule_contract() -> No
 
     preflight = full_run.render_pii350_scout_preflight_command("wsd3e-4")
     launch = full_run.render_pii350_scout_command("wsd3e-4")
-    assert preflight.startswith("MODAL_PROFILE=meddiesresearch ")
+    assert preflight.startswith("MODAL_PROFILE=anonymousresearch ")
     assert "--pii350-scout-run wsd3e-4 --preflight-assets" in preflight
-    assert launch.startswith("MODAL_PROFILE=meddiesresearch ")
+    assert launch.startswith("MODAL_PROFILE=anonymousresearch ")
     assert "--pii350-scout-run wsd3e-4 --execute" in launch
     assert "HA_AUTHORIZE_PII350_R128A256_B128_WSD3E4_SCOUT" in launch
 

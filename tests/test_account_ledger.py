@@ -18,7 +18,7 @@ from __future__ import annotations
 # reason: inputs, so a tolerance would make the test accept a value the code does not produce.
 from typing import TYPE_CHECKING
 
-from meddies_pii.generation.account_ledger import AccountLedger, AccountLimits
+from anonymous_pii.generation.account_ledger import AccountLedger, AccountLimits
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

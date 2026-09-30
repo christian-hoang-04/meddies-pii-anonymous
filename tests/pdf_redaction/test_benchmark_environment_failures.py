@@ -9,47 +9,47 @@ import pytest
 from pypdf import PdfWriter
 from pypdf.generic import NameObject, NumberObject, RectangleObject
 
-import meddies_pii.pdf_redaction.benchmark.execution_environment as environment_module
-import meddies_pii.pdf_redaction.benchmark.execution_report as report_module
-from meddies_pii.bioes_inference.artifacts import (
+import anonymous_pii.pdf_redaction.benchmark.execution_environment as environment_module
+import anonymous_pii.pdf_redaction.benchmark.execution_report as report_module
+from anonymous_pii.bioes_inference.artifacts import (
     HydratedArtifactIdentity,
     HydratedFileIdentity,
 )
-from meddies_pii.pdf_redaction.benchmark.execution_report import (
+from anonymous_pii.pdf_redaction.benchmark.execution_report import (
     FullMatrixEvidence,
     build_full_matrix_result,
 )
-from meddies_pii.pdf_redaction.benchmark.execution_types import FullMatrixInputs
-from meddies_pii.pdf_redaction.benchmark.fidelity import RenderFidelity
-from meddies_pii.pdf_redaction.benchmark.results import (
+from anonymous_pii.pdf_redaction.benchmark.execution_types import FullMatrixInputs
+from anonymous_pii.pdf_redaction.benchmark.fidelity import RenderFidelity
+from anonymous_pii.pdf_redaction.benchmark.results import (
     TIMING_STAGES,
     NoEligibleCandidateError,
     StageTimingRecord,
 )
-from meddies_pii.pdf_redaction.benchmark.runtime import ModelGate, OcrSuccess
-from meddies_pii.pdf_redaction.benchmark.spatial import (
+from anonymous_pii.pdf_redaction.benchmark.runtime import ModelGate, OcrSuccess
+from anonymous_pii.pdf_redaction.benchmark.spatial import (
     OracleRegion,
     SpatialCoverage,
 )
-from meddies_pii.pdf_redaction.contracts import (
+from anonymous_pii.pdf_redaction.contracts import (
     GeometryPage,
     PageRegion,
     Point,
     Quad,
 )
-from meddies_pii.pdf_redaction.document import DocumentInspection, PageInspection
-from meddies_pii.pdf_redaction.routing import PageRouteSignals, classify_page
-from meddies_pii.pdf_redaction.verification import (
+from anonymous_pii.pdf_redaction.document import DocumentInspection, PageInspection
+from anonymous_pii.pdf_redaction.routing import PageRouteSignals, classify_page
+from anonymous_pii.pdf_redaction.verification import (
     VerificationFinding,
     VerificationReport,
 )
-from meddies_pii.pdf_redaction.writers import RedactionWriteResult
+from anonymous_pii.pdf_redaction.writers import RedactionWriteResult
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from meddies_pii.bioes_inference import BioesSpanDetector
-    from meddies_pii.pdf_redaction.ocr import GeometryOcr
+    from anonymous_pii.bioes_inference import BioesSpanDetector
+    from anonymous_pii.pdf_redaction.ocr import GeometryOcr
 
 
 def _quad() -> Quad:
@@ -136,7 +136,7 @@ def _evidence(
     fidelity = RenderFidelity(1, 72, 16, 2, 100, 0, 0.0, ())
     artifact = HydratedArtifactIdentity(
         artifact_id="test_model",
-        repo_id="Meddies/test-model",
+        repo_id="anonymous-placeholder/test-model",
         revision="b" * 40,
         root=tmp_path,
         tokenizer_directory=tmp_path,

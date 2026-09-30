@@ -10,9 +10,9 @@ from typing import TYPE_CHECKING, override
 
 import pytest
 
-from meddies_pii.bioes_inference import SpanDetection
-from meddies_pii.pdf_redaction.benchmark.corpus import generate_challenge_corpus
-from meddies_pii.pdf_redaction.contracts import (
+from anonymous_pii.bioes_inference import SpanDetection
+from anonymous_pii.pdf_redaction.benchmark.corpus import generate_challenge_corpus
+from anonymous_pii.pdf_redaction.contracts import (
     GeometryPage,
     GeometryToken,
     PageRegion,
@@ -20,23 +20,23 @@ from meddies_pii.pdf_redaction.contracts import (
     Quad,
     ReviewedRedaction,
 )
-from meddies_pii.pdf_redaction.document import (
+from anonymous_pii.pdf_redaction.document import (
     DocumentInspection,
     PymupdfDocumentAdapter,
     RasterArtifact,
 )
-from meddies_pii.pdf_redaction.document import (
+from anonymous_pii.pdf_redaction.document import (
     PdfSource as DocumentPdfSource,
 )
-from meddies_pii.pdf_redaction.errors import InputDocumentError, OutputPathError
-from meddies_pii.pdf_redaction.extraction import (
+from anonymous_pii.pdf_redaction.errors import InputDocumentError, OutputPathError
+from anonymous_pii.pdf_redaction.extraction import (
     NativeGeometryPrecision,
     PymupdfExtractor,
 )
-from meddies_pii.pdf_redaction.extraction import (
+from anonymous_pii.pdf_redaction.extraction import (
     PdfSource as NativePdfSource,
 )
-from meddies_pii.pdf_redaction.pipeline import (
+from anonymous_pii.pdf_redaction.pipeline import (
     DEFAULT_MAX_EXTRACTED_TEXT_CHARS,
     ExtractedTextLimitError,
     PdfGeometryPreparer,
@@ -44,18 +44,18 @@ from meddies_pii.pdf_redaction.pipeline import (
     PipelineVerificationError,
     PreparedDocument,
 )
-from meddies_pii.pdf_redaction.verification import (
+from anonymous_pii.pdf_redaction.verification import (
     VerificationFinding,
     VerificationReport,
 )
-from meddies_pii.pdf_redaction.writers import RedactionWriteResult
-from meddies_pii.regex_runtime import regex_manifest
-from meddies_pii.spans import CharSpan
+from anonymous_pii.pdf_redaction.writers import RedactionWriteResult
+from anonymous_pii.regex_runtime import regex_manifest
+from anonymous_pii.spans import CharSpan
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from meddies_pii.pdf_redaction.ocr import RasterPage
+    from anonymous_pii.pdf_redaction.ocr import RasterPage
 
 
 def _quad(x0: float, y0: float, x1: float, y1: float) -> Quad:
@@ -520,7 +520,7 @@ def test_caller_language_bypasses_document_detection(
         raise AssertionError(msg)
 
     monkeypatch.setattr(
-        "meddies_pii.regex_runtime.detect_language",
+        "anonymous_pii.regex_runtime.detect_language",
         fail_if_called,
     )
     preview = PdfRedactionPipeline(
@@ -537,7 +537,7 @@ def test_caller_language_bypasses_document_detection(
 
 @pytest.mark.parametrize("language", ["", "vi,en", "Klingon"])
 def test_pipeline_rejects_noncanonicalizable_language(language: str) -> None:
-    with pytest.raises(ValueError, match="Unsupported Meddies PII language"):
+    with pytest.raises(ValueError, match="Unsupported Anonymous PII language"):
         PdfRedactionPipeline(
             detector=_Detector(),
             writer=_Writer(),
@@ -645,7 +645,7 @@ def test_pipeline_keeps_output_private_until_all_gates_pass(tmp_path: Path) -> N
     assert destination.exists()
     if os.name == "posix":
         assert destination.stat().st_mode & 0o777 == 0o600
-    assert not tuple(tmp_path.glob(".meddies-pdf-*"))
+    assert not tuple(tmp_path.glob(".anonymous-pdf-*"))
 
 
 def test_pipeline_rejects_caller_destination_unsafe_clean_unsafe_aba(
@@ -686,7 +686,7 @@ def test_pipeline_rejects_caller_destination_unsafe_clean_unsafe_aba(
 
     assert raised.value.code == "output_exists"
     assert destination.read_bytes() == unsafe
-    assert not tuple(tmp_path.glob(".meddies-pdf-*"))
+    assert not tuple(tmp_path.glob(".anonymous-pdf-*"))
 
 
 def test_pipeline_writes_snapshot_a_when_original_path_performs_aba(

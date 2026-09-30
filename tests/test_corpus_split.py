@@ -20,7 +20,7 @@ import hashlib
 
 import pytest
 
-from meddies_pii.publishing.corpus_split import (
+from anonymous_pii.publishing.corpus_split import (
     dedup_rows,
     drop_held_out,
     holdout_split,

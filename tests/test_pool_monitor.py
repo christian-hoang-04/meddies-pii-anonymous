@@ -28,13 +28,13 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from meddies_pii.generation.pool_monitor import (
+from anonymous_pii.generation.pool_monitor import (
     format_pool_status,
     load_usage_record,
     pool_health,
 )
-from meddies_pii.generation.pool_policy import account_rpd_cap
-from meddies_pii.generation.usage.records import (
+from anonymous_pii.generation.pool_policy import account_rpd_cap
+from anonymous_pii.generation.usage.records import (
     AccountUsage,
     ProviderLimits,
     ProviderUsage,

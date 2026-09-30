@@ -5,7 +5,7 @@ from typing import Literal
 
 import pytest
 
-from meddies_pii.regex_runtime.language import detect_language
+from anonymous_pii.regex_runtime.language import detect_language
 
 
 @pytest.mark.parametrize(

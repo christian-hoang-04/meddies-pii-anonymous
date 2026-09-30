@@ -2,7 +2,7 @@
 """Command-line wrapper over the PII350 mixed-generation aggregate assembler.
 
 The assembly logic lives in
-``meddies_pii.eval_baseline.pii350_release.aggregate``; this script only parses
+``anonymous_pii.eval_baseline.pii350_release.aggregate``; this script only parses
 arguments, validates the digests, and renders the result.
 """
 
@@ -20,12 +20,12 @@ import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from meddies_pii.eval_baseline.pii350_release.aggregate import (
+from anonymous_pii.eval_baseline.pii350_release.aggregate import (
     _parse_exclusion,
     assemble,
     load_summary,
 )
-from meddies_pii.evaluation.identity import is_sha256
+from anonymous_pii.evaluation.identity import is_sha256
 
 if TYPE_CHECKING:
     from collections.abc import Sequence

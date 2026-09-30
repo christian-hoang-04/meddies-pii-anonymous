@@ -6,7 +6,7 @@ from __future__ import annotations
 # reason: stays visible instead.
 from collections import Counter
 
-from meddies_pii.training.bioes.data.splits import (
+from anonymous_pii.training.bioes.data.splits import (
     carve_heldout,
     normalize_text,
     row_language_bucket,

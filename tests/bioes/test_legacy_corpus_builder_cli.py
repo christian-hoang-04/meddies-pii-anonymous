@@ -4,8 +4,8 @@ import json
 import sys
 from typing import TYPE_CHECKING
 
-from meddies_pii.json_types import is_str_mapping
-from meddies_pii.training.bioes.data import build_legacy_pii_label_corpus
+from anonymous_pii.json_types import is_str_mapping
+from anonymous_pii.training.bioes.data import build_legacy_pii_label_corpus
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -102,7 +102,7 @@ def test_builder_expands_all_languages_and_preserves_existing_metadata(
 ) -> None:
     monkeypatch.setattr(
         build_legacy_pii_label_corpus,
-        "MEDDIES_PII_LANGUAGE_CONFIGS",
+        "ANONYMOUS_PII_LANGUAGE_CONFIGS",
         ("english", "vietnamese-translated"),
     )
 

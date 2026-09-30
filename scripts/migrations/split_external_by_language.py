@@ -1,15 +1,15 @@
 #!/usr/bin/env python
-"""Restructure ``Meddies/meddies-pii-external`` into per-language configs.
+"""Restructure ``anonymous-placeholder/anonymous-pii-external`` into per-language configs.
 
 The #25 build lumped ai4privacy as ``en`` / ``vi`` / ``other`` (28 languages in
 one bucket) and left gretel / nemotron / creddata as single English configs.
 This repartitions every source by ``info.language`` into ``<source>_<code>``
-configs using **canonical Meddies codes** (``tl`` -> ``fil`` etc.), gated to the
+configs using **canonical Anonymous codes** (``tl`` -> ``fil`` etc.), gated to the
 **17 supported languages** (non-17 rows dropped), ``train`` + ``eval`` each:
 
 * ``ai4privacy_en`` / ``ai4privacy_vi`` — already correct, kept untouched.
 * ``ai4privacy_other`` — split into ``ai4privacy_<code>`` for each supported
-  language present; 18 non-Meddies European languages dropped.
+  language present; 18 non-Anonymous European languages dropped.
 * ``gretel`` / ``nemotron`` / ``creddata`` — all-English -> renamed ``<source>_en``.
 
 The 4 superseded configs (``ai4privacy_other``, ``gretel``, ``nemotron``,
@@ -37,13 +37,13 @@ from typing import TYPE_CHECKING
 
 from datasets import Dataset, DatasetDict, load_dataset
 
-from meddies_pii.languages import is_supported_meddies_language, normalize_language
-from meddies_pii.publishing.corpus_split import text_hash
+from anonymous_pii.languages import is_supported_anonymous_language, normalize_language
+from anonymous_pii.publishing.corpus_split import text_hash
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-REPO_ID = "Meddies/meddies-pii-external"
+REPO_ID = "anonymous-placeholder/anonymous-pii-external"
 SPLITS = ("train", "eval")
 
 OTHER_CONFIG = "ai4privacy_other"
@@ -55,8 +55,8 @@ OLD_TO_DELETE = ("ai4privacy_other", "gretel", "nemotron", "creddata")
 
 
 def code_or_none(language: str) -> str | None:
-    """Canonical Meddies code if the language is one of the 17, else None."""
-    return normalize_language(language).code if is_supported_meddies_language(language) else None
+    """Canonical Anonymous code if the language is one of the 17, else None."""
+    return normalize_language(language).code if is_supported_anonymous_language(language) else None
 
 
 def split_other_by_code() -> tuple[dict[str, dict[str, Dataset]], dict[str, dict[str, int]]]:

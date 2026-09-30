@@ -1,7 +1,7 @@
 """Full-scale PII dataset audit on Modal.
 
 Downloads each external source in Modal's cloud (fast), and reports per source:
-raw label distribution, Meddies Labels-mapped span + doc counts, language mix, and
+raw label distribution, Anonymous Labels-mapped span + doc counts, language mix, and
 (Nemotron) domain mix. Drives the data-redistribution strategy with real numbers
 instead of local 2k-row samples.
 
@@ -36,7 +36,7 @@ from typing import TYPE_CHECKING
 
 import modal
 
-from meddies_pii.modal_runtime import (
+from anonymous_pii.modal_runtime import (
     MODAL_SOURCE_ROOT,
     add_source_pythonpath,
 )
@@ -50,7 +50,7 @@ image = add_source_pythonpath(
     .pip_install("datasets==4.5.0", "huggingface_hub==1.19.0")
     .add_local_dir("src", remote_path=MODAL_SOURCE_ROOT),
 )
-app = modal.App("meddies-pii-dataset-audit", image=image)
+app = modal.App("anonymous-pii-dataset-audit", image=image)
 
 SOURCES: list[tuple[str, str, str]] = [
     ("ai4privacy/pii-masking-openpii-1.5m", "train", "ai4privacy"),
@@ -162,8 +162,8 @@ def audit_one(dataset_id: str, split: str, kind: str) -> None:
     """
     from datasets import load_dataset
 
-    from meddies_pii.annotations.label_aliases import LABEL_MAP
-    from meddies_pii.taxonomy import PII_LABELS
+    from anonymous_pii.annotations.label_aliases import LABEL_MAP
+    from anonymous_pii.taxonomy import PII_LABELS
 
     allowed: set[str] = set(PII_LABELS)
     drop: set[str] = NEMOTRON_DROP if kind == "nemotron" else (AI4PRIVACY_DROP if kind == "ai4privacy" else set())
@@ -269,7 +269,7 @@ def main(only: str = "") -> None:
     timeout=900,
     secrets=[modal.Secret.from_name("huggingface-secret")],
 )
-def inspect_meddies(repo: str = "Meddies/meddies-pii") -> None:
+def inspect_anonymous(repo: str = "anonymous-placeholder/anonymous-pii") -> None:
 
     from datasets import get_dataset_config_info, get_dataset_config_names
 
@@ -286,9 +286,9 @@ def inspect_meddies(repo: str = "Meddies/meddies-pii") -> None:
         # reason: means the same thing here: record this config as an error row and keep sweeping the others.
         except Exception as exc:  # ruff: ignore[blind-except,try-except-in-loop]
             out[cfg] = {"error": str(exc)[:120]}
-    print("MEDDIES_CONFIGS::" + _json.dumps(out, ensure_ascii=False))
+    print("ANONYMOUS_CONFIGS::" + _json.dumps(out, ensure_ascii=False))
 
 
 @app.local_entrypoint()
-def meddies(repo: str = "Meddies/meddies-pii") -> None:
-    inspect_meddies.remote(repo)
+def anonymous(repo: str = "anonymous-placeholder/anonymous-pii") -> None:
+    inspect_anonymous.remote(repo)
