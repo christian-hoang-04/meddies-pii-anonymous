@@ -23,7 +23,7 @@ pdf-redaction = [
   "openvino==2026.1.0",
   "pillow==12.3.0",
   "pypdf==6.15.0",
-  "pypdfium2==5.12.1",
+  "pypdfium2==5.13.0",
   "rapidocr==3.9.2",
   "reportlab==5.0.0",
   "transformers==5.14.1",
